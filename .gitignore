@@ -1,0 +1,24 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# --- Secrets (NEVER commit your API key) ---
+.streamlit/secrets.toml
+.env
+*.key
+
+# --- Training datasets (licensed; re-download with src/fetch_datasets.py) ---
+data/datasets/
+
+# NOTE: data/models/*.joblib ARE committed on purpose — small, and the deployed
+# app needs them for the risk signal. Retrain anytime with train_risk_models.py.
+
+# --- OS / editor ---
+.DS_Store
+.idea/
+.vscode/
+*.log
