@@ -14,7 +14,7 @@ Sources (public, research/education use — verify licenses before redistributio
 from pathlib import Path
 import urllib.request
 
-DATA = Path(__file__).resolve().parent.parent / "data" / "datasets"
+DATA = Path(__file__).resolve().parent / "data" / "datasets"
 DATA.mkdir(parents=True, exist_ok=True)
 
 FILES = {

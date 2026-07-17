@@ -30,7 +30,7 @@ for _k in ("SHOKHI_BACKEND", "SHOKHI_GEMMA_MODEL", "GOOGLE_API_KEY", "OLLAMA_HOS
         pass
 
 # make src/ importable
-SRC = Path(__file__).resolve().parent.parent / "src"
+SRC = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SRC))
 
 from assistant import Assistant           # noqa: E402

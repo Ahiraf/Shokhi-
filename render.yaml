@@ -1,0 +1,20 @@
+# Render Blueprint for the Shokhi backend (FastAPI).
+# Deploy: New → Blueprint → point at this repo. Then set the secret env vars below
+# in the Render dashboard (do NOT commit real keys).
+services:
+  - type: web
+    name: shokhi-api
+    runtime: python
+    rootDir: api
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SHOKHI_BACKEND
+        value: gemini
+      - key: SHOKHI_GEMMA_MODEL
+        value: gemma-4-26b-a4b-it
+      - key: GOOGLE_API_KEY
+        sync: false        # set this secret in the dashboard
+      - key: ALLOWED_ORIGINS
+        sync: false        # e.g. https://shokhi.vercel.app

@@ -25,7 +25,7 @@ import operator
 from pathlib import Path
 from typing import Any, Callable
 
-KNOWLEDGE_PATH = Path(__file__).resolve().parent.parent / "data" / "knowledge.json"
+KNOWLEDGE_PATH = Path(__file__).resolve().parent / "data" / "knowledge.json"
 
 # --- urgency ranking ----------------------------------------------------------
 EMERGENCY = "emergency"

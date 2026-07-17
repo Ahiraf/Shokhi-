@@ -30,7 +30,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score, accuracy_score
 import joblib
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data" / "datasets"
 MODELS = ROOT / "data" / "models"
 MODELS.mkdir(parents=True, exist_ok=True)

@@ -11,11 +11,16 @@ env/
 .env
 *.key
 
-# --- Training datasets (licensed; re-download with src/fetch_datasets.py) ---
-data/datasets/
+# --- Training datasets (licensed; re-download with api/fetch_datasets.py) ---
+api/data/datasets/
 
-# NOTE: data/models/*.joblib ARE committed on purpose — small, and the deployed
+# NOTE: api/data/models/*.joblib ARE committed on purpose — small, and the deployed
 # app needs them for the risk signal. Retrain anytime with train_risk_models.py.
+
+# --- Node / Next.js (also has web/.gitignore) ---
+node_modules/
+.next/
+.env.local
 
 # --- OS / editor ---
 .DS_Store

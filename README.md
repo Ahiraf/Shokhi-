@@ -152,34 +152,39 @@ before redistribution; used here for research/education.*
 
 ## 🚀 Quick start
 
+Shokhi is a **Next.js frontend** (`web/`, → Vercel) talking to a **FastAPI backend**
+(`api/`, → Render). Run both locally:
+
+**1. Backend** (terminal 1):
 ```bash
-git clone <this-repo> && cd Shokhi
+cd api
 pip install -r requirements.txt
+uvicorn main:app --reload --port 8000        # runs on the mock backend by default
 
-# 1) Offline demo (deterministic mock backend — no model needed):
-streamlit run app/streamlit_app.py
-
-# 2) Live Gemma 4 — hosted via API key (easiest, no download):
-pip install google-genai
-export GOOGLE_API_KEY=your_key       # the SAME key that works for Gemini
+# For live Gemma 4 (same API key that works for Gemini):
 export SHOKHI_BACKEND=gemini
 export SHOKHI_GEMMA_MODEL=gemma-4-26b-a4b-it   # or gemma-4-31b-it (flagship)
-streamlit run app/streamlit_app.py
+export GOOGLE_API_KEY=your_key
+uvicorn main:app --reload --port 8000
 
-# 3) Live Gemma 4 — local via Ollama (offline, downloads the model):
-ollama pull gemma4:e4b       # 9.6GB, laptop-friendly; or gemma4:12b / gemma4:31b
-export SHOKHI_BACKEND=ollama
-export SHOKHI_GEMMA_MODEL=gemma4:e4b
-streamlit run app/streamlit_app.py
+# Or fully offline via Ollama:
+#   ollama pull gemma4:e4b && export SHOKHI_BACKEND=ollama SHOKHI_GEMMA_MODEL=gemma4:e4b
 ```
 
-Run the CLI demo or tests without any UI:
-
+**2. Frontend** (terminal 2):
 ```bash
-cd src
-python3 assistant.py       # scripted Bangla conversation
-python3 test_triage.py     # 13 safety-engine tests
-python3 test_assistant.py  # 10 orchestrator tests
+cd web
+npm install
+cp .env.local.example .env.local             # points at http://localhost:8000
+npm run dev                                   # open http://localhost:3000
+```
+
+Run the backend tests (no UI, no model needed):
+```bash
+cd api
+python3 test_triage.py       # 13 safety-engine tests
+python3 test_assistant.py    # 10 orchestrator tests
+python3 test_risk_model.py   # 5 ML-support tests
 ```
 
 ---
@@ -188,24 +193,38 @@ python3 test_assistant.py  # 10 orchestrator tests
 
 ```
 Shokhi/
-├── app/streamlit_app.py     # web UI: Bangla chat, symptom checklist, voice, TTS
-├── src/
+├── web/                     # Next.js + Tailwind frontend  → Vercel
+│   ├── app/                 # page.tsx, layout.tsx, globals.css
+│   ├── components/          # Message, Composer, UrgencyPill, RiskBar, Examples
+│   └── lib/                 # api.ts (backend client), types.ts
+├── api/                     # FastAPI backend             → Render
+│   ├── main.py              # JSON API (message / checklist / transcribe / knowledge)
 │   ├── triage.py            # deterministic triage/safety engine (no LLM)
-│   ├── gemma_backend.py     # GemmaBackend: MockGemmaBackend + OllamaBackend + factory
+│   ├── gemma_backend.py     # Mock + Ollama + Gemini(API) backends + native audio
 │   ├── prompts.py           # Gemma 4 prompt templates
 │   ├── assistant.py         # orchestrator (conversation → triage → guidance)
 │   ├── risk_model.py        # optional ML risk-signal inference (PCOS/endo)
 │   ├── train_risk_models.py # trains the two classifiers from public datasets
-│   ├── test_triage.py       # 13 tests
-│   ├── test_assistant.py    # 10 tests
-│   └── test_risk_model.py   # 5 tests
-├── data/
-│   ├── knowledge.json       # red flags, conditions (PCOS/PMS/endo/cramps), myths, schema
-│   ├── datasets/            # downloaded public training data (PCOS, endometriosis)
-│   └── models/              # trained classifiers (*.joblib) + metrics.json
-├── requirements.txt
+│   ├── test_*.py            # 28 tests (triage 13 + assistant 10 + risk 5)
+│   ├── legacy_streamlit/    # old Streamlit UI (optional offline demo)
+│   └── data/                # knowledge.json, models/*.joblib, datasets/
+├── render.yaml              # Render blueprint for the backend
+├── docs/                    # writeup, platform decision PDF
 └── README.md
 ```
+
+## 🌐 Deploy (Vercel + Render)
+
+Two services, **connected** by one env var + CORS:
+
+1. **Backend → Render:** New → Blueprint (uses `render.yaml`, root `api/`). In the
+   dashboard set `GOOGLE_API_KEY` and `ALLOWED_ORIGINS` (your Vercel URL). You get
+   `https://shokhi-api.onrender.com`.
+2. **Frontend → Vercel:** Import the repo, set **Root Directory = `web`**, and add env
+   var `NEXT_PUBLIC_API_URL=https://shokhi-api.onrender.com`. Deploy → public link.
+
+The frontend calls the backend via `NEXT_PUBLIC_API_URL`; the backend allows the frontend
+via `ALLOWED_ORIGINS`. That wiring is what makes the two separate deployments work together.
 
 ## ⚙️ Configuration
 

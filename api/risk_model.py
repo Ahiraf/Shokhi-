@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-MODELS = Path(__file__).resolve().parent.parent / "data" / "models"
+MODELS = Path(__file__).resolve().parent / "data" / "models"
 
 # thresholds above which we surface the signal to the user as "elevated"
 _ELEVATED = 0.5
