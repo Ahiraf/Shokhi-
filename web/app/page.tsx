@@ -8,6 +8,7 @@ import Composer from "@/components/Composer";
 import Examples from "@/components/Examples";
 import Guides from "@/components/Guides";
 import CycleTracker from "@/components/CycleTracker";
+import PadReminder from "@/components/PadReminder";
 import Mascot from "@/components/Mascot";
 
 export default function Home() {
@@ -105,7 +106,12 @@ export default function Home() {
         ))}
       </div>
 
-      {view === "tracker" && <CycleTracker />}
+      {view === "tracker" && (
+        <div className="pb-8">
+          <CycleTracker />
+          <PadReminder />
+        </div>
+      )}
 
       {/* landing — one calm column: greeting, the input front-and-centre, a few starters */}
       {view === "chat" && !started && (
