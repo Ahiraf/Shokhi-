@@ -92,6 +92,31 @@ _TRIGGERS: list[tuple[str, list[str]]] = [
     ("trouble_conceiving", ["সন্তান হচ্ছে না", "বাচ্চা নিতে সমস্যা", "সন্তান নিতে সমস্যা", "trouble conceiving", "can't get pregnant", "infertil"]),
     ("pms_mood_symptoms", ["মাসিকের আগে মেজাজ", "আগে কান্না", "আগে রাগ", "mood swing", "irritable before"]),
     ("pms_physical_symptoms", ["পেট ফাঁপা", "স্তনে ব্যথা", "মাথাব্যথা", "bloating", "breast tender", "headache before"]),
+    # general expansion: infection / anaemia / breast
+    ("genital_itching", ["যৌনাঙ্গে চুলকানি", "গোপনাঙ্গে চুলকানি", "চুলকানি", "genital itch", "itching down there", "vaginal itch"]),
+    ("painful_urination", ["প্রস্রাবে জ্বালা", "প্রস্রাবে ব্যথা", "burning urine", "painful urination", "burning when i pee"]),
+    ("frequent_urination", ["বারবার প্রস্রাব", "ঘন ঘন প্রস্রাব", "frequent urination", "peeing often"]),
+    ("fatigue_weakness", ["সবসময় ক্লান্ত", "খুব দুর্বল লাগে", "অল্পতেই হাঁপিয়ে", "always tired", "very weak", "fatigue"]),
+    ("breast_lump", ["স্তনে চাকা", "স্তনে দলা", "breast lump", "lump in breast"]),
+    # pregnancy danger signs
+    ("pregnancy_bleeding", ["গর্ভাবস্থায় রক্ত", "গর্ভবতী অবস্থায় রক্ত", "bleeding while pregnant", "bleeding in pregnancy"]),
+    ("pregnancy_severe_headache", ["গর্ভাবস্থায় তীব্র মাথাব্যথা", "severe headache pregnant", "bad headache pregnant"]),
+    ("pregnancy_vision_changes", ["ঝাপসা দেখ", "চোখে ঝলক", "blurred vision", "flashing light", "spots in vision"]),
+    ("pregnancy_face_hand_swelling", ["মুখ ফুলে", "হাত ফুলে", "face swelling", "hands swollen", "swollen face"]),
+    ("pregnancy_convulsions", ["খিঁচুনি", "convulsion", "fits", "seizure"]),
+    ("reduced_fetal_movement", ["বাচ্চা নড়ছে না", "শিশু নড়াচড়া কম", "baby not moving", "reduced movement", "baby stopped moving"]),
+    # postpartum danger signs
+    ("recently_gave_birth", ["সন্তান প্রসব করেছি", "বাচ্চা হয়েছে", "সদ্য মা হয়েছি", "just gave birth", "recently delivered", "after delivery"]),
+    ("postpartum_heavy_bleeding", ["প্রসবের পর অতিরিক্ত রক্ত", "প্রসবের পর প্রচুর রক্ত", "bleeding after delivery", "postpartum bleeding"]),
+    ("postpartum_fever", ["প্রসবের পর জ্বর", "fever after delivery", "fever after birth"]),
+    ("postpartum_foul_lochia", ["প্রসবের পর দুর্গন্ধ", "foul discharge after delivery", "smelly discharge after birth"]),
+    ("breast_pain_fever", ["স্তন লাল হয়ে ব্যথা", "স্তনে ব্যথা ও জ্বর", "red painful breast", "mastitis"]),
+    ("postpartum_sadness", ["প্রসবের পর মন খারাপ", "বাচ্চা হওয়ার পর কান্না", "sad after birth", "depressed after delivery", "postpartum sad"]),
+    # menopause / perimenopause
+    ("hot_flashes", ["হট ফ্ল্যাশ", "হঠাৎ শরীর গরম", "গরম লাগে হঠাৎ", "hot flash", "hot flush"]),
+    ("night_sweats", ["রাতে ঘাম", "night sweat"]),
+    ("vaginal_dryness", ["যোনিপথে শুষ্ক", "যোনি শুষ্ক", "vaginal dryness", "dryness down there"]),
+    ("menopause_mood_changes", ["মাঝবয়সে মেজাজ", "ঘুমের সমস্যা", "mid-life mood", "menopause mood"]),
 ]
 
 # lightweight negation cues near a trigger

@@ -79,9 +79,14 @@ def _any_pass(clauses: list[dict], profile: dict) -> bool:
 
 
 def _match_red_flags(knowledge: dict, profile: dict) -> list[dict]:
+    """A red flag fires when its `when` (AND) clauses all pass. If it also declares an
+    optional `any` list, at least one of those must pass too (e.g. pregnancy + one of
+    several danger signs)."""
     fired = []
     for rf in knowledge.get("red_flags", []):
-        if _all_pass(rf["when"], profile):
+        any_clauses = rf.get("any", [])
+        ok_any = _any_pass(any_clauses, profile) if any_clauses else True
+        if _all_pass(rf["when"], profile) and ok_any:
             fired.append({
                 "id": rf["id"], "name_bn": rf["name_bn"], "name_en": rf["name_en"],
                 "urgency": rf["urgency"], "message_bn": rf["message_bn"],

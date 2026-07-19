@@ -53,6 +53,47 @@ def test_emergency_beats_condition_suspicion():
     check("test_emergency_beats_condition_suspicion", r["urgency"] == "emergency")
 
 
+def test_pregnancy_convulsions_is_emergency():
+    r = run({"pregnancy_convulsions": True})
+    check("test_pregnancy_convulsions_is_emergency",
+          r["urgency"] == "emergency" and any(f["id"] == "eclampsia" for f in r["red_flags"]))
+
+
+def test_preeclampsia_signs_are_emergency():
+    r = run({"is_pregnant": True, "pregnancy_severe_headache": True})
+    check("test_preeclampsia_signs_are_emergency",
+          r["urgency"] == "emergency" and any(f["id"] == "preeclampsia" for f in r["red_flags"]))
+
+
+def test_pregnant_alone_is_not_preeclampsia():
+    # is_pregnant with no danger sign must NOT fire the preeclampsia (any-clause) flag
+    r = run({"is_pregnant": True})
+    check("test_pregnant_alone_is_not_preeclampsia",
+          not any(f["id"] == "preeclampsia" for f in r["red_flags"]))
+
+
+def test_pregnancy_bleeding_is_emergency():
+    r = run({"is_pregnant": True, "pregnancy_bleeding": True})
+    check("test_pregnancy_bleeding_is_emergency",
+          r["urgency"] == "emergency" and any(f["id"] == "pregnancy_bleeding" for f in r["red_flags"]))
+
+
+def test_reduced_fetal_movement_is_emergency():
+    r = run({"is_pregnant": True, "reduced_fetal_movement": True})
+    check("test_reduced_fetal_movement_is_emergency", r["urgency"] == "emergency")
+
+
+def test_postpartum_hemorrhage_is_emergency():
+    r = run({"recently_gave_birth": True, "postpartum_heavy_bleeding": True})
+    check("test_postpartum_hemorrhage_is_emergency",
+          r["urgency"] == "emergency" and any(f["id"] == "postpartum_hemorrhage" for f in r["red_flags"]))
+
+
+def test_postpartum_fever_is_emergency():
+    r = run({"recently_gave_birth": True, "postpartum_fever": True})
+    check("test_postpartum_fever_is_emergency", r["urgency"] == "emergency")
+
+
 # --- see-a-doctor red flags ---------------------------------------------------
 def test_postmenopausal_bleeding_flags():
     r = run({"post_menopausal": True, "bleeding_now": True})
@@ -90,6 +131,50 @@ def test_pms_is_self_care():
     r = run({"pms_mood_symptoms": True})
     ids = [c["id"] for c in r["suspected_conditions"]]
     check("test_pms_is_self_care", "pms" in ids and r["urgency"] == "self_care")
+
+
+def test_uti_suspected():
+    r = run({"painful_urination": True})
+    ids = [c["id"] for c in r["suspected_conditions"]]
+    check("test_uti_suspected", "uti" in ids and r["urgency"] == "see_doctor_soon")
+
+
+def test_vaginal_infection_suspected():
+    r = run({"genital_itching": True})
+    ids = [c["id"] for c in r["suspected_conditions"]]
+    check("test_vaginal_infection_suspected", "vaginal_infection" in ids)
+
+
+def test_anemia_needs_heavy_bleeding():
+    # fatigue alone should NOT flag anaemia (all+any: needs a bleeding signal too)
+    r = run({"fatigue_weakness": True})
+    ids = [c["id"] for c in r["suspected_conditions"]]
+    check("test_anemia_needs_heavy_bleeding", "anemia" not in ids)
+
+
+def test_anemia_suspected():
+    r = run({"fatigue_weakness": True, "heavy_bleeding": True})
+    ids = [c["id"] for c in r["suspected_conditions"]]
+    check("test_anemia_suspected", "anemia" in ids)
+
+
+def test_menopause_is_self_care():
+    r = run({"hot_flashes": True, "night_sweats": True})
+    ids = [c["id"] for c in r["suspected_conditions"]]
+    check("test_menopause_is_self_care", "menopause" in ids and r["urgency"] == "self_care")
+
+
+def test_breast_lump_flags_see_doctor():
+    r = run({"breast_lump": True})
+    check("test_breast_lump_flags_see_doctor",
+          r["urgency"] == "see_doctor_soon" and any(f["id"] == "breast_change" for f in r["red_flags"]))
+
+
+def test_postpartum_depression_suspected():
+    r = run({"postpartum_sadness": True})
+    ids = [c["id"] for c in r["suspected_conditions"]]
+    check("test_postpartum_depression_suspected",
+          "postpartum_depression" in ids and r["urgency"] == "see_doctor_soon")
 
 
 # --- screening & empty --------------------------------------------------------

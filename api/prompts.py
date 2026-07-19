@@ -13,13 +13,24 @@ Gemma's jobs:
 
 # Symptom fields Gemma may fill. Mirrors knowledge.json symptom_schema.
 SYMPTOM_FIELDS = [
-    "age", "is_pregnant_possible", "post_menopausal", "bleeding_now",
+    "age", "is_pregnant_possible", "is_pregnant", "recently_gave_birth",
+    "post_menopausal", "bleeding_now",
     "severe_pelvic_pain", "heavy_bleeding", "fainting_or_dizzy", "fever",
-    "foul_discharge", "bleeding_between_periods", "bleeding_after_sex",
+    "foul_discharge", "genital_itching", "painful_urination", "frequent_urination",
+    "fatigue_weakness", "breast_lump",
+    "bleeding_between_periods", "bleeding_after_sex",
     "cycles_irregular", "missed_periods_3plus", "excess_hair", "persistent_acne",
     "unexplained_weight_gain", "pain_during_sex", "periods_disrupt_daily_life",
     "chronic_pelvic_pain", "trouble_conceiving", "pms_mood_symptoms",
     "pms_physical_symptoms",
+    # pregnancy danger signs
+    "pregnancy_bleeding", "pregnancy_severe_headache", "pregnancy_vision_changes",
+    "pregnancy_face_hand_swelling", "pregnancy_convulsions", "reduced_fetal_movement",
+    # postpartum danger signs
+    "postpartum_heavy_bleeding", "postpartum_fever", "postpartum_foul_lochia",
+    "breast_pain_fever", "postpartum_sadness",
+    # menopause / perimenopause
+    "hot_flashes", "night_sweats", "vaginal_dryness", "menopause_mood_changes",
 ]
 
 # --- symptom extraction -------------------------------------------------------
@@ -32,6 +43,8 @@ Allowed fields (all boolean unless noted). Set a field true ONLY if the user cle
 indicates it:
 - age: integer (years)
 - is_pregnant_possible: could currently be pregnant
+- is_pregnant: is currently pregnant (confirmed)
+- recently_gave_birth: gave birth within the last ~6 weeks
 - post_menopausal: periods have permanently stopped (menopause)
 - bleeding_now: currently menstruating/bleeding
 - severe_pelvic_pain: severe/unbearable lower-abdominal or pelvic pain
@@ -52,6 +65,26 @@ indicates it:
 - trouble_conceiving: difficulty getting pregnant despite trying
 - pms_mood_symptoms: mood swings/irritability/anxiety before periods
 - pms_physical_symptoms: bloating/breast tenderness/headache before periods
+- genital_itching: itching or irritation of the genital area
+- painful_urination: burning or pain when urinating
+- frequent_urination: needing to urinate very often
+- fatigue_weakness: persistent tiredness/weakness (possible anaemia)
+- breast_lump: a new breast lump or breast change
+- pregnancy_bleeding: bleeding while pregnant
+- pregnancy_severe_headache: severe headache while pregnant
+- pregnancy_vision_changes: blurred vision / flashing lights while pregnant
+- pregnancy_face_hand_swelling: sudden swelling of face/hands while pregnant
+- pregnancy_convulsions: convulsions/fits while pregnant
+- reduced_fetal_movement: the baby's movements have reduced or stopped
+- postpartum_heavy_bleeding: heavy bleeding after childbirth
+- postpartum_fever: fever after childbirth
+- postpartum_foul_lochia: foul-smelling discharge after childbirth
+- breast_pain_fever: painful, red breast with fever (possible mastitis)
+- postpartum_sadness: lasting sadness/crying/anxiety after childbirth
+- hot_flashes: sudden hot flushes with sweating
+- night_sweats: sweating at night
+- vaginal_dryness: vaginal dryness
+- menopause_mood_changes: mid-life mood changes or sleep problems
 
 Return ONLY a JSON object of the fields you are confident about. No prose, no diagnosis."""
 
