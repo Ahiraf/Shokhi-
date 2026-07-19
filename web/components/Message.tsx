@@ -1,6 +1,7 @@
 import type { ChatItem } from "@/lib/types";
 import UrgencyPill from "./UrgencyPill";
 import RiskBar from "./RiskBar";
+import Mascot from "./Mascot";
 
 export default function Message({ item }: { item: ChatItem }) {
   const isUser = item.role === "user";
@@ -8,7 +9,7 @@ export default function Message({ item }: { item: ChatItem }) {
   if (isUser) {
     return (
       <div className="flex animate-rise justify-end">
-        <div className="max-w-[80%] rounded-2xl rounded-br-md bg-gradient-to-br from-rose to-rose-deep px-4 py-2.5 text-white shadow-soft">
+        <div className="max-w-[80%] rounded-3xl rounded-br-lg bg-gradient-to-br from-rose to-rose-deep px-4 py-2.5 text-white shadow-lift">
           {item.text}
         </div>
       </div>
@@ -21,10 +22,10 @@ export default function Message({ item }: { item: ChatItem }) {
 
   return (
     <div className="flex animate-rise items-start gap-2.5">
-      <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-rose-soft text-lg">
-        🌸
-      </div>
-      <div className="max-w-[85%] rounded-2xl rounded-tl-md bg-white px-4 py-3 shadow-soft ring-1 ring-rose-100">
+      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-plum shadow-lift">
+        <Mascot size={34} />
+      </span>
+      <div className="max-w-[85%] rounded-3xl rounded-tl-lg bg-white px-4 py-3 shadow-soft ring-1 ring-rose-100">
         {t && (
           <div className="mb-2">
             <UrgencyPill urgency={t.urgency} label={t.urgency_label_bn} />
@@ -40,7 +41,7 @@ export default function Message({ item }: { item: ChatItem }) {
           </div>
         ))}
 
-        <div className="whitespace-pre-wrap leading-relaxed text-[#3a2230]">
+        <div className="whitespace-pre-wrap leading-relaxed text-plum">
           {item.text}
         </div>
 

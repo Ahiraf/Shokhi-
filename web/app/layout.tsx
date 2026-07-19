@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
-import { Hind_Siliguri } from "next/font/google";
+import { Hind_Siliguri, Baloo_Da_2 } from "next/font/google";
 import "./globals.css";
 
+// Body — humanist Bangla text face.
 const hind = Hind_Siliguri({
   weight: ["300", "400", "500", "600", "700"],
   subsets: ["bengali", "latin"],
   variable: "--font-hind",
+});
+
+// Display — rounded, friendly, highly legible (kind on low-literacy readers).
+const baloo = Baloo_Da_2({
+  weight: ["500", "600", "700", "800"],
+  subsets: ["bengali", "latin"],
+  variable: "--font-baloo",
 });
 
 // Base URL for absolute OG/Twitter image links (set NEXT_PUBLIC_SITE_URL in prod).
@@ -38,8 +46,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="bn" className={hind.variable}>
-      <body className="font-sans text-[#3a2230] antialiased">{children}</body>
+    <html lang="bn" className={`${hind.variable} ${baloo.variable}`}>
+      <body className="font-sans text-plum antialiased">{children}</body>
     </html>
   );
 }

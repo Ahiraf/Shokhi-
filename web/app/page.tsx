@@ -8,6 +8,7 @@ import Composer from "@/components/Composer";
 import Examples from "@/components/Examples";
 import Guides from "@/components/Guides";
 import CycleTracker from "@/components/CycleTracker";
+import Mascot from "@/components/Mascot";
 
 export default function Home() {
   const [chat, setChat] = useState<ChatItem[]>([]);
@@ -68,26 +69,24 @@ export default function Home() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col px-4">
-      {/* header */}
-      <header className="pt-8 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-rose-deep">🌸 সখী</h1>
-        <p className="mt-1 text-rose-deep/70">আপনার স্বাস্থ্য বন্ধু</p>
-        <div className="mt-3 flex flex-wrap justify-center gap-1.5 text-xs">
-          {["মাসিক", "পিসিওএস", "পিএমএস", "এন্ডোমেট্রিওসিস", "Powered by Gemma 4"].map(
-            (t) => (
-              <span
-                key={t}
-                className="rounded-full bg-rose-soft px-2.5 py-1 font-medium text-rose-deep"
-              >
-                {t}
-              </span>
-            )
-          )}
+      {/* brand row */}
+      <header className="flex items-center justify-between pt-6">
+        <div className="flex items-center gap-2.5">
+          <span className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-plum shadow-lift">
+            <Mascot size={40} />
+          </span>
+          <div className="leading-none">
+            <h1 className="font-display text-2xl font-bold text-plum">সখী</h1>
+            <p className="mt-0.5 text-xs text-plum/60">আপনার বিশ্বস্ত স্বাস্থ্য বন্ধু</p>
+          </div>
         </div>
+        <span className="rounded-full bg-white/70 px-2.5 py-1 text-[11px] font-medium text-plum/60 ring-1 ring-rose-100">
+          Gemma 4
+        </span>
       </header>
 
-      {/* view tabs */}
-      <div className="mt-4 flex justify-center gap-2">
+      {/* segmented tabs */}
+      <div className="mt-5 grid grid-cols-2 gap-1 rounded-full bg-white p-1 shadow-soft ring-1 ring-rose-100">
         {([
           ["chat", "💬 পরামর্শ"],
           ["tracker", "🩸 মাসিক ট্র্যাকার"],
@@ -95,10 +94,10 @@ export default function Home() {
           <button
             key={v}
             onClick={() => setView(v)}
-            className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
+            className={`rounded-full py-2 text-sm font-semibold transition ${
               view === v
-                ? "bg-rose-deep text-white"
-                : "bg-rose-soft text-rose-deep hover:bg-rose-100"
+                ? "bg-gradient-to-br from-rose to-rose-deep text-white shadow-lift"
+                : "text-plum/60 hover:text-plum"
             }`}
           >
             {label}
@@ -110,22 +109,55 @@ export default function Home() {
 
       {/* hero (only before first message) */}
       {view === "chat" && !started && (
-        <section className="mt-10 text-center">
-          <p className="mx-auto max-w-md text-lg leading-relaxed text-rose-deep/80">
-            শহরের কিশোরী থেকে গ্রামের নারী — সবার জন্য। বাংলায় লিখুন বা কণ্ঠে বলুন,
-            সখী আপনাকে বুঝবে এবং নিরাপদ পরামর্শ দেবে।
-          </p>
-          <p className="mx-auto mt-3 max-w-md text-sm text-rose-deep/50">
-            সখী ডাক্তার নয়, একজন বন্ধু। জরুরি অবস্থায় সবসময় ৯৯৯।
-          </p>
-          <div className="mt-8">
-            <p className="mb-3 text-sm font-medium text-rose-deep/60">
+        <section className="mt-6">
+          {/* welcome card */}
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-plum to-plum-deep p-6 text-white shadow-card">
+            <div className="pointer-events-none absolute -right-6 -top-8 h-32 w-32 rounded-full bg-rose/20 blur-2xl" />
+            <div className="relative flex items-center gap-4">
+              <div className="shrink-0 animate-float">
+                <Mascot size={104} wave />
+              </div>
+              <div>
+                <h2 className="font-display text-2xl font-bold leading-tight">
+                  নমস্কার! আমি সখী।
+                </h2>
+                <p className="mt-1.5 text-sm leading-relaxed text-white/80">
+                  আপনার শরীর কেমন লাগছে বাংলায় বলুন বা লিখুন — আমি বুঝব ও নিরাপদ
+                  পরামর্শ দেব। লজ্জার কিছু নেই, সব কথা গোপন থাকবে।
+                </p>
+              </div>
+            </div>
+            <div className="relative mt-4 flex flex-wrap gap-1.5 text-[11px] font-medium">
+              {["🔒 গোপনীয়", "☎️ স্বাস্থ্য বাতায়ন ১৬২৬৩", "🚨 জরুরি ৯৯৯"].map((t) => (
+                <span key={t} className="rounded-full bg-white/12 px-2.5 py-1 text-white/85">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* what she can help with */}
+          <div className="mt-5 flex flex-wrap justify-center gap-1.5">
+            {["মাসিক", "পিসিওএস", "পিএমএস", "এন্ডোমেট্রিওসিস", "গর্ভকাল", "মেনোপজ"].map(
+              (t) => (
+                <span
+                  key={t}
+                  className="rounded-full bg-blush px-3 py-1 text-xs font-medium text-rose-deep ring-1 ring-rose-100"
+                >
+                  {t}
+                </span>
+              )
+            )}
+          </div>
+
+          <div className="mt-7">
+            <p className="mb-2.5 text-center text-sm font-semibold text-plum/60">
               একটি উদাহরণ দিয়ে শুরু করুন
             </p>
             <Examples onPick={handleSend} />
           </div>
           <div className="mt-6">
-            <p className="mb-3 text-sm font-medium text-rose-deep/60">
+            <p className="mb-2.5 text-center text-sm font-semibold text-plum/60">
               অথবা একটি বিষয়ে জানুন
             </p>
             <Guides onPick={handleGuide} />
@@ -141,10 +173,10 @@ export default function Home() {
           <Message key={i} item={item} />
         ))}
         {busy && (
-          <div className="flex items-center gap-2.5 pl-1 text-rose-deep/50">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-rose-soft">
-              🌸
-            </div>
+          <div className="flex items-center gap-2.5 pl-1 text-plum/50">
+            <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-plum">
+              <Mascot size={34} />
+            </span>
             <span className="animate-pulse">সখী ভাবছে…</span>
           </div>
         )}
@@ -152,14 +184,14 @@ export default function Home() {
       </section>
 
       {/* composer */}
-      <div className="sticky bottom-0 -mx-4 bg-gradient-to-t from-white via-white/95 to-transparent px-4 pb-5 pt-3">
+      <div className="sticky bottom-0 -mx-4 bg-gradient-to-t from-cream via-cream/95 to-transparent px-4 pb-5 pt-3">
         {started && (
           <div className="mb-3">
             <Examples onPick={handleSend} />
           </div>
         )}
         <Composer onSend={handleSend} busy={busy} />
-        <p className="mt-2.5 text-center text-xs text-rose-deep/45">
+        <p className="mt-2.5 text-center text-xs text-plum/45">
           🔒 বিনামূল্যে ও গোপনীয় · ☎️ স্বাস্থ্য বাতায়ন ১৬২৬৩ · 🚨 জরুরি ৯৯৯
         </p>
       </div>

@@ -67,7 +67,7 @@ export default function Composer({
         {voiceBusy ? "…" : recording ? "⏹️" : "🎙️"}
       </button>
 
-      <div className="flex flex-1 items-end gap-2 rounded-2xl bg-white p-1.5 shadow-soft ring-1 ring-rose-100">
+      <div className="flex flex-1 items-end gap-2 rounded-3xl bg-white p-1.5 shadow-soft ring-1 ring-rose-100 focus-within:ring-2 focus-within:ring-rose/40">
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -79,12 +79,12 @@ export default function Composer({
           }}
           rows={1}
           placeholder="এখানে বাংলায় লিখুন বা কণ্ঠে বলুন..."
-          className="max-h-32 flex-1 resize-none bg-transparent px-3 py-2.5 text-[#3a2230] outline-none placeholder:text-rose-deep/40"
+          className="max-h-32 flex-1 resize-none bg-transparent px-3 py-2.5 text-plum outline-none placeholder:text-plum/40"
         />
         <button
           onClick={submit}
           disabled={busy || !text.trim()}
-          className="flex h-10 items-center gap-1 rounded-xl bg-gradient-to-br from-rose to-rose-deep px-4 font-medium text-white transition disabled:opacity-40"
+          className="flex h-10 items-center gap-1 rounded-full bg-gradient-to-br from-rose to-rose-deep px-5 font-semibold text-white shadow-lift transition hover:brightness-105 disabled:opacity-40 disabled:shadow-none"
         >
           {busy ? "…" : "পাঠান"}
         </button>

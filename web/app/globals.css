@@ -7,19 +7,46 @@
 }
 
 body {
+  /* warm cream with a soft blush glow up top, like morning light through a window */
   background:
-    radial-gradient(1200px 600px at 50% -10%, #ffe6f1 0%, transparent 60%),
-    linear-gradient(180deg, #fff5f9 0%, #ffffff 55%);
+    radial-gradient(900px 500px at 15% -8%, #ffe1ee 0%, transparent 55%),
+    radial-gradient(700px 500px at 100% 0%, #fdeecf 0%, transparent 45%),
+    linear-gradient(180deg, #fff9f4 0%, #fff9f4 100%);
+  background-attachment: fixed;
   min-height: 100vh;
 }
 
 /* gentle fade-in for new messages */
 @keyframes rise {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.animate-rise { animation: rise 0.35s ease-out both; }
+.animate-rise {
+  animation: rise 0.35s ease-out both;
+}
 
 /* soft scrollbar */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-thumb { background: #f0c3d8; border-radius: 8px; }
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #f0c3d8;
+  border-radius: 8px;
+}
+
+/* respect reduced-motion — turn off ambient animation */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
