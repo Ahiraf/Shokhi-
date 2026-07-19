@@ -74,6 +74,13 @@ class Assistant:
             for g in self.knowledge.get("guides", [])
         ]
 
+    def get_guide(self, gid: str) -> dict | None:
+        """Return the full guide object by its id (for its own detail page)."""
+        for g in self.knowledge.get("guides", []):
+            if g["id"] == gid:
+                return g
+        return None
+
     def find_guide(self, topic: str) -> dict | None:
         """Match a guide by id, or by a keyword found in a free-text question."""
         guides = self.knowledge.get("guides", [])

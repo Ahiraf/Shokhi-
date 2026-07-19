@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Hind_Siliguri, Baloo_Da_2 } from "next/font/google";
 import "./globals.css";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 
 // Body — humanist Bangla text face.
 const hind = Hind_Siliguri({
@@ -47,7 +49,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="bn" className={`${hind.variable} ${baloo.variable}`}>
-      <body className="font-sans text-plum antialiased">{children}</body>
+      <body className="flex min-h-screen flex-col font-sans text-plum antialiased">
+        <Nav />
+        <div className="flex-1">{children}</div>
+        <Footer />
+      </body>
     </html>
   );
 }

@@ -92,12 +92,15 @@ def health():
 
 @app.get("/api/knowledge")
 def knowledge():
-    """Symptom schema + examples so the frontend can render checklist & examples."""
+    """Symptom schema, conditions, red flags & myths so the frontend can render the
+    checklist, the 'learn' library and the myth-busting page."""
     a = Assistant(backend=get_backend())
     kb = a.knowledge
     return {
         "symptom_schema": kb["symptom_schema"],
         "meta": kb["meta"],
+        "conditions": kb.get("conditions", []),
+        "red_flags": kb.get("red_flags", []),
         "myths": kb.get("myths", []),
     }
 
@@ -127,6 +130,16 @@ def guides():
     """List the health-info guide cards (contraception, family planning, menopause…)."""
     a = Assistant(backend=get_backend())
     return {"guides": a.list_guides()}
+
+
+@app.get("/api/guides/{gid}")
+def guide_detail(gid: str):
+    """Full guide (title + points + when-to-see-a-doctor) for its own page."""
+    a = Assistant(backend=get_backend())
+    g = a.get_guide(gid)
+    if not g:
+        raise HTTPException(status_code=404, detail="Guide not found.")
+    return g
 
 
 @app.post("/api/guide")

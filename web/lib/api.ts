@@ -2,6 +2,8 @@ import type {
   MessageResponse,
   GuideCard,
   GuideResponse,
+  GuideFull,
+  KnowledgeResponse,
   CycleLog,
   CycleAnalysis,
 } from "./types";
@@ -36,6 +38,23 @@ export async function getGuides(): Promise<GuideCard[]> {
 
 export function explainGuide(topic: string): Promise<GuideResponse> {
   return post<GuideResponse>("/api/guide", { topic });
+}
+
+export async function getGuide(id: string): Promise<GuideFull> {
+  const res = await fetch(`${BASE}/api/guides/${id}`);
+  if (!res.ok) throw new Error("guide failed");
+  return res.json();
+}
+
+export async function getKnowledge(): Promise<KnowledgeResponse> {
+  const res = await fetch(`${BASE}/api/knowledge`);
+  if (!res.ok) throw new Error("knowledge failed");
+  return res.json();
+}
+
+export async function bustMyth(belief: string): Promise<string> {
+  const data = await post<{ reply: string }>("/api/myth", { belief });
+  return data.reply;
 }
 
 export function analyzeCycle(logs: CycleLog[]): Promise<CycleAnalysis> {

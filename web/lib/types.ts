@@ -3,15 +3,28 @@ export type Urgency = "emergency" | "see_doctor_soon" | "self_care" | "info";
 export interface RedFlag {
   id: string;
   name_bn: string;
+  name_en?: string;
+  urgency?: Urgency;
+  message_bn?: string;
   action_bn: string;
 }
 
 export interface Condition {
   id: string;
   name_bn: string;
+  name_en?: string;
+  urgency?: Urgency;
   about_bn: string;
+  about_en?: string;
   self_care_bn: string[];
   see_doctor_bn: string;
+}
+
+export interface Myth {
+  myth_bn: string;
+  fact_bn: string;
+  myth_en?: string;
+  fact_en?: string;
 }
 
 export interface RiskSignal {
@@ -60,6 +73,25 @@ export interface GuideCard {
 export interface GuideResponse {
   guide: { id: string; icon: string; title_bn: string; title_en: string };
   guidance: string;
+}
+
+export interface GuideFull {
+  id: string;
+  icon: string;
+  title_bn: string;
+  title_en: string;
+  summary_bn: string;
+  summary_en?: string;
+  points_bn: string[];
+  when_see_doctor_bn: string;
+}
+
+export interface KnowledgeResponse {
+  symptom_schema: Record<string, unknown>;
+  meta: Record<string, unknown>;
+  conditions: Condition[];
+  red_flags: RedFlag[];
+  myths: Myth[];
 }
 
 export interface CycleLog {
