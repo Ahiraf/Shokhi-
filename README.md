@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/brand/shokhi-logo.png" alt="Shokhi — Your Health. Your Care. Your Friend." width="320" />
+</p>
+
 # 🌸 সখী · Shokhi — A Bangla Women's Health Companion, Powered by Gemma 4
 
 **Shokhi** (সখী — *"a woman's trusted confidante"*) is a warm, Bangla-first health
