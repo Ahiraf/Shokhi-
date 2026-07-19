@@ -61,3 +61,26 @@ export interface GuideResponse {
   guide: { id: string; icon: string; title_bn: string; title_en: string };
   guidance: string;
 }
+
+export interface CycleLog {
+  start: string; // ISO date (YYYY-MM-DD)
+  end?: string;
+  flow?: "light" | "normal" | "heavy";
+  pain?: 0 | 1 | 2 | 3;
+  note?: string;
+}
+
+export interface CycleAnalysis {
+  logged_count: number;
+  cycle_lengths: number[];
+  avg_cycle_length: number | null;
+  shortest_cycle: number | null;
+  longest_cycle: number | null;
+  avg_period_length: number | null;
+  regular: boolean | null;
+  predicted_next_start: string | null;
+  days_until_next: number | null;
+  insights_bn: string[];
+  suggested_symptoms: Record<string, boolean>;
+  disclaimer_bn: string;
+}

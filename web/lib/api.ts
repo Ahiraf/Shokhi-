@@ -1,4 +1,10 @@
-import type { MessageResponse, GuideCard, GuideResponse } from "./types";
+import type {
+  MessageResponse,
+  GuideCard,
+  GuideResponse,
+  CycleLog,
+  CycleAnalysis,
+} from "./types";
 
 const BASE =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://localhost:8000";
@@ -30,6 +36,10 @@ export async function getGuides(): Promise<GuideCard[]> {
 
 export function explainGuide(topic: string): Promise<GuideResponse> {
   return post<GuideResponse>("/api/guide", { topic });
+}
+
+export function analyzeCycle(logs: CycleLog[]): Promise<CycleAnalysis> {
+  return post<CycleAnalysis>("/api/cycle/analyze", { logs });
 }
 
 export async function transcribe(audio: Blob): Promise<string> {

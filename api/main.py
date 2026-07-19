@@ -19,6 +19,7 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+import cycle as cycle_engine
 from assistant import Assistant
 from gemma_backend import get_backend
 
@@ -75,6 +76,10 @@ class GuideIn(BaseModel):
     topic: str  # a guide id (e.g. "contraception") or a free-text Bangla/English question
 
 
+class CycleIn(BaseModel):
+    logs: list[dict]  # [{start, end?, flow?, pain?, note?}, …] — client-stored history
+
+
 # --- endpoints ----------------------------------------------------------------
 @app.get("/api/health")
 def health():
@@ -128,6 +133,16 @@ def guide(inp: GuideIn):
     if not result:
         raise HTTPException(status_code=404, detail="No guide matched that topic.")
     return result
+
+
+@app.post("/api/cycle/analyze")
+def cycle_analyze(inp: CycleIn):
+    """Analyse a logged period history into Bangla insights + suggested symptom flags.
+
+    Stateless by design: the client keeps the history (localStorage) and sends it here.
+    The returned `suggested_symptoms` can be merged into the chat profile so triage can
+    act on a pattern the woman couldn't have described in a single message."""
+    return cycle_engine.analyze(inp.logs)
 
 
 @app.post("/api/transcribe")

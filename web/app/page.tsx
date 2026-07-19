@@ -7,12 +7,14 @@ import Message from "@/components/Message";
 import Composer from "@/components/Composer";
 import Examples from "@/components/Examples";
 import Guides from "@/components/Guides";
+import CycleTracker from "@/components/CycleTracker";
 
 export default function Home() {
   const [chat, setChat] = useState<ChatItem[]>([]);
   const [profile, setProfile] = useState<Record<string, unknown>>({});
   const [history, setHistory] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
+  const [view, setView] = useState<"chat" | "tracker">("chat");
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -84,8 +86,30 @@ export default function Home() {
         </div>
       </header>
 
+      {/* view tabs */}
+      <div className="mt-4 flex justify-center gap-2">
+        {([
+          ["chat", "💬 পরামর্শ"],
+          ["tracker", "🩸 মাসিক ট্র্যাকার"],
+        ] as const).map(([v, label]) => (
+          <button
+            key={v}
+            onClick={() => setView(v)}
+            className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
+              view === v
+                ? "bg-rose-deep text-white"
+                : "bg-rose-soft text-rose-deep hover:bg-rose-100"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {view === "tracker" && <CycleTracker />}
+
       {/* hero (only before first message) */}
-      {!started && (
+      {view === "chat" && !started && (
         <section className="mt-10 text-center">
           <p className="mx-auto max-w-md text-lg leading-relaxed text-rose-deep/80">
             শহরের কিশোরী থেকে গ্রামের নারী — সবার জন্য। বাংলায় লিখুন বা কণ্ঠে বলুন,
@@ -110,6 +134,8 @@ export default function Home() {
       )}
 
       {/* chat */}
+      {view === "chat" && (
+      <>
       <section className="flex-1 space-y-4 py-6">
         {chat.map((item, i) => (
           <Message key={i} item={item} />
@@ -137,6 +163,8 @@ export default function Home() {
           🔒 বিনামূল্যে ও গোপনীয় · ☎️ স্বাস্থ্য বাতায়ন ১৬২৬৩ · 🚨 জরুরি ৯৯৯
         </p>
       </div>
+      </>
+      )}
     </main>
   );
 }
