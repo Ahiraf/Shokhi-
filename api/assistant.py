@@ -83,10 +83,15 @@ class Assistant:
         low = (topic or "").lower()
         if not low:
             return None
+        # Prefer the most specific match: the guide whose LONGEST matching keyword wins,
+        # so "কাপড়ের প্যাড" routes to cloth_pad rather than a generic "প্যাড" guide.
+        best, best_len = None, 0
         for g in guides:
-            if any(kw.lower() in low for kw in g.get("keywords", [])):
-                return g
-        return None
+            for kw in g.get("keywords", []):
+                k = kw.lower()
+                if k in low and len(k) > best_len:
+                    best, best_len = g, len(k)
+        return best
 
     def explain_guide(self, topic: str) -> dict | None:
         """Look up a guide by id/keyword and return it with warm Bangla guidance."""

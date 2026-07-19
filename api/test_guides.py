@@ -32,7 +32,19 @@ def test_lists_all_guides():
     ids = {g["id"] for g in a.list_guides()}
     check("test_lists_all_guides",
           {"contraception", "family_planning", "menopause_care",
-           "nutrition_anemia", "first_period", "menstrual_hygiene"} <= ids)
+           "nutrition_anemia", "first_period", "menstrual_hygiene",
+           "cloth_pad", "how_to_use_pad", "no_pad_emergency"} <= ids)
+
+
+def test_pad_guides_match_by_keyword():
+    a = fresh()
+    cloth = a.find_guide("আমি কাপড়ের প্যাড ব্যবহার করি")
+    howto = a.find_guide("how to use a pad first time")
+    none = a.find_guide("আমার হাতে প্যাড নেই এখন")
+    check("test_pad_guides_match_by_keyword",
+          cloth is not None and cloth["id"] == "cloth_pad"
+          and howto is not None and howto["id"] == "how_to_use_pad"
+          and none is not None and none["id"] == "no_pad_emergency")
 
 
 def test_find_guide_by_id():
