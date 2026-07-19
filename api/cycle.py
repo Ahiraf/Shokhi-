@@ -16,7 +16,12 @@ A "log" is one recorded period:
     {"start": "2026-06-01", "end": "2026-06-05",   # ISO dates; end optional
      "flow": "light|normal|heavy",                  # optional
      "pain": 0-3,                                    # optional (0 none … 3 severe)
+     "pads": 6,                                      # optional: pads soaked per day
      "note": "..."}                                  # optional
+
+The `pads` count turns a vague "heavy" into an objective signal: soaking 6+ pads a day
+is a clinical menorrhagia threshold, which raises the anaemia suspicion the woman herself
+might dismiss as "normal".
 """
 
 from __future__ import annotations
@@ -29,6 +34,7 @@ _NORMAL_CYCLE_MIN = 21
 _NORMAL_CYCLE_MAX = 35
 _IRREGULAR_SPREAD = 9   # >9 days between shortest & longest cycle => "irregular"
 _LONG_GAP_MISSED = 90   # a 3+ month gap => missed_periods_3plus signal
+_HEAVY_PADS_PER_DAY = 6  # soaking 6+ pads a day => menorrhagia territory (anaemia risk)
 
 
 def _parse(d: str) -> date | None:
@@ -133,12 +139,30 @@ def analyze(logs: list[dict], today: date | None = None) -> dict:
         )
         result["suggested_symptoms"]["missed_periods_3plus"] = True
 
-    # repeated heavy flow / severe pain patterns
-    heavy = sum(1 for l in logs if str(l.get("flow", "")).lower() == "heavy")
+    # flow heaviness — from the flow label AND the pad count (objective)
+    def _pads(l: dict) -> float:
+        p = l.get("pads")
+        return p if isinstance(p, (int, float)) else 0
+
+    def _is_heavy(l: dict) -> bool:
+        return (str(l.get("flow", "")).lower() == "heavy"
+                or _pads(l) >= _HEAVY_PADS_PER_DAY)
+
+    max_pads = int(max((_pads(l) for l in logs), default=0))
+    heavy = sum(1 for l in logs if _is_heavy(l))
     severe_pain = sum(1 for l in logs if isinstance(l.get("pain"), (int, float)) and l["pain"] >= 3)
-    if heavy >= 2:
+
+    if max_pads >= _HEAVY_PADS_PER_DAY:
+        ins.append(
+            f"আপনি দিনে প্রায় {max_pads}টি প্যাড ব্যবহার করছেন। দিনে ৬টির বেশি প্যাড "
+            "ভিজে গেলে তা অতিরিক্ত রক্তক্ষরণ (মেনোরেজিয়া) হতে পারে — রক্তস্বল্পতা এড়াতে "
+            "ডাক্তার দেখান এবং আয়রন-সমৃদ্ধ খাবার খান।"
+        )
+        result["suggested_symptoms"]["heavy_bleeding"] = True
+    elif heavy >= 2:
         ins.append("কয়েকবার ভারী রক্তক্ষরণ লিখেছেন। বারবার অতিরিক্ত রক্তক্ষরণে "
                    "রক্তস্বল্পতা হতে পারে — ডাক্তার দেখান ও আয়রন-সমৃদ্ধ খাবার খান।")
+        result["suggested_symptoms"]["heavy_bleeding"] = True
     if severe_pain >= 2:
         ins.append("কয়েকবার তীব্র ব্যথা লিখেছেন। মাসিকের তীব্র ব্যথা যা জীবন থামিয়ে দেয় "
                    "তা 'স্বাভাবিক' নয় — এটি নিয়ে ডাক্তারের সাথে কথা বলুন।")

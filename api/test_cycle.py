@@ -65,6 +65,21 @@ def test_long_gap_suggests_missed_periods():
           r["suggested_symptoms"].get("missed_periods_3plus") is True)
 
 
+def test_high_pad_count_flags_heavy_bleeding():
+    logs = [{"start": "2026-01-01", "pads": 8}, {"start": "2026-01-29"}]
+    r = C.analyze(logs, today=date(2026, 2, 1))
+    check("test_high_pad_count_flags_heavy_bleeding",
+          r["suggested_symptoms"].get("heavy_bleeding") is True
+          and any("প্যাড" in i for i in r["insights_bn"]))
+
+
+def test_low_pad_count_is_not_heavy():
+    logs = [{"start": "2026-01-01", "pads": 3}, {"start": "2026-01-29"}]
+    r = C.analyze(logs, today=date(2026, 2, 1))
+    check("test_low_pad_count_is_not_heavy",
+          "heavy_bleeding" not in r["suggested_symptoms"])
+
+
 def test_repeated_severe_pain_flag():
     logs = [{"start": "2026-01-01", "pain": 3}, {"start": "2026-01-29", "pain": 3}]
     r = C.analyze(logs, today=date(2026, 2, 1))

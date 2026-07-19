@@ -67,6 +67,7 @@ export interface CycleLog {
   end?: string;
   flow?: "light" | "normal" | "heavy";
   pain?: 0 | 1 | 2 | 3;
+  pads?: number; // pads soaked per day (peak); 6+ signals heavy bleeding
   note?: string;
 }
 

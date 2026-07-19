@@ -12,6 +12,13 @@ const FLOW_LABELS: Record<NonNullable<CycleLog["flow"]>, string> = {
   heavy: "বেশি",
 };
 const PAIN_LABELS = ["ব্যথা নেই", "হালকা", "মাঝারি", "তীব্র"];
+// pads soaked per day; 6+ is a heavy-bleeding (menorrhagia) signal
+const PAD_OPTIONS: { value: number; label: string }[] = [
+  { value: 2, label: "১–২" },
+  { value: 4, label: "৩–৪" },
+  { value: 6, label: "৫–৬" },
+  { value: 8, label: "৬+" },
+];
 
 function loadLogs(): CycleLog[] {
   if (typeof window === "undefined") return [];
@@ -25,14 +32,16 @@ function loadLogs(): CycleLog[] {
 /**
  * Client-side menstrual cycle & symptom tracker. History is kept privately in the
  * browser (localStorage) — nothing personal is stored on the server. On demand it sends
- * just the dates/flow/pain to /api/cycle/analyze for Bangla pattern insight, which is
- * exactly how PCOS/endometriosis get noticed over months instead of one message.
+ * just the dates/flow/pain/pad-count to /api/cycle/analyze for Bangla pattern insight,
+ * which is exactly how PCOS/endometriosis/heavy-bleeding get noticed over months instead
+ * of one message.
  */
 export default function CycleTracker() {
   const [logs, setLogs] = useState<CycleLog[]>([]);
   const [start, setStart] = useState("");
   const [flow, setFlow] = useState<CycleLog["flow"]>("normal");
   const [pain, setPain] = useState<CycleLog["pain"]>(0);
+  const [pads, setPads] = useState(0); // 0 = not recorded
   const [analysis, setAnalysis] = useState<CycleAnalysis | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -52,10 +61,11 @@ export default function CycleTracker() {
   function addLog() {
     if (!start) return;
     if (logs.some((l) => l.start === start)) return; // avoid duplicate date
-    persist([...logs, { start, flow, pain }]);
+    persist([...logs, { start, flow, pain, ...(pads ? { pads } : {}) }]);
     setStart("");
     setFlow("normal");
     setPain(0);
+    setPads(0);
   }
 
   function removeLog(date: string) {
@@ -136,6 +146,24 @@ export default function CycleTracker() {
               ))}
             </div>
           </div>
+          <div>
+            <span className="text-rose-deep/70">দিনে প্যাড</span>
+            <div className="mt-1 flex gap-1">
+              {PAD_OPTIONS.map((o) => (
+                <button
+                  key={o.value}
+                  onClick={() => setPads(pads === o.value ? 0 : o.value)}
+                  className={`rounded-full px-3 py-1 ${
+                    pads === o.value
+                      ? "bg-rose-deep text-white"
+                      : "bg-rose-soft text-rose-deep"
+                  }`}
+                >
+                  {o.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         <button
@@ -162,6 +190,7 @@ export default function CycleTracker() {
                 📅 {l.start}
                 {l.flow && ` · রক্ত: ${FLOW_LABELS[l.flow]}`}
                 {typeof l.pain === "number" && ` · ${PAIN_LABELS[l.pain]}`}
+                {l.pads ? ` · প্যাড: ${l.pads >= 6 ? "৬+" : l.pads}` : ""}
               </span>
               <button
                 onClick={() => removeLog(l.start)}
