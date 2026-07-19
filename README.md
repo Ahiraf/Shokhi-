@@ -115,10 +115,37 @@ red flags/conditions/myths, and Bangla text-to-speech (gTTS) so guidance can be 
 |---|---|---|
 | Urban teen / literate woman | **Web app** (text + voice) | ✅ this repo |
 | Health worker / NGO field staff | Same web app (checklist mode) | ✅ this repo |
-| **Rural, low-literacy woman** | **IVR voice hotline** — dial, speak Bangla, hear guidance; no smartphone, no reading | 🛣️ roadmap (same backend) |
+| **Rural, low-literacy woman** | **IVR voice hotline** — dial, speak Bangla, hear guidance; no smartphone, no reading | ✅ this repo (`api/ivr.py`) |
 
 Because the triage engine and Gemma backend are fully decoupled from the UI, the *same
-core* powers the web app today and a phone hotline tomorrow.
+core* powers the web app **and** the phone hotline. The IVR path (`/api/ivr/*`, Twilio/
+Exotel TwiML) greets the caller, records her spoken Bangla, transcribes it with Gemma's
+native audio, runs the **identical** triage, and speaks the guidance back (gTTS, falling
+back to `<Say bn-IN>`) — every path has a safe spoken fallback to **16263 / 999** so a
+call never dead-ends.
+
+---
+
+## ✨ What Shokhi covers (features)
+
+Beyond symptom triage, Shokhi now spans a woman's whole reproductive life — from her first
+period to menopause — as **one warm companion**:
+
+| Area | What it does | Where |
+|---|---|---|
+| **Symptom triage** | Free-form Bangla → urgency + red flags + suspected conditions | `triage.py` |
+| **Menstrual cycle tracker** | Log periods privately (on-device); get regularity, next-period estimate, and PCOS/anaemia pattern hints over months | `cycle.py`, `web/…/CycleTracker.tsx` |
+| **Pregnancy & postpartum** | Danger-sign triage: eclampsia, pre-eclampsia, bleeding, reduced fetal movement, postpartum haemorrhage/sepsis, mastitis, postpartum depression | `knowledge.json` |
+| **Menopause / perimenopause** | Recognises hot flashes, night sweats, dryness, mood changes; flags post-menopausal bleeding | `knowledge.json` |
+| **Health guides** | Warm, grounded explainers: **contraception, family planning**, menopause care, nutrition/anaemia, first period, menstrual hygiene | `/api/guides`, `web/…/Guides.tsx` |
+| **More conditions** | + UTI, vaginal infection, anaemia, breast-change screening | `knowledge.json` |
+| **Voice hotline (IVR)** | Dial, speak Bangla, hear guidance — no smartphone, no reading | `ivr.py` |
+| **Myth-busting** | Gentle, shame-free corrections of common beliefs | `/api/myth` |
+
+The **safety model is identical everywhere**: every urgency decision is made by
+deterministic rules in `triage.py`/`cycle.py`, never by the LLM; Gemma only understands
+messy Bangla and speaks back with warmth. New danger signs (e.g. pregnancy `any`-clause
+red flags) plug into the same rules table, so they are fully unit-tested.
 
 ---
 
@@ -182,9 +209,13 @@ npm run dev                                   # open http://localhost:3000
 Run the backend tests (no UI, no model needed):
 ```bash
 cd api
-python3 test_triage.py       # 13 safety-engine tests
+python3 test_triage.py       # 27 safety-engine tests (incl. pregnancy/postpartum/menopause)
 python3 test_assistant.py    # 10 orchestrator tests
-python3 test_risk_model.py   # 5 ML-support tests
+python3 test_risk_model.py   #  5 ML-support tests
+python3 test_guides.py       #  6 health-guide tests
+python3 test_cycle.py        #  8 cycle-tracking tests
+python3 test_ivr.py          #  7 IVR voice-hotline tests
+# 63 tests total, zero external dependencies
 ```
 
 ---
@@ -194,18 +225,22 @@ python3 test_risk_model.py   # 5 ML-support tests
 ```
 Shokhi/
 ├── web/                     # Next.js + Tailwind frontend  → Vercel
-│   ├── app/                 # page.tsx, layout.tsx, globals.css
-│   ├── components/          # Message, Composer, UrgencyPill, RiskBar, Examples
+│   ├── app/                 # page.tsx (chat + tracker tabs), layout.tsx, globals.css
+│   ├── components/          # Message, Composer, UrgencyPill, RiskBar, Examples,
+│   │                        #   Guides, CycleTracker
 │   └── lib/                 # api.ts (backend client), types.ts
 ├── api/                     # FastAPI backend             → Render
-│   ├── main.py              # JSON API (message / checklist / transcribe / knowledge)
+│   ├── main.py              # JSON API (message / checklist / guides / cycle / transcribe)
 │   ├── triage.py            # deterministic triage/safety engine (no LLM)
-│   ├── gemma_backend.py     # Mock + Ollama + Gemini(API) backends + native audio
+│   ├── cycle.py             # deterministic cycle-tracking analysis (no LLM)
+│   ├── ivr.py               # IVR voice-hotline TwiML webhooks (Twilio/Exotel)
+│   ├── gemma_backend.py     # Mock + Ollama + Gemini(API) backends + native audio + guides
 │   ├── prompts.py           # Gemma 4 prompt templates
-│   ├── assistant.py         # orchestrator (conversation → triage → guidance)
+│   ├── assistant.py         # orchestrator (conversation → triage → guidance, guides)
 │   ├── risk_model.py        # optional ML risk-signal inference (PCOS/endo)
 │   ├── train_risk_models.py # trains the two classifiers from public datasets
-│   ├── test_*.py            # 28 tests (triage 13 + assistant 10 + risk 5)
+│   ├── test_*.py            # 63 tests (triage 27 + assistant 10 + risk 5 +
+│   │                        #   guides 6 + cycle 8 + ivr 7)
 │   ├── legacy_streamlit/    # old Streamlit UI (optional offline demo)
 │   └── data/                # knowledge.json, models/*.joblib, datasets/
 ├── render.yaml              # Render blueprint for the backend
