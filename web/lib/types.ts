@@ -48,3 +48,16 @@ export interface ChatItem {
   text: string;
   data?: MessageResponse;
 }
+
+export interface GuideCard {
+  id: string;
+  icon: string;
+  title_bn: string;
+  title_en: string;
+  summary_bn: string;
+}
+
+export interface GuideResponse {
+  guide: { id: string; icon: string; title_bn: string; title_en: string };
+  guidance: string;
+}

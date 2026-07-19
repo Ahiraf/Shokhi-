@@ -65,6 +65,41 @@ class Assistant:
         qs = self.triage()["outstanding_questions"]
         return next(iter(qs.values()), None)
 
+    def list_guides(self) -> list[dict]:
+        """Short cards for the health-info guides (contraception, family planning, …)."""
+        return [
+            {"id": g["id"], "icon": g.get("icon", "🌸"),
+             "title_bn": g.get("title_bn", ""), "title_en": g.get("title_en", ""),
+             "summary_bn": g.get("summary_bn", "")}
+            for g in self.knowledge.get("guides", [])
+        ]
+
+    def find_guide(self, topic: str) -> dict | None:
+        """Match a guide by id, or by a keyword found in a free-text question."""
+        guides = self.knowledge.get("guides", [])
+        for g in guides:
+            if g["id"] == topic:
+                return g
+        low = (topic or "").lower()
+        if not low:
+            return None
+        for g in guides:
+            if any(kw.lower() in low for kw in g.get("keywords", [])):
+                return g
+        return None
+
+    def explain_guide(self, topic: str) -> dict | None:
+        """Look up a guide by id/keyword and return it with warm Bangla guidance."""
+        g = self.find_guide(topic)
+        if not g:
+            return None
+        return {"guide": self.list_guides_entry(g), "guidance": self.backend.explain_guide(g, topic)}
+
+    @staticmethod
+    def list_guides_entry(g: dict) -> dict:
+        return {"id": g["id"], "icon": g.get("icon", "🌸"),
+                "title_bn": g.get("title_bn", ""), "title_en": g.get("title_en", "")}
+
     def bust_myth(self, belief: str) -> str:
         """Answer a menstrual-health myth, grounding on the knowledge base if matched."""
         fact = ""

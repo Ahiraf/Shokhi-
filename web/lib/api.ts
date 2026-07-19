@@ -1,4 +1,4 @@
-import type { MessageResponse } from "./types";
+import type { MessageResponse, GuideCard, GuideResponse } from "./types";
 
 const BASE =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://localhost:8000";
@@ -19,6 +19,17 @@ export function sendMessage(
   history: string[]
 ): Promise<MessageResponse> {
   return post<MessageResponse>("/api/message", { message, profile, history });
+}
+
+export async function getGuides(): Promise<GuideCard[]> {
+  const res = await fetch(`${BASE}/api/guides`);
+  if (!res.ok) throw new Error("guides failed");
+  const data = (await res.json()) as { guides: GuideCard[] };
+  return data.guides;
+}
+
+export function explainGuide(topic: string): Promise<GuideResponse> {
+  return post<GuideResponse>("/api/guide", { topic });
 }
 
 export async function transcribe(audio: Blob): Promise<string> {

@@ -49,6 +49,23 @@ class GemmaBackend(ABC):
     def bust_myth(self, belief: str, fact: str = "") -> str:
         """Return a gentle Bangla correction of a menstrual-health belief."""
 
+    def explain_guide(self, guide: dict, question: str = "") -> str:
+        """Return warm Bangla guidance for a health-info guide (contraception, family
+        planning, menopause care, nutrition …). Default is a deterministic render of the
+        knowledge-base points, so every backend works offline; LLM backends override it
+        with a fluent explanation."""
+        lines: list[str] = []
+        title = guide.get("title_bn", "")
+        if title:
+            lines.append(f"**{guide.get('icon', '🌸')} {title}**\n")
+        if guide.get("summary_bn"):
+            lines.append(guide["summary_bn"] + "\n")
+        for p in guide.get("points_bn", []):
+            lines.append(f"• {p}")
+        if guide.get("when_see_doctor_bn"):
+            lines.append(f"\n🩺 {guide['when_see_doctor_bn']}")
+        return "\n".join(lines)
+
     # --- optional multimodal: Gemma 4 native audio (E2B/E4B) ------------------
     def supports_audio(self) -> bool:
         """True if this backend can transcribe/understand spoken audio via Gemma 4."""
@@ -320,6 +337,11 @@ class OllamaBackend(GemmaBackend):
         user = prompts.MYTH_USER_TEMPLATE.format(belief=belief, fact=fact or "N/A")
         return self._chat(prompts.MYTH_SYSTEM, user, temperature=0.4)
 
+    def explain_guide(self, guide: dict, question: str = "") -> str:
+        user = prompts.GUIDE_USER_TEMPLATE.format(
+            guide=json.dumps(guide, ensure_ascii=False), question=question or "N/A")
+        return self._chat(prompts.GUIDE_SYSTEM, user, temperature=0.4)
+
 
 # =============================================================================
 # Real backend — hosted Gemma 4 via Google AI Studio API (no download, API key).
@@ -402,6 +424,11 @@ class GeminiApiBackend(GemmaBackend):
     def bust_myth(self, belief: str, fact: str = "") -> str:
         user = prompts.MYTH_USER_TEMPLATE.format(belief=belief, fact=fact or "N/A")
         return self._generate(prompts.MYTH_SYSTEM, user, temperature=0.4)
+
+    def explain_guide(self, guide: dict, question: str = "") -> str:
+        user = prompts.GUIDE_USER_TEMPLATE.format(
+            guide=json.dumps(guide, ensure_ascii=False), question=question or "N/A")
+        return self._generate(prompts.GUIDE_SYSTEM, user, temperature=0.4)
 
     # --- native audio: speech -> text, through Gemma 4 itself -----------------
     def supports_audio(self) -> bool:

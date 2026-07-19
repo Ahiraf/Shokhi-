@@ -71,6 +71,10 @@ class MythIn(BaseModel):
     belief: str
 
 
+class GuideIn(BaseModel):
+    topic: str  # a guide id (e.g. "contraception") or a free-text Bangla/English question
+
+
 # --- endpoints ----------------------------------------------------------------
 @app.get("/api/health")
 def health():
@@ -107,6 +111,23 @@ def checklist(inp: ChecklistIn):
 def myth(inp: MythIn):
     a = Assistant(backend=get_backend())
     return {"reply": a.bust_myth(inp.belief)}
+
+
+@app.get("/api/guides")
+def guides():
+    """List the health-info guide cards (contraception, family planning, menopause…)."""
+    a = Assistant(backend=get_backend())
+    return {"guides": a.list_guides()}
+
+
+@app.post("/api/guide")
+def guide(inp: GuideIn):
+    """Explain one health topic in warm Bangla, grounded on the knowledge base."""
+    a = Assistant(backend=get_backend())
+    result = a.explain_guide(inp.topic)
+    if not result:
+        raise HTTPException(status_code=404, detail="No guide matched that topic.")
+    return result
 
 
 @app.post("/api/transcribe")

@@ -378,5 +378,105 @@
     {"myth_bn": "বুকের দুধ খাওয়ালে গর্ভবতী হওয়া যায় না, তাই কোনো জন্মনিয়ন্ত্রণ লাগে না।", "fact_bn": "শুধু বুকের দুধ খাওয়ানো কিছুটা সুরক্ষা দেয়, তবে এটি নিশ্চিত নয় — গর্ভধারণ হতে পারে।", "myth_en": "You cannot get pregnant while breastfeeding, so no contraception is needed.", "fact_en": "Breastfeeding gives some protection but is not reliable — pregnancy can still happen."},
     {"myth_bn": "প্রথম মাসিকের সময় ব্যথা মানেই বড় কোনো রোগ।", "fact_bn": "প্রথম দিকের মাসিকে হালকা ব্যথা স্বাভাবিক; তবে ব্যথা অসহনীয় হলে ডাক্তার দেখানো ভালো।", "myth_en": "Pain during your first period means a serious disease.", "fact_en": "Mild cramps in early periods are normal; but see a doctor if the pain is unbearable."},
     {"myth_bn": "মেনোপজের পর রক্তক্ষরণ স্বাভাবিক।", "fact_bn": "মাসিক বন্ধ হওয়ার পর যেকোনো রক্তক্ষরণ স্বাভাবিক নয় — অবশ্যই ডাক্তার দেখান।", "myth_en": "Bleeding after menopause is normal.", "fact_en": "Any bleeding after menopause is not normal — always see a doctor."}
+  ],
+
+  "guides": [
+    {
+      "id": "contraception",
+      "icon": "🛡️",
+      "title_bn": "জন্মনিয়ন্ত্রণ পদ্ধতি",
+      "title_en": "Contraception options",
+      "keywords": ["জন্মনিয়ন্ত্রণ", "পিল", "কনডম", "গর্ভনিরোধ", "birth control", "contraception", "condom", "pill", "family planning method"],
+      "summary_bn": "গর্ভধারণ ঠেকাতে অনেক নিরাপদ ও কার্যকর উপায় আছে; আপনার জন্য কোনটি ঠিক তা একজন স্বাস্থ্যকর্মীর সাথে বেছে নেওয়া যায়।",
+      "summary_en": "There are many safe, effective ways to prevent pregnancy; a health worker can help you choose what suits you.",
+      "points_bn": [
+        "স্বল্পমেয়াদি: খাওয়ার পিল, কনডম (যৌনরোগ থেকেও বাঁচায়), মাসিক ইনজেকশন।",
+        "দীর্ঘমেয়াদি (ফেরানো যায়): আইইউডি/কপার-টি, ইমপ্লান্ট — ৩–১০ বছর কার্যকর।",
+        "জরুরি পিল সহবাসের ৭২ ঘণ্টার মধ্যে কাজ করে, তবে এটি নিয়মিত পদ্ধতি নয়।",
+        "স্থায়ী: লাইগেশন (নারী) বা ভ্যাসেকটমি (পুরুষ) — পরিবার সম্পূর্ণ হলে।",
+        "বাংলাদেশে সরকারি স্বাস্থ্যকেন্দ্র ও পরিবার পরিকল্পনা কর্মীর কাছে বিনামূল্যে/স্বল্পমূল্যে পাওয়া যায়।"
+      ],
+      "when_see_doctor_bn": "কোন পদ্ধতি আপনার শরীর ও পরিকল্পনার জন্য সবচেয়ে ভালো, তা একজন ডাক্তার বা পরিবার পরিকল্পনা কর্মীর সাথে আলোচনা করে ঠিক করুন।"
+    },
+    {
+      "id": "family_planning",
+      "icon": "🌱",
+      "title_bn": "পরিবার পরিকল্পনা ও সন্তান নেওয়ার প্রস্তুতি",
+      "title_en": "Family planning & preparing for pregnancy",
+      "keywords": ["পরিবার পরিকল্পনা", "সন্তান নেওয়া", "গর্ভধারণের প্রস্তুতি", "family planning", "planning pregnancy", "conceive", "trying to get pregnant"],
+      "summary_bn": "সন্তান কখন ও কতজন নেবেন তা পরিকল্পনা করা মা ও শিশুর স্বাস্থ্যের জন্য ভালো; সন্তান নেওয়ার আগেও কিছু প্রস্তুতি নেওয়া যায়।",
+      "summary_en": "Planning when and how many children to have is good for mother and baby; some preparation before pregnancy also helps.",
+      "points_bn": [
+        "দুই সন্তানের মাঝে অন্তত ২ বছর বিরতি মা ও শিশুর জন্য নিরাপদ।",
+        "সন্তান নেওয়ার পরিকল্পনা থাকলে আগে থেকে ফলিক অ্যাসিড খাওয়া শিশুর জন্মগত ত্রুটি কমায়।",
+        "মাসিক চক্র বুঝলে উর্বর দিন সম্পর্কে ধারণা পাওয়া যায় (সখীর সাইকেল ট্র্যাকার সাহায্য করতে পারে)।",
+        "গর্ভধারণের আগে রক্তস্বল্পতা, ডায়াবেটিস বা উচ্চ রক্তচাপ পরীক্ষা করানো ভালো।"
+      ],
+      "when_see_doctor_bn": "১ বছর (৩৫-এর বেশি হলে ৬ মাস) চেষ্টা করেও সন্তান না হলে, বা কোনো দীর্ঘমেয়াদি রোগ থাকলে ডাক্তার দেখান।"
+    },
+    {
+      "id": "menopause_care",
+      "icon": "🍃",
+      "title_bn": "মেনোপজের যত্ন",
+      "title_en": "Caring for menopause",
+      "keywords": ["মেনোপজ", "হট ফ্ল্যাশ", "মাসিক বন্ধ", "menopause", "hot flash", "perimenopause"],
+      "summary_bn": "মধ্যবয়সে মাসিক বন্ধ হওয়া একটি স্বাভাবিক পর্যায়; কিছু সহজ অভ্যাসে অস্বস্তি অনেকটাই কমানো যায়।",
+      "summary_en": "Periods stopping in mid-life is a normal stage; simple habits can ease most of the discomfort.",
+      "points_bn": [
+        "হট ফ্ল্যাশ কমাতে পাতলা সুতির কাপড়, কম ক্যাফেইন ও ঝাল খাবার।",
+        "হাড় শক্ত রাখতে ক্যালসিয়াম ও ভিটামিন ডি (দুধ, ছোট মাছ, সকালের রোদ, ব্যায়াম)।",
+        "যোনিপথের শুষ্কতায় স্বস্তির উপায় আছে — ডাক্তারকে নির্দ্বিধায় জিজ্ঞাসা করুন।",
+        "মন ভালো রাখতে ঘুম, হাঁটা ও কাছের মানুষের সাথে কথা বলা।"
+      ],
+      "when_see_doctor_bn": "মাসিক বন্ধ হওয়ার পর যেকোনো রক্তক্ষরণ, খুব তীব্র উপসর্গ বা হাড় ভাঙার ভয় থাকলে ডাক্তার দেখান।"
+    },
+    {
+      "id": "nutrition_anemia",
+      "icon": "🥗",
+      "title_bn": "পুষ্টি ও রক্তস্বল্পতা প্রতিরোধ",
+      "title_en": "Nutrition & preventing anaemia",
+      "keywords": ["রক্তস্বল্পতা", "আয়রন", "পুষ্টি", "দুর্বলতা", "anemia", "iron", "nutrition", "weakness"],
+      "summary_bn": "বাংলাদেশে অনেক নারী রক্তস্বল্পতায় ভোগেন, বিশেষত ভারী মাসিকে; সঠিক খাবারে অনেকটাই প্রতিরোধ করা যায়।",
+      "summary_en": "Many women in Bangladesh have anaemia, especially with heavy periods; the right foods can largely prevent it.",
+      "points_bn": [
+        "আয়রন-সমৃদ্ধ খাবার: কলিজা, ডিম, কালো ও সবুজ শাক, ডাল, খেজুর।",
+        "ভিটামিন সি (লেবু, পেয়ারা, আমলকী) খাবারের সাথে খেলে আয়রন ভালো শোষণ হয়।",
+        "খাবারের ঠিক পরপর চা/কফি কমান — এগুলো আয়রন শোষণে বাধা দেয়।",
+        "সবসময় ক্লান্তি, ফ্যাকাশে ভাব বা হাঁপ ধরলে হিমোগ্লোবিন পরীক্ষা করান।"
+      ],
+      "when_see_doctor_bn": "খুব দুর্বলতা, বুক ধড়ফড় বা ভারী মাসিকের সাথে ক্লান্তি থাকলে রক্ত পরীক্ষা করিয়ে ডাক্তার দেখান।"
+    },
+    {
+      "id": "first_period",
+      "icon": "🌼",
+      "title_bn": "প্রথম মাসিক — কিশোরীদের জন্য",
+      "title_en": "Your first period — for teens",
+      "keywords": ["প্রথম মাসিক", "কিশোরী", "মাসিক শুরু", "first period", "menarche", "teenager period"],
+      "summary_bn": "প্রথম মাসিক বড় হয়ে ওঠার একটি স্বাভাবিক ও সুস্থ চিহ্ন — ভয় বা লজ্জার কিছু নেই।",
+      "summary_en": "Your first period is a normal, healthy sign of growing up — nothing to fear or feel shy about.",
+      "points_bn": [
+        "সাধারণত ৯–১৫ বছর বয়সে প্রথম মাসিক হয়; শুরুতে অনিয়মিত হওয়া স্বাভাবিক।",
+        "পরিষ্কার প্যাড বা কাপড় ব্যবহার করুন এবং প্রতি ৪–৬ ঘণ্টায় বদলান।",
+        "হালকা ব্যথা হলে গরম সেঁক ও বিশ্রাম আরাম দেয়।",
+        "মাসিকের সময়ও পড়াশোনা, খেলা, স্বাভাবিক সব কাজ করা যায়।"
+      ],
+      "when_see_doctor_bn": "ব্যথা অসহনীয় হলে, খুব বেশি রক্ত গেলে, বা ১৫ বছরেও মাসিক শুরু না হলে একজন বড় কাউকে জানিয়ে ডাক্তার দেখান।"
+    },
+    {
+      "id": "menstrual_hygiene",
+      "icon": "🧼",
+      "title_bn": "মাসিক পরিচ্ছন্নতা",
+      "title_en": "Menstrual hygiene",
+      "keywords": ["মাসিক পরিচ্ছন্নতা", "প্যাড", "পরিষ্কার", "menstrual hygiene", "pad", "sanitary"],
+      "summary_bn": "মাসিকের সময় পরিচ্ছন্নতা সংক্রমণ ঠেকায় এবং আরাম দেয় — এটি সহজ ও সবার জন্য সম্ভব।",
+      "summary_en": "Good hygiene during periods prevents infection and keeps you comfortable — it is simple and possible for everyone.",
+      "points_bn": [
+        "পরিষ্কার প্যাড বা কাপড় প্রতি ৪–৬ ঘণ্টায় বদলান।",
+        "কাপড় ব্যবহার করলে সাবান-পানিতে ধুয়ে রোদে ভালোভাবে শুকান।",
+        "দিনে অন্তত একবার পরিষ্কার পানিতে ধুয়ে শুকনো রাখুন; সুগন্ধি সাবান ভেতরে নয়।",
+        "ব্যবহৃত প্যাড কাগজে মুড়ে নির্দিষ্ট জায়গায় ফেলুন।"
+      ],
+      "when_see_doctor_bn": "দুর্গন্ধযুক্ত স্রাব, চুলকানি, জ্বালা বা জ্বর হলে সংক্রমণ হতে পারে — ডাক্তার দেখান।"
+    }
   ]
 }

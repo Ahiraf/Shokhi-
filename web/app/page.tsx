@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { sendMessage } from "@/lib/api";
+import { sendMessage, explainGuide } from "@/lib/api";
 import type { ChatItem } from "@/lib/types";
 import Message from "@/components/Message";
 import Composer from "@/components/Composer";
 import Examples from "@/components/Examples";
+import Guides from "@/components/Guides";
 
 export default function Home() {
   const [chat, setChat] = useState<ChatItem[]>([]);
@@ -32,6 +33,28 @@ export default function Home() {
         {
           role: "assistant",
           text: "দুঃখিত, সার্ভারের সাথে সংযোগ করা গেল না। ব্যাকএন্ড চালু আছে কিনা দেখুন।",
+        },
+      ]);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleGuide(topic: string) {
+    setBusy(true);
+    try {
+      const res = await explainGuide(topic);
+      setChat((c) => [
+        ...c,
+        { role: "user", text: `${res.guide.icon} ${res.guide.title_bn}` },
+        { role: "assistant", text: res.guidance },
+      ]);
+    } catch {
+      setChat((c) => [
+        ...c,
+        {
+          role: "assistant",
+          text: "দুঃখিত, এই মুহূর্তে তথ্যটি আনা গেল না। ব্যাকএন্ড চালু আছে কিনা দেখুন।",
         },
       ]);
     } finally {
@@ -76,6 +99,12 @@ export default function Home() {
               একটি উদাহরণ দিয়ে শুরু করুন
             </p>
             <Examples onPick={handleSend} />
+          </div>
+          <div className="mt-6">
+            <p className="mb-3 text-sm font-medium text-rose-deep/60">
+              অথবা একটি বিষয়ে জানুন
+            </p>
+            <Guides onPick={handleGuide} />
           </div>
         </section>
       )}
