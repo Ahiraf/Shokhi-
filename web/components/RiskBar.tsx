@@ -3,7 +3,7 @@ import type { RiskSignal } from "@/lib/types";
 export default function RiskBar({ signal }: { signal: RiskSignal }) {
   const pct = Math.round(signal.probability * 100);
   return (
-    <div className="mt-3 rounded-xl bg-white/70 p-3 ring-1 ring-rose-100">
+    <div className="mt-3 rounded-xl bg-white/70 p-3 ring-1 ring-rose-soft">
       <div className="mb-1.5 flex items-center justify-between text-sm">
         <span className="font-medium text-rose-deep">
           📊 সহায়ক ইঙ্গিত — {signal.name_bn}

@@ -18,7 +18,7 @@ export default function Examples({
         <button
           key={e.label}
           onClick={() => onPick(e.text)}
-          className="rounded-full bg-white/80 px-4 py-1.5 text-sm font-medium text-rose-deep ring-1 ring-rose-100 backdrop-blur transition hover:bg-rose-soft"
+          className="rounded-full bg-white/80 px-4 py-1.5 text-sm font-medium text-rose-deep ring-1 ring-rose-soft backdrop-blur transition hover:bg-rose-soft"
         >
           {e.label}
         </button>

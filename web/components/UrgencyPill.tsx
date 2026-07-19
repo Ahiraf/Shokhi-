@@ -4,7 +4,7 @@ const STYLES: Record<Urgency, { cls: string; icon: string }> = {
   emergency: { cls: "bg-red-100 text-red-700 ring-red-200", icon: "🚨" },
   see_doctor_soon: { cls: "bg-amber-100 text-amber-800 ring-amber-200", icon: "🩺" },
   self_care: { cls: "bg-emerald-100 text-emerald-700 ring-emerald-200", icon: "🌿" },
-  info: { cls: "bg-rose-soft text-rose-deep ring-rose-100", icon: "💬" },
+  info: { cls: "bg-rose-soft text-rose-deep ring-rose-soft", icon: "💬" },
 };
 
 export default function UrgencyPill({

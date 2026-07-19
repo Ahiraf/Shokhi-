@@ -87,7 +87,7 @@ export default function CycleTracker() {
       </div>
 
       {/* add a log */}
-      <div className="space-y-3 rounded-2xl border border-rose-100 p-4">
+      <div className="space-y-3 rounded-2xl border border-rose-soft p-4">
         <label className="block text-sm font-medium text-rose-deep/80">
           মাসিক শুরুর তারিখ
           <input
@@ -95,7 +95,7 @@ export default function CycleTracker() {
             value={start}
             max={new Date().toISOString().slice(0, 10)}
             onChange={(e) => setStart(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-rose-100 px-3 py-2 text-rose-deep focus:outline-none focus:ring-2 focus:ring-rose-200"
+            className="mt-1 block w-full rounded-lg border border-rose-soft px-3 py-2 text-rose-deep focus:outline-none focus:ring-2 focus:ring-rose/40"
           />
         </label>
 
@@ -156,7 +156,7 @@ export default function CycleTracker() {
           {sorted.map((l) => (
             <div
               key={l.start}
-              className="flex items-center justify-between rounded-lg bg-white px-3 py-2 text-sm ring-1 ring-rose-100"
+              className="flex items-center justify-between rounded-lg bg-white px-3 py-2 text-sm ring-1 ring-rose-soft"
             >
               <span className="text-rose-deep">
                 📅 {l.start}
@@ -176,7 +176,7 @@ export default function CycleTracker() {
           <button
             onClick={runAnalysis}
             disabled={busy || logs.length < 2}
-            className="mt-2 w-full rounded-full bg-rose-soft py-2.5 font-medium text-rose-deep transition hover:bg-rose-100 disabled:opacity-40"
+            className="mt-2 w-full rounded-full bg-rose-soft py-2.5 font-medium text-rose-deep transition hover:bg-rose-soft disabled:opacity-40"
           >
             {busy
               ? "দেখা হচ্ছে…"

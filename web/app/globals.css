@@ -6,14 +6,19 @@
   color-scheme: light;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
-  /* warm cream with a soft blush glow up top, like morning light through a window */
+  /* calm warm oat with the faintest blush + sage wash — low saturation, restful */
   background:
-    radial-gradient(900px 500px at 15% -8%, #ffe1ee 0%, transparent 55%),
-    radial-gradient(700px 500px at 100% 0%, #fdeecf 0%, transparent 45%),
-    linear-gradient(180deg, #fff9f4 0%, #fff9f4 100%);
+    radial-gradient(900px 520px at 12% -10%, #f6e6ec 0%, transparent 55%),
+    radial-gradient(760px 520px at 100% 2%, #eaf1ea 0%, transparent 50%),
+    #faf6f1;
   background-attachment: fixed;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* gentle fade-in for new messages */

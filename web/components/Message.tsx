@@ -22,10 +22,10 @@ export default function Message({ item }: { item: ChatItem }) {
 
   return (
     <div className="flex animate-rise items-start gap-2.5">
-      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-plum shadow-lift">
+      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blush ring-1 ring-rose-soft">
         <Mascot size={34} />
       </span>
-      <div className="max-w-[85%] rounded-3xl rounded-tl-lg bg-white px-4 py-3 shadow-soft ring-1 ring-rose-100">
+      <div className="max-w-[85%] rounded-3xl rounded-tl-lg bg-white px-4 py-3 shadow-soft ring-1 ring-rose-soft">
         {t && (
           <div className="mb-2">
             <UrgencyPill urgency={t.urgency} label={t.urgency_label_bn} />

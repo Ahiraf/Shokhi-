@@ -27,7 +27,7 @@ export default function Guides({ onPick }: { onPick: (id: string) => void }) {
           key={g.id}
           onClick={() => onPick(g.id)}
           title={g.summary_bn}
-          className="rounded-full bg-white/80 px-4 py-1.5 text-sm font-medium text-rose-deep ring-1 ring-rose-100 backdrop-blur transition hover:bg-rose-soft"
+          className="rounded-full bg-white/80 px-4 py-1.5 text-sm font-medium text-rose-deep ring-1 ring-rose-soft backdrop-blur transition hover:bg-rose-soft"
         >
           {g.icon} {g.title_bn}
         </button>
