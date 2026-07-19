@@ -8,7 +8,11 @@ python-multipart>=0.0.9      # for audio file uploads
 google-genai>=0.3
 
 # Real Gemma 4 backend via Ollama (local). SHOKHI_BACKEND=ollama.
+# Also used by the IVR hotline to fetch the caller's recording.
 requests>=2.31
+
+# IVR voice hotline — spoken-Bangla playback (optional; falls back to <Say bn-IN>).
+gtts>=2.5
 
 # ML support signal — PCOS / endometriosis risk classifiers.
 scikit-learn>=1.3

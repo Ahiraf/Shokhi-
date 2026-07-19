@@ -20,10 +20,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 import cycle as cycle_engine
+import ivr
 from assistant import Assistant
 from gemma_backend import get_backend
 
 app = FastAPI(title="Shokhi API", version="1.0")
+
+# IVR voice-hotline webhooks (Twilio/Exotel) — same core, a phone front door.
+app.include_router(ivr.router)
 
 # CORS: allow the Vercel frontend (comma-separated origins in ALLOWED_ORIGINS; * in dev).
 _origins = os.environ.get("ALLOWED_ORIGINS", "*").split(",")
