@@ -367,6 +367,12 @@ export const STRINGS = {
     en: "Log a period in the tracker to get movement & food tips tailored to your cycle here.",
   },
   "wellness.seeAll": { bn: "সব পরামর্শ দেখুন →", en: "See all tips →" },
+  "wellness.weekTitle": { bn: "📅 এই সপ্তাহে আপনার জন্য", en: "📅 This week for you" },
+  "wellness.weekSub": {
+    bn: "আপনার চক্র অনুযায়ী প্রতিদিনের হালকা চলাফেরা ও খাবারের দিকনির্দেশ।",
+    en: "A gentle day-by-day movement + food focus, tuned to your cycle.",
+  },
+  "wellness.today": { bn: "আজ", en: "Today" },
 } as const;
 
 export type StringKey = keyof typeof STRINGS;

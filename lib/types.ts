@@ -129,6 +129,7 @@ export interface WellnessPhase {
   days_bn: string; days_en: string;
   move_bn: string; move_en: string;
   food_bn: string; food_en: string;
+  focus_bn: string; focus_en: string;
 }
 export interface WellnessCondition {
   id: string;

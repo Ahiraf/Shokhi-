@@ -631,7 +631,8 @@
         "move_bn": "বিশ্রাম আর হালকা স্ট্রেচিং বা ধীর হাঁটাই ভালো। শরীরের কথা শুনুন, জোর করবেন না।",
         "move_en": "Rest and gentle stretching or a slow walk are best. Listen to your body; don't push hard.",
         "food_bn": "যে আয়রন কমে যায় তা পূরণে কলিজা, ডিম, ডাল, কালো শাক — সাথে লেবু/পেয়ারা (ভিটামিন সি) আয়রন শোষণে সাহায্য করে। প্রচুর পানি পান করুন।",
-        "food_en": "Replace lost iron with liver, egg, lentils and dark greens — plus lemon/guava (vitamin C) to absorb it. Drink plenty of water."
+        "food_en": "Replace lost iron with liver, egg, lentils and dark greens — plus lemon/guava (vitamin C) to absorb it. Drink plenty of water.",
+        "focus_bn": "আয়রন-সমৃদ্ধ খাবার ও পানি", "focus_en": "Iron-rich foods & water"
       },
       {
         "id": "follicular",
@@ -640,7 +641,8 @@
         "move_bn": "এখন শক্তি বাড়ে — দ্রুত হাঁটা, হালকা শক্তি-ব্যায়াম বা পছন্দের কোনো সক্রিয় কাজের ভালো সময়।",
         "move_en": "Your energy rises now — a good time for brisk walking, light strength, or an active task you enjoy.",
         "food_bn": "টাটকা শাকসবজি, ফল, গোটা শস্য ও প্রোটিন (ডিম, মাছ, ডাল) এই সময়ের বাড়তি শক্তিতে সহায়ক।",
-        "food_en": "Fresh vegetables, fruit, whole grains and protein (egg, fish, dal) support this higher-energy phase."
+        "food_en": "Fresh vegetables, fruit, whole grains and protein (egg, fish, dal) support this higher-energy phase.",
+        "focus_bn": "সবজি, গোটা শস্য ও প্রোটিন", "focus_en": "Veggies, whole grains & protein"
       },
       {
         "id": "ovulatory",
@@ -649,7 +651,8 @@
         "move_bn": "সাধারণত এখন সবচেয়ে বেশি শক্তি অনুভব হয় — পছন্দের চলাফেরা উপভোগ করুন, তবে আরামদায়ক রাখুন।",
         "move_en": "You may feel strongest now — enjoy movement you like, but keep it comfortable.",
         "food_bn": "প্রচুর সবজি ও আঁশ-জাতীয় খাবার; পর্যাপ্ত পানি পান করুন।",
-        "food_en": "Plenty of vegetables and fibre; stay well hydrated."
+        "food_en": "Plenty of vegetables and fibre; stay well hydrated.",
+        "focus_bn": "সবজি, আঁশ ও পর্যাপ্ত পানি", "focus_en": "Vegetables, fibre & water"
       },
       {
         "id": "luteal",
@@ -658,7 +661,8 @@
         "move_bn": "শক্তি কমতে পারে ও পিএমএস শুরু হতে পারে — মৃদু যোগব্যায়াম, স্ট্রেচিং বা শান্ত হাঁটা মেজাজ ও ব্যথায় আরাম দেয়।",
         "move_en": "Energy may dip and PMS can start — gentle yoga, stretching or a calm walk help mood and cramps.",
         "food_bn": "পেট ফাঁপা ও মেজাজ সামলাতে বাড়তি লবণ, ক্যাফেইন ও চিনি কমান; ম্যাগনেসিয়ামযুক্ত খাবার (কলা, বাদাম, কালো শাক, গোটা শস্য) সাহায্য করে।",
-        "food_en": "Ease bloating and mood by cutting extra salt, caffeine and sugar; magnesium foods (banana, nuts, dark greens, whole grains) help."
+        "food_en": "Ease bloating and mood by cutting extra salt, caffeine and sugar; magnesium foods (banana, nuts, dark greens, whole grains) help.",
+        "focus_bn": "কম লবণ/চিনি; ম্যাগনেসিয়াম খাবার", "focus_en": "Less salt/sugar; magnesium foods"
       }
     ],
     "conditions": [

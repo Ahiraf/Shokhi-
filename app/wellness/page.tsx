@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import PageIntro from "@/components/PageIntro";
+import WeeklyPlan from "@/components/WeeklyPlan";
 import { useLang } from "@/components/LanguageProvider";
 import { getWellness } from "@/lib/api";
 import type { Wellness } from "@/lib/types";
@@ -29,6 +30,9 @@ export default function WellnessPage() {
           <p className="mx-auto max-w-2xl text-center text-[15px] leading-relaxed text-plum/70">
             {pick(w, "intro")}
           </p>
+
+          {/* personalized 7-day plan */}
+          <WeeklyPlan />
 
           {/* by cycle phase */}
           <section>
