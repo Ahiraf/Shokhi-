@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import PageHeader from "@/components/PageHeader";
+import Mascot3D from "@/components/Mascot3D";
 import { useLang } from "@/components/LanguageProvider";
 import {
   loadProfile,
@@ -63,6 +64,9 @@ export default function ProfilePage() {
 
   return (
     <main className="mx-auto max-w-2xl px-5 py-10">
+      <div className="mb-2 flex justify-center">
+        <Mascot3D variant="profile" size={120} />
+      </div>
       <PageHeader icon="🌸" title={t("profile.title")} sub={t("profile.sub")} />
 
       <div className="mt-8 space-y-6">

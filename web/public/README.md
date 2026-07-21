@@ -12,6 +12,11 @@ Brand and illustration files served from `/` (this `public/` folder). Favicons l
 | `mascot-3d-chat.png` | Chat pose (sitting, both hands on cheeks, thoughtful & caring). | Chat welcome screen. |
 | `mascot-3d-learn.png` | Learn pose (holding an open book / curious "learning"). | Learn page header. |
 | `mascot-3d-hotline.png` | Hotline pose (holding / talking on a phone). | Hotline card. |
+| `mascot-3d-tracker.png` | Tracker pose (holding a notepad/calendar with a pen). | Tracker page header. |
+| `mascot-3d-guides.png` | Guides pose (presenting with open hands). | Guides page header. |
+| `mascot-3d-myths.png` | Myths pose (finger raised, hand on hip, knowing). | Myths page header. |
+| `mascot-3d-profile.png` | Profile pose (waving hello, hand on heart). | Profile page header. |
+| `mascot-3d-about.png` | About pose (falls back to the confident default). | About page header. |
 | `og.png` | Social-share preview image. | Open Graph / Twitter card (see `app/layout.tsx`). |
 
 ## Adding the 3D cartoon (and per-page poses)

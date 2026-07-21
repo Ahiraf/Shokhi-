@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
+import Mascot3D from "@/components/Mascot3D";
 import { useLang } from "@/components/LanguageProvider";
 
 const DANGER_SIGNS: { bn: string; en: string }[] = [
@@ -58,6 +59,9 @@ export default function AboutPage() {
   const { t, lang } = useLang();
   return (
     <main className="mx-auto max-w-2xl px-5 py-10">
+      <div className="mb-2 flex justify-center">
+        <Mascot3D variant="about" size={120} />
+      </div>
       <PageHeader icon="🛡️" title={t("about.title")} sub={t("about.sub")} />
 
       {/* emergency */}
