@@ -139,6 +139,7 @@ period to menopause — as **one warm companion**:
 | **Bangla ↔ English** | A language toggle across the whole app; curated content is bilingual and Gemma replies in the chosen language | `lib/i18n.ts` |
 | **Symptom triage** | Free-form Bangla → urgency + red flags + suspected conditions | `lib/server/triage.ts` |
 | **Menstrual cycle tracker** | Log periods privately (on-device); get regularity, next-period estimate, and PCOS/anaemia pattern hints over months | `lib/server/cycle.ts` |
+| **Wellness (movement & food)** | Gentle exercise + everyday Bangladeshi food for hormonal balance, **personalised to her cycle phase and conditions** (PCOS/PMS/anaemia/menopause) — body-positive, not diet-culture | `/wellness`, `lib/wellness.ts` |
 | **Pregnancy & postpartum** | Danger-sign triage: eclampsia, pre-eclampsia, bleeding, reduced fetal movement, postpartum haemorrhage/sepsis, mastitis, postpartum depression | `knowledge.json` |
 | **Menopause / perimenopause** | Recognises hot flashes, night sweats, dryness, mood changes; flags post-menopausal bleeding | `knowledge.json` |
 | **Health guides** | Warm, grounded explainers: **contraception, family planning**, menopause care, nutrition/anaemia, first period, menstrual hygiene | `/api/guides` |
@@ -215,8 +216,8 @@ The Next.js app lives at the **repo root** (deploys to Vercel with no root-direc
 ```
 Shokhi/
 ├── app/
-│   ├── (pages)            # landing, chat, tracker, guides, learn, myths, hotline,
-│   │                      #   about, profile — one route per feature, bilingual
+│   ├── (pages)            # landing, chat, tracker, guides, learn, myths, wellness,
+│   │                      #   hotline, about, profile — one route per feature, bilingual
 │   └── api/               # the backend, as Next.js route handlers:
 │                          #   message, myth, guide, guides/[id], knowledge,
 │                          #   cycle/analyze, transcribe, health

@@ -6,6 +6,7 @@ import type {
   KnowledgeResponse,
   CycleLog,
   CycleAnalysis,
+  Wellness,
 } from "./types";
 
 // The backend now lives in this same Next.js app (app/api/*), so calls are same-origin
@@ -51,6 +52,12 @@ export async function getGuide(id: string): Promise<GuideFull> {
 export async function getKnowledge(): Promise<KnowledgeResponse> {
   const res = await fetch(`${BASE}/api/knowledge`);
   if (!res.ok) throw new Error("knowledge failed");
+  return res.json();
+}
+
+export async function getWellness(): Promise<Wellness> {
+  const res = await fetch(`${BASE}/api/wellness`);
+  if (!res.ok) throw new Error("wellness failed");
   return res.json();
 }
 

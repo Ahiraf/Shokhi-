@@ -20,6 +20,7 @@ export const STRINGS = {
   "nav.guides": { bn: "গাইড", en: "Guides" },
   "nav.learn": { bn: "রোগ-জ্ঞান", en: "Learn" },
   "nav.myths": { bn: "ভুল ধারণা", en: "Myths" },
+  "nav.wellness": { bn: "সুস্থতা", en: "Wellness" },
   "nav.hotline": { bn: "হটলাইন", en: "Hotline" },
   "nav.about": { bn: "সম্পর্কে", en: "About" },
   "nav.profile": { bn: "আমার প্রোফাইল", en: "My Profile" },
@@ -342,6 +343,30 @@ export const STRINGS = {
 
   // chat greeting when a name is saved ({name} is replaced)
   "chat.greeting": { bn: "স্বাগতম, {name}", en: "Welcome, {name}" },
+
+  // --- wellness ------------------------------------------------------------
+  "wellness.title": { bn: "সুস্থতা — চলাফেরা ও খাবার", en: "Wellness — Movement & Food" },
+  "wellness.sub": {
+    bn: "হরমোনের ভারসাম্যে সহায়ক হালকা ব্যায়াম ও সহজ বাংলাদেশি খাবার — আপনার মাসিক চক্র ও অবস্থা অনুযায়ী।",
+    en: "Gentle movement and simple Bangladeshi food that support hormonal balance — tuned to your cycle and conditions.",
+  },
+  "wellness.error": { bn: "তথ্য আনা গেল না।", en: "Couldn't load this." },
+  "wellness.byPhase": { bn: "🩸 মাসিক চক্র অনুযায়ী", en: "🩸 By cycle phase" },
+  "wellness.forConditions": { bn: "🌼 আপনার অবস্থা অনুযায়ী", en: "🌼 For your conditions" },
+  "wellness.movesTitle": { bn: "🤸 সহজ ব্যায়াম (ঘরেই করা যায়)", en: "🤸 Simple moves (do them at home)" },
+  "wellness.move": { bn: "🏃 চলাফেরা", en: "🏃 Movement" },
+  "wellness.food": { bn: "🥗 খাবার", en: "🥗 Food" },
+  // personalized "today's tip" card (on the tracker)
+  "wellness.tipTitle": { bn: "🌿 আজকের পরামর্শ", en: "🌿 Today's tip" },
+  "wellness.tipPhase": {
+    bn: "আপনি সম্ভবত এই পর্যায়ে আছেন:",
+    en: "You're likely in this phase:",
+  },
+  "wellness.tipNoData": {
+    bn: "মাসিক ট্র্যাকারে তারিখ লিখলে এখানে চক্র অনুযায়ী চলাফেরা ও খাবারের পরামর্শ পাবেন।",
+    en: "Log a period in the tracker to get movement & food tips tailored to your cycle here.",
+  },
+  "wellness.seeAll": { bn: "সব পরামর্শ দেখুন →", en: "See all tips →" },
 } as const;
 
 export type StringKey = keyof typeof STRINGS;

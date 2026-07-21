@@ -122,3 +122,30 @@ export interface CycleAnalysis {
   suggested_symptoms: Record<string, boolean>;
   disclaimer_bn: string;
 }
+
+export interface WellnessPhase {
+  id: string;
+  label_bn: string; label_en: string;
+  days_bn: string; days_en: string;
+  move_bn: string; move_en: string;
+  food_bn: string; food_en: string;
+}
+export interface WellnessCondition {
+  id: string;
+  label_bn: string; label_en: string;
+  move_bn: string; move_en: string;
+  food_bn: string; food_en: string;
+  note_bn: string; note_en: string;
+}
+export interface WellnessMove {
+  id: string; icon: string;
+  name_bn: string; name_en: string;
+  how_bn: string; how_en: string;
+}
+export interface Wellness {
+  intro_bn: string; intro_en: string;
+  phases: WellnessPhase[];
+  conditions: WellnessCondition[];
+  moves: WellnessMove[];
+  disclaimer_bn: string; disclaimer_en: string;
+}

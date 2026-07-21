@@ -618,5 +618,124 @@
       "when_see_doctor_bn": "দ্রুত কাপড়/প্যাড ভিজে যাওয়া, মাথা ঘোরা বা তীব্র দুর্বলতা হলে দ্রুত ডাক্তার দেখান।",
       "when_see_doctor_en": "If the cloth/pad soaks through quickly, or you feel dizzy or very weak, see a doctor promptly."
     }
-  ]
+  ],
+
+  "wellness": {
+    "intro_bn": "নিয়মিত হালকা চলাফেরা ও সুষম খাবার হরমোনের ভারসাম্য রাখতে সাহায্য করে — মন ভালো থাকে, মাসিকের কষ্ট কমে। উদ্দেশ্য শরীরকে শক্তিশালী ও সুস্থ রাখা, ওজন কমানো নয়। প্রতিটি শরীর আলাদা — নিজের গতিতে করুন।",
+    "intro_en": "Regular gentle movement and balanced food help keep your hormones in balance — better mood, easier periods. The goal is to feel strong and well, not to lose weight. Every body is different — go at your own pace.",
+    "phases": [
+      {
+        "id": "menstrual",
+        "label_bn": "মাসিক চলাকালীন", "label_en": "During your period",
+        "days_bn": "প্রায় ১–৫ দিন", "days_en": "About days 1–5",
+        "move_bn": "বিশ্রাম আর হালকা স্ট্রেচিং বা ধীর হাঁটাই ভালো। শরীরের কথা শুনুন, জোর করবেন না।",
+        "move_en": "Rest and gentle stretching or a slow walk are best. Listen to your body; don't push hard.",
+        "food_bn": "যে আয়রন কমে যায় তা পূরণে কলিজা, ডিম, ডাল, কালো শাক — সাথে লেবু/পেয়ারা (ভিটামিন সি) আয়রন শোষণে সাহায্য করে। প্রচুর পানি পান করুন।",
+        "food_en": "Replace lost iron with liver, egg, lentils and dark greens — plus lemon/guava (vitamin C) to absorb it. Drink plenty of water."
+      },
+      {
+        "id": "follicular",
+        "label_bn": "মাসিকের পরে", "label_en": "After your period",
+        "days_bn": "প্রায় ৬–১৩ দিন", "days_en": "About days 6–13",
+        "move_bn": "এখন শক্তি বাড়ে — দ্রুত হাঁটা, হালকা শক্তি-ব্যায়াম বা পছন্দের কোনো সক্রিয় কাজের ভালো সময়।",
+        "move_en": "Your energy rises now — a good time for brisk walking, light strength, or an active task you enjoy.",
+        "food_bn": "টাটকা শাকসবজি, ফল, গোটা শস্য ও প্রোটিন (ডিম, মাছ, ডাল) এই সময়ের বাড়তি শক্তিতে সহায়ক।",
+        "food_en": "Fresh vegetables, fruit, whole grains and protein (egg, fish, dal) support this higher-energy phase."
+      },
+      {
+        "id": "ovulatory",
+        "label_bn": "ডিম্বস্ফোটনের সময় (মাঝামাঝি)", "label_en": "Around ovulation (mid-cycle)",
+        "days_bn": "চক্রের মাঝামাঝি", "days_en": "Middle of your cycle",
+        "move_bn": "সাধারণত এখন সবচেয়ে বেশি শক্তি অনুভব হয় — পছন্দের চলাফেরা উপভোগ করুন, তবে আরামদায়ক রাখুন।",
+        "move_en": "You may feel strongest now — enjoy movement you like, but keep it comfortable.",
+        "food_bn": "প্রচুর সবজি ও আঁশ-জাতীয় খাবার; পর্যাপ্ত পানি পান করুন।",
+        "food_en": "Plenty of vegetables and fibre; stay well hydrated."
+      },
+      {
+        "id": "luteal",
+        "label_bn": "মাসিকের আগে", "label_en": "Before your period",
+        "days_bn": "মাসিকের আগের কয়েক দিন", "days_en": "The days before your period",
+        "move_bn": "শক্তি কমতে পারে ও পিএমএস শুরু হতে পারে — মৃদু যোগব্যায়াম, স্ট্রেচিং বা শান্ত হাঁটা মেজাজ ও ব্যথায় আরাম দেয়।",
+        "move_en": "Energy may dip and PMS can start — gentle yoga, stretching or a calm walk help mood and cramps.",
+        "food_bn": "পেট ফাঁপা ও মেজাজ সামলাতে বাড়তি লবণ, ক্যাফেইন ও চিনি কমান; ম্যাগনেসিয়ামযুক্ত খাবার (কলা, বাদাম, কালো শাক, গোটা শস্য) সাহায্য করে।",
+        "food_en": "Ease bloating and mood by cutting extra salt, caffeine and sugar; magnesium foods (banana, nuts, dark greens, whole grains) help."
+      }
+    ],
+    "conditions": [
+      {
+        "id": "pcos",
+        "label_bn": "পিসিওএস", "label_en": "PCOS",
+        "move_bn": "নিয়মিত দ্রুত হাঁটা ও সহজ শক্তি-ব্যায়াম শরীরের ইনসুলিন ব্যবহারে সাহায্য করে — পিসিওএস-এ এটিই সবচেয়ে উপকারী অভ্যাস। বেশিরভাগ দিন ৩০ মিনিটও যথেষ্ট।",
+        "move_en": "Regular brisk walking and simple strength movement improve how the body uses insulin — the single most helpful habit for PCOS. Even 30 minutes most days helps.",
+        "food_bn": "কম চিনি, বেশি আঁশের খাবার বেছে নিন — বেশি সবজি ও ডাল, সাদা ভাত/ময়দার বদলে যতটা সম্ভব গোটা শস্য, আর মিষ্টি পানীয় ও মিষ্টি কম। অল্প অল্প করে নিয়মিত খাওয়া ভালো।",
+        "food_en": "Choose lower-sugar, higher-fibre meals — more vegetables and dal, whole grains over white rice/flour where you can, and fewer sugary drinks and sweets. Small, regular meals help.",
+        "note_bn": "চলাফেরা ও খাবার সহায়ক, নিরাময় নয় — পিসিওএস-এর চিকিৎসার জন্য ডাক্তার দেখান।",
+        "note_en": "Movement and food are supportive, not a cure — see a doctor for PCOS care."
+      },
+      {
+        "id": "anemia",
+        "label_bn": "রক্তস্বল্পতা", "label_en": "Anaemia",
+        "move_bn": "দুর্বল লাগলে চলাফেরা মৃদু রাখুন — ছোট হাঁটা ও হালকা স্ট্রেচিং। ক্লান্ত হলে বিশ্রাম নিন, জোর করবেন না।",
+        "move_en": "Keep movement gentle while you're low — short walks and light stretching. Rest when tired; don't push to exhaustion.",
+        "food_bn": "আয়রন-সমৃদ্ধ খাবার (কলিজা, ডিম, কালো শাক, ডাল, খেজুর) ভিটামিন সি ফলের সাথে; খাবারের ঠিক পরপর চা/কফি এড়িয়ে চলুন (আয়রন শোষণে বাধা দেয়)।",
+        "food_en": "Iron-rich foods (liver, egg, dark greens, lentils, dates) with vitamin-C fruit; avoid tea/coffee right after meals (they block iron).",
+        "note_bn": "হিমোগ্লোবিন পরীক্ষা করান; আয়রন ট্যাবলেট লাগতে পারে।",
+        "note_en": "Get your haemoglobin checked; you may need iron tablets."
+      },
+      {
+        "id": "pms",
+        "label_bn": "পিএমএস", "label_en": "PMS",
+        "move_bn": "হালকা অ্যারোবিক চলাফেরা — হাঁটা, মৃদু নাচ বা যোগব্যায়াম — মেজাজের ওঠানামা, পেট ফাঁপা ও ব্যথায় আরাম দেয়।",
+        "move_en": "Light aerobic movement — a walk, gentle dance or yoga — eases mood swings, bloating and cramps.",
+        "food_bn": "মাসিকের আগের দিনগুলোতে লবণ, ক্যাফেইন ও চিনি কমান; ম্যাগনেসিয়াম ও ক্যালসিয়ামযুক্ত খাবার সাহায্য করে।",
+        "food_en": "Cut back on salt, caffeine and sugar in the days before your period; magnesium and calcium foods help.",
+        "note_bn": "পিএমএস যদি দৈনন্দিন জীবন থামিয়ে দেয়, ডাক্তার দেখান।",
+        "note_en": "If PMS stops your daily life, see a doctor."
+      },
+      {
+        "id": "menopause",
+        "label_bn": "মেনোপজ", "label_en": "Menopause",
+        "move_bn": "ভার বহনকারী চলাফেরা (হাঁটা, মৃদু শক্তি-ব্যায়াম) হাড় শক্ত রাখে ও মন ভালো রাখে; নিয়মিত চলাফেরায় অনেকের হট ফ্ল্যাশ কমে।",
+        "move_en": "Weight-bearing movement (walking, gentle strength) keeps bones strong and lifts mood; regular activity eases hot flashes for many.",
+        "food_bn": "ক্যালসিয়াম ও ভিটামিন ডি (দুধ, ছোট মাছ কাঁটাসহ, সকালের রোদ); ক্যাফেইন ও ঝাল খাবার কমালে হট ফ্ল্যাশ কমতে পারে।",
+        "food_en": "Calcium and vitamin D (milk, small fish with bones, morning sun); less caffeine and spicy food can reduce hot flashes.",
+        "note_bn": "মাসিক বন্ধ হওয়ার পর যেকোনো রক্তক্ষরণে ডাক্তার দেখান।",
+        "note_en": "See a doctor for any bleeding after periods stop."
+      }
+    ],
+    "moves": [
+      {
+        "id": "walk", "icon": "🚶‍♀️",
+        "name_bn": "দ্রুত হাঁটা", "name_en": "Brisk walking",
+        "how_bn": "ঘরে, উঠানে বা বাইরে ২০–৩০ মিনিট একটু জোরে হাঁটুন। সবার জন্য সবচেয়ে সহজ ও নিরাপদ ব্যায়াম।",
+        "how_en": "Walk a little briskly for 20–30 minutes — indoors, in the courtyard, or outside. The easiest, safest movement for everyone."
+      },
+      {
+        "id": "stretch", "icon": "🤸‍♀️",
+        "name_bn": "স্ট্রেচিং", "name_en": "Stretching",
+        "how_bn": "ঘাড়, পিঠ, কোমর ও পায়ের মৃদু স্ট্রেচ — মাসিকের ব্যথা ও টান কমায়। ধীরে শ্বাস নিন।",
+        "how_en": "Gentle stretches for neck, back, hips and legs — eases cramps and tension. Breathe slowly."
+      },
+      {
+        "id": "squats", "icon": "🦵",
+        "name_bn": "স্কোয়াট", "name_en": "Squats",
+        "how_bn": "পা ফাঁক করে দাঁড়ান, যেন নিচু টুলে বসছেন তেমন করে বসুন, আবার উঠুন। ধীরে ৮–১০ বার। পা ও কোমরের শক্তি বাড়ায়।",
+        "how_en": "Stand with feet apart, sit back as if onto a low stool, then stand up. 8–10 slow reps. Builds leg and hip strength."
+      },
+      {
+        "id": "yoga", "icon": "🧘‍♀️",
+        "name_bn": "সহজ যোগব্যায়াম", "name_en": "Simple yoga",
+        "how_bn": "শিশু-ভঙ্গি বা বিড়াল-গরু ভঙ্গির মতো সহজ আসন মন শান্ত করে ও মাসিকের ব্যথায় আরাম দেয়।",
+        "how_en": "Simple poses like child's pose or cat-cow calm the mind and ease period pain."
+      },
+      {
+        "id": "breathing", "icon": "🌬️",
+        "name_bn": "গভীর শ্বাস", "name_en": "Deep breathing",
+        "how_bn": "ধীরে গভীর করে পেট ভরে ৫ মিনিট শ্বাস নিন — মানসিক চাপ কমে, যা হরমোনে প্রভাব ফেলে।",
+        "how_en": "Slow, deep belly breathing for 5 minutes — lowers stress, which affects hormones."
+      }
+    ],
+    "disclaimer_bn": "এটি শক্তিশালী ও ভারসাম্যপূর্ণ থাকার সাধারণ পরামর্শ — কোনো ডায়েট বা ওজন কমানোর পরিকল্পনা নয়, চিকিৎসাও নয়। আপনি গর্ভবতী, খুব দুর্বল/রক্তস্বল্পতাগ্রস্ত হলে বা কোনো রোগ থাকলে চলাফেরা মৃদু রাখুন এবং ডাক্তারের পরামর্শ নিন।",
+    "disclaimer_en": "This is general guidance to feel strong and balanced — not a diet or weight-loss plan, and not medical treatment. If you're pregnant, very weak/anaemic, or have a health condition, keep movement gentle and check with a doctor."
+  }
 }

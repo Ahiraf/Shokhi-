@@ -67,6 +67,15 @@ export const FEATURES: Feature[] = [
     accent: "apricot",
   },
   {
+    href: "/wellness",
+    icon: "🌿",
+    title_bn: "সুস্থতা",
+    title_en: "Wellness",
+    desc_bn: "হরমোন ভারসাম্যে চলাফেরা ও খাবার — চক্র ও অবস্থা অনুযায়ী।",
+    desc_en: "Movement & food for hormonal balance — tuned to your cycle.",
+    accent: "sage",
+  },
+  {
     href: "/hotline",
     icon: "☎️",
     title_bn: "ভয়েস হটলাইন",
