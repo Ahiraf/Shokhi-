@@ -53,9 +53,9 @@ class Assistant:
             pass
         return result
 
-    def explain(self) -> str:
-        """Warm, safe Bangla guidance for the current triage result."""
-        return self.backend.explain_triage(self.triage())
+    def explain(self, lang: str = "bn") -> str:
+        """Warm, safe guidance (Bangla or English) for the current triage result."""
+        return self.backend.explain_triage(self.triage(), lang)
 
     def is_emergency(self) -> bool:
         return self.triage()["urgency"] == triage_engine.EMERGENCY
@@ -70,7 +70,7 @@ class Assistant:
         return [
             {"id": g["id"], "icon": g.get("icon", "🌸"),
              "title_bn": g.get("title_bn", ""), "title_en": g.get("title_en", ""),
-             "summary_bn": g.get("summary_bn", "")}
+             "summary_bn": g.get("summary_bn", ""), "summary_en": g.get("summary_en", "")}
             for g in self.knowledge.get("guides", [])
         ]
 
@@ -100,28 +100,29 @@ class Assistant:
                     best, best_len = g, len(k)
         return best
 
-    def explain_guide(self, topic: str) -> dict | None:
-        """Look up a guide by id/keyword and return it with warm Bangla guidance."""
+    def explain_guide(self, topic: str, lang: str = "bn") -> dict | None:
+        """Look up a guide by id/keyword and return it with warm guidance (Bangla/English)."""
         g = self.find_guide(topic)
         if not g:
             return None
-        return {"guide": self.list_guides_entry(g), "guidance": self.backend.explain_guide(g, topic)}
+        return {"guide": self.list_guides_entry(g),
+                "guidance": self.backend.explain_guide(g, topic, lang)}
 
     @staticmethod
     def list_guides_entry(g: dict) -> dict:
         return {"id": g["id"], "icon": g.get("icon", "🌸"),
                 "title_bn": g.get("title_bn", ""), "title_en": g.get("title_en", "")}
 
-    def bust_myth(self, belief: str) -> str:
+    def bust_myth(self, belief: str, lang: str = "bn") -> str:
         """Answer a menstrual-health myth, grounding on the knowledge base if matched."""
         fact = ""
         low = belief.lower()
         for m in self.knowledge.get("myths", []):
             key = m["myth_bn"][:8]
             if key and key in belief or any(w in low for w in m["myth_en"].lower().split()[:3]):
-                fact = m["fact_bn"]
+                fact = (m.get("fact_en") or m["fact_bn"]) if lang == "en" else m["fact_bn"]
                 break
-        return self.backend.bust_myth(belief, fact)
+        return self.backend.bust_myth(belief, fact, lang)
 
 
 # --- CLI demo: a short scripted conversation ---------------------------------

@@ -5,15 +5,18 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getKnowledge } from "@/lib/api";
 import type { Condition } from "@/lib/types";
+import { useLang } from "@/components/LanguageProvider";
+import { pickField, type StringKey } from "@/lib/i18n";
 
-const URGENCY_TAG: Record<string, { label: string; cls: string }> = {
-  emergency: { label: "🚨 জরুরি — এখনই হাসপাতালে যান", cls: "bg-red-100 text-red-700" },
-  see_doctor_soon: { label: "🩺 শীঘ্রই ডাক্তার দেখান", cls: "bg-amber-100 text-amber-800" },
-  self_care: { label: "🌿 ঘরোয়া যত্ন সাধারণত যথেষ্ট", cls: "bg-sage-soft text-sage-deep" },
-  info: { label: "💬 সাধারণ তথ্য", cls: "bg-blush text-rose-deep" },
+const URGENCY_TAG: Record<string, { key: StringKey; cls: string }> = {
+  emergency: { key: "urgency.emergency.long", cls: "bg-red-100 text-red-700" },
+  see_doctor_soon: { key: "urgency.see_doctor_soon.long", cls: "bg-amber-100 text-amber-800" },
+  self_care: { key: "urgency.self_care.long", cls: "bg-sage-soft text-sage-deep" },
+  info: { key: "urgency.info.long", cls: "bg-blush text-rose-deep" },
 };
 
 export default function ConditionDetailPage() {
+  const { t, lang } = useLang();
   const { id } = useParams<{ id: string }>();
   const [cond, setCond] = useState<Condition | null>(null);
   const [status, setStatus] = useState<"loading" | "ok" | "error">("loading");
@@ -33,31 +36,35 @@ export default function ConditionDetailPage() {
   return (
     <main className="mx-auto max-w-2xl px-5 py-10">
       <Link href="/learn" className="text-sm font-semibold text-rose hover:underline">
-        ← সব বিষয়
+        {t("learn.backAll")}
       </Link>
 
-      {status === "loading" && <p className="mt-8 text-plum/50">লোড হচ্ছে…</p>}
-      {status === "error" && <p className="mt-8 text-plum/50">এই বিষয়টি পাওয়া গেল না।</p>}
+      {status === "loading" && <p className="mt-8 text-plum/50">{t("common.loading")}</p>}
+      {status === "error" && <p className="mt-8 text-plum/50">{t("learn.notFound")}</p>}
 
       {cond && (
         <article className="mt-4">
           <h1 className="font-display text-2xl font-bold leading-tight text-plum">
-            {cond.name_bn}
+            {lang === "en" ? cond.name_en || cond.name_bn : cond.name_bn}
           </h1>
-          {cond.name_en && <p className="mt-1 text-sm text-plum/45">{cond.name_en}</p>}
+          {lang !== "en" && cond.name_en && (
+            <p className="mt-1 text-sm text-plum/45">{cond.name_en}</p>
+          )}
           {tag && (
             <span className={`mt-3 inline-block rounded-full px-3 py-1 text-sm font-semibold ${tag.cls}`}>
-              {tag.label}
+              {t(tag.key)}
             </span>
           )}
 
-          <p className="mt-5 text-[15px] leading-relaxed text-plum/75">{cond.about_bn}</p>
+          <p className="mt-5 text-[15px] leading-relaxed text-plum/75">
+            {lang === "en" ? cond.about_en || cond.about_bn : cond.about_bn}
+          </p>
 
           {cond.self_care_bn?.length > 0 && (
             <div className="mt-6">
-              <h2 className="font-display text-lg font-bold text-plum">🌸 যা করতে পারেন</h2>
+              <h2 className="font-display text-lg font-bold text-plum">{t("learn.whatYouCanDo")}</h2>
               <ul className="mt-3 space-y-2">
-                {cond.self_care_bn.map((s, i) => (
+                {(pickField<string[]>(lang, cond as unknown as Record<string, unknown>, "self_care") ?? []).map((s, i) => (
                   <li
                     key={i}
                     className="flex gap-2.5 rounded-xl bg-white/80 px-4 py-2.5 text-sm text-plum/80 ring-1 ring-rose-soft"
@@ -72,24 +79,24 @@ export default function ConditionDetailPage() {
 
           {cond.see_doctor_bn && (
             <div className="mt-6 rounded-2xl bg-sage-soft px-4 py-3.5">
-              <p className="text-sm font-semibold text-sage-deep">🩺 কখন ডাক্তার দেখাবেন</p>
-              <p className="mt-1 text-sm leading-relaxed text-plum/75">{cond.see_doctor_bn}</p>
+              <p className="text-sm font-semibold text-sage-deep">{t("common.seeDoctorHeading")}</p>
+              <p className="mt-1 text-sm leading-relaxed text-plum/75">
+                {pickField<string>(lang, cond as unknown as Record<string, unknown>, "see_doctor")}
+              </p>
             </div>
           )}
 
           <div className="mt-8 rounded-2xl bg-blush/70 px-4 py-4 text-center">
-            <p className="text-sm text-plum/70">আপনার এই উপসর্গ আছে বলে মনে হচ্ছে?</p>
+            <p className="text-sm text-plum/70">{t("learn.haveThis")}</p>
             <Link
               href="/chat"
               className="mt-2 inline-block rounded-full bg-rose px-5 py-2 text-sm font-semibold text-white"
             >
-              সখীর সাথে যাচাই করুন
+              {t("learn.checkWithShokhi")}
             </Link>
           </div>
 
-          <p className="mt-6 text-xs leading-relaxed text-plum/45">
-            ℹ️ এটি সাধারণ তথ্য, নিশ্চিত রোগ নির্ণয় নয় — একজন ডাক্তারের পরামর্শ নিন।
-          </p>
+          <p className="mt-6 text-xs leading-relaxed text-plum/45">{t("learn.diagnosisNote")}</p>
         </article>
       )}
     </main>

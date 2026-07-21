@@ -48,12 +48,12 @@ def _assistant(profile: dict | None, history: list[str] | None) -> Assistant:
     return a
 
 
-def _payload(a: Assistant) -> dict:
+def _payload(a: Assistant, lang: str = "bn") -> dict:
     result = a.triage()
     return {
         "profile": a.profile,
         "triage": result,
-        "guidance": a.explain(),
+        "guidance": a.explain(lang),
         "next_question": a.next_question(),
         "is_emergency": result["urgency"] == "emergency",
         "backend": a.backend.name,
@@ -61,27 +61,34 @@ def _payload(a: Assistant) -> dict:
 
 
 # --- request models -----------------------------------------------------------
+# lang: UI language for the generated reply ("bn" default | "en"). Curated knowledge-base
+# content already ships both languages; lang controls the LLM/cycle prose.
 class MessageIn(BaseModel):
     message: str
     profile: dict | None = None
     history: list[str] | None = None
+    lang: str = "bn"
 
 
 class ChecklistIn(BaseModel):
     symptoms: dict
     profile: dict | None = None
+    lang: str = "bn"
 
 
 class MythIn(BaseModel):
     belief: str
+    lang: str = "bn"
 
 
 class GuideIn(BaseModel):
     topic: str  # a guide id (e.g. "contraception") or a free-text Bangla/English question
+    lang: str = "bn"
 
 
 class CycleIn(BaseModel):
     logs: list[dict]  # [{start, end?, flow?, pain?, note?}, …] — client-stored history
+    lang: str = "bn"
 
 
 # --- endpoints ----------------------------------------------------------------
@@ -109,20 +116,20 @@ def knowledge():
 def message(inp: MessageIn):
     a = _assistant(inp.profile, inp.history)
     a.add_user_message(inp.message)
-    return _payload(a)
+    return _payload(a, inp.lang)
 
 
 @app.post("/api/checklist")
 def checklist(inp: ChecklistIn):
     a = _assistant(inp.profile, None)
     a.set_symptoms(**{k: v for k, v in inp.symptoms.items() if v})
-    return _payload(a)
+    return _payload(a, inp.lang)
 
 
 @app.post("/api/myth")
 def myth(inp: MythIn):
     a = Assistant(backend=get_backend())
-    return {"reply": a.bust_myth(inp.belief)}
+    return {"reply": a.bust_myth(inp.belief, inp.lang)}
 
 
 @app.get("/api/guides")
@@ -144,9 +151,9 @@ def guide_detail(gid: str):
 
 @app.post("/api/guide")
 def guide(inp: GuideIn):
-    """Explain one health topic in warm Bangla, grounded on the knowledge base."""
+    """Explain one health topic in warm Bangla/English, grounded on the knowledge base."""
     a = Assistant(backend=get_backend())
-    result = a.explain_guide(inp.topic)
+    result = a.explain_guide(inp.topic, inp.lang)
     if not result:
         raise HTTPException(status_code=404, detail="No guide matched that topic.")
     return result
@@ -159,7 +166,7 @@ def cycle_analyze(inp: CycleIn):
     Stateless by design: the client keeps the history (localStorage) and sends it here.
     The returned `suggested_symptoms` can be merged into the chat profile so triage can
     act on a pattern the woman couldn't have described in a single message."""
-    return cycle_engine.analyze(inp.logs)
+    return cycle_engine.analyze(inp.logs, lang=inp.lang)
 
 
 @app.post("/api/transcribe")

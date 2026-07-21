@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import type { Feature, Accent } from "@/lib/features";
+import { useLang } from "./LanguageProvider";
 
 const ICON_BG: Record<Accent, string> = {
   rose: "bg-rose-soft text-rose-deep",
@@ -9,6 +12,7 @@ const ICON_BG: Record<Accent, string> = {
 
 /** A tappable feature tile on the landing page, linking to that feature's page. */
 export default function FeatureCard({ feature }: { feature: Feature }) {
+  const { t, lang } = useLang();
   return (
     <Link
       href={feature.href}
@@ -19,10 +23,14 @@ export default function FeatureCard({ feature }: { feature: Feature }) {
       >
         {feature.icon}
       </span>
-      <h3 className="mt-3 font-display text-base font-bold text-plum">{feature.title}</h3>
-      <p className="mt-1 flex-1 text-sm leading-relaxed text-plum/60">{feature.desc}</p>
+      <h3 className="mt-3 font-display text-base font-bold text-plum">
+        {lang === "en" ? feature.title_en : feature.title_bn}
+      </h3>
+      <p className="mt-1 flex-1 text-sm leading-relaxed text-plum/60">
+        {lang === "en" ? feature.desc_en : feature.desc_bn}
+      </p>
       <span className="mt-3 text-sm font-semibold text-rose transition group-hover:translate-x-0.5">
-        খুলুন →
+        {t("common.open")}
       </span>
     </Link>
   );

@@ -5,8 +5,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getGuide } from "@/lib/api";
 import type { GuideFull } from "@/lib/types";
+import { useLang } from "@/components/LanguageProvider";
+import { pickField } from "@/lib/i18n";
 
 export default function GuideDetailPage() {
+  const { t, lang } = useLang();
   const { id } = useParams<{ id: string }>();
   const [guide, setGuide] = useState<GuideFull | null>(null);
   const [status, setStatus] = useState<"loading" | "ok" | "error">("loading");
@@ -23,13 +26,11 @@ export default function GuideDetailPage() {
   return (
     <main className="mx-auto max-w-2xl px-5 py-10">
       <Link href="/guides" className="text-sm font-semibold text-rose hover:underline">
-        ← সব গাইড
+        {t("guides.backAll")}
       </Link>
 
-      {status === "loading" && <p className="mt-8 text-plum/50">লোড হচ্ছে…</p>}
-      {status === "error" && (
-        <p className="mt-8 text-plum/50">এই গাইডটি পাওয়া গেল না।</p>
-      )}
+      {status === "loading" && <p className="mt-8 text-plum/50">{t("common.loading")}</p>}
+      {status === "error" && <p className="mt-8 text-plum/50">{t("guides.notFound")}</p>}
 
       {guide && (
         <article className="mt-4">
@@ -38,14 +39,16 @@ export default function GuideDetailPage() {
               {guide.icon}
             </span>
             <h1 className="font-display text-2xl font-bold leading-tight text-plum">
-              {guide.title_bn}
+              {pickField<string>(lang, guide as unknown as Record<string, unknown>, "title")}
             </h1>
           </div>
 
-          <p className="mt-4 text-[15px] leading-relaxed text-plum/75">{guide.summary_bn}</p>
+          <p className="mt-4 text-[15px] leading-relaxed text-plum/75">
+            {pickField<string>(lang, guide as unknown as Record<string, unknown>, "summary")}
+          </p>
 
           <ul className="mt-6 space-y-3">
-            {guide.points_bn.map((p, i) => (
+            {(pickField<string[]>(lang, guide as unknown as Record<string, unknown>, "points") ?? []).map((p, i) => (
               <li
                 key={i}
                 className="flex gap-3 rounded-2xl bg-white/80 px-4 py-3 ring-1 ring-rose-soft"
@@ -60,26 +63,24 @@ export default function GuideDetailPage() {
 
           {guide.when_see_doctor_bn && (
             <div className="mt-6 rounded-2xl bg-sage-soft px-4 py-3.5">
-              <p className="text-sm font-semibold text-sage-deep">🩺 কখন ডাক্তার দেখাবেন</p>
+              <p className="text-sm font-semibold text-sage-deep">{t("common.seeDoctorHeading")}</p>
               <p className="mt-1 text-sm leading-relaxed text-plum/75">
-                {guide.when_see_doctor_bn}
+                {pickField<string>(lang, guide as unknown as Record<string, unknown>, "when_see_doctor")}
               </p>
             </div>
           )}
 
           <div className="mt-8 rounded-2xl bg-blush/70 px-4 py-4 text-center">
-            <p className="text-sm text-plum/70">এই বিষয়ে আরও কিছু জানতে চান?</p>
+            <p className="text-sm text-plum/70">{t("guides.moreQuestion")}</p>
             <Link
               href="/chat"
               className="mt-2 inline-block rounded-full bg-rose px-5 py-2 text-sm font-semibold text-white"
             >
-              সখীকে জিজ্ঞাসা করুন
+              {t("common.askShokhi")}
             </Link>
           </div>
 
-          <p className="mt-6 text-xs leading-relaxed text-plum/45">
-            ℹ️ এটি সাধারণ তথ্য, নিশ্চিত চিকিৎসা নয় — প্রয়োজনে ডাক্তার বা স্বাস্থ্যকর্মীর পরামর্শ নিন।
-          </p>
+          <p className="mt-6 text-xs leading-relaxed text-plum/45">{t("common.generalInfoNote")}</p>
         </article>
       )}
     </main>

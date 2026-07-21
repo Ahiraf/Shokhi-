@@ -4,15 +4,28 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { NAV } from "@/lib/nav";
+import { useLang } from "./LanguageProvider";
 import Mascot from "./Mascot";
 
 /** Sticky top navigation shared across every page, with a mobile menu. */
 export default function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { t, lang, toggle } = useLang();
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  const langButton = (extra: string) => (
+    <button
+      onClick={toggle}
+      className={`rounded-full px-3 py-1.5 text-sm font-bold text-plum ring-1 ring-rose-soft transition hover:bg-blush ${extra}`}
+      aria-label={lang === "bn" ? "Switch to English" : "বাংলায় দেখুন"}
+      title={lang === "bn" ? "Switch to English" : "বাংলায় দেখুন"}
+    >
+      🌐 {t("nav.langLabel")}
+    </button>
+  );
 
   return (
     <header className="sticky top-0 z-40 border-b border-rose-soft/70 bg-cream/85 backdrop-blur">
@@ -36,23 +49,27 @@ export default function Nav() {
                     : "text-plum/60 hover:bg-blush hover:text-plum"
                 }`}
               >
-                {n.label}
+                {t(n.key)}
               </Link>
             </li>
           ))}
+          <li className="ml-1">{langButton("")}</li>
         </ul>
 
-        {/* mobile toggle */}
-        <button
-          onClick={() => setOpen((o) => !o)}
-          className="rounded-full bg-blush p-2 text-plum ring-1 ring-rose-soft md:hidden"
-          aria-label="মেনু"
-          aria-expanded={open}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-            {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
-          </svg>
-        </button>
+        {/* mobile: language toggle + menu button */}
+        <div className="flex items-center gap-2 md:hidden">
+          {langButton("")}
+          <button
+            onClick={() => setOpen((o) => !o)}
+            className="rounded-full bg-blush p-2 text-plum ring-1 ring-rose-soft"
+            aria-label={t("nav.menu")}
+            aria-expanded={open}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+              {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+            </svg>
+          </button>
+        </div>
       </nav>
 
       {/* mobile menu */}
@@ -69,7 +86,7 @@ export default function Nav() {
                     : "bg-white/70 text-plum/70 ring-1 ring-rose-soft"
                 }`}
               >
-                {n.label}
+                {t(n.key)}
               </Link>
             </li>
           ))}

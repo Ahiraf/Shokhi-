@@ -24,9 +24,10 @@ async function post<T>(path: string, body: unknown): Promise<T> {
 export function sendMessage(
   message: string,
   profile: Record<string, unknown>,
-  history: string[]
+  history: string[],
+  lang: "bn" | "en" = "bn"
 ): Promise<MessageResponse> {
-  return post<MessageResponse>("/api/message", { message, profile, history });
+  return post<MessageResponse>("/api/message", { message, profile, history, lang });
 }
 
 export async function getGuides(): Promise<GuideCard[]> {
@@ -36,8 +37,8 @@ export async function getGuides(): Promise<GuideCard[]> {
   return data.guides;
 }
 
-export function explainGuide(topic: string): Promise<GuideResponse> {
-  return post<GuideResponse>("/api/guide", { topic });
+export function explainGuide(topic: string, lang: "bn" | "en" = "bn"): Promise<GuideResponse> {
+  return post<GuideResponse>("/api/guide", { topic, lang });
 }
 
 export async function getGuide(id: string): Promise<GuideFull> {
@@ -52,13 +53,13 @@ export async function getKnowledge(): Promise<KnowledgeResponse> {
   return res.json();
 }
 
-export async function bustMyth(belief: string): Promise<string> {
-  const data = await post<{ reply: string }>("/api/myth", { belief });
+export async function bustMyth(belief: string, lang: "bn" | "en" = "bn"): Promise<string> {
+  const data = await post<{ reply: string }>("/api/myth", { belief, lang });
   return data.reply;
 }
 
-export function analyzeCycle(logs: CycleLog[]): Promise<CycleAnalysis> {
-  return post<CycleAnalysis>("/api/cycle/analyze", { logs });
+export function analyzeCycle(logs: CycleLog[], lang: "bn" | "en" = "bn"): Promise<CycleAnalysis> {
+  return post<CycleAnalysis>("/api/cycle/analyze", { logs, lang });
 }
 
 export async function transcribe(audio: Blob): Promise<string> {

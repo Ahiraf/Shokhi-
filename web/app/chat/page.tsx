@@ -8,8 +8,10 @@ import Composer from "@/components/Composer";
 import Examples from "@/components/Examples";
 import Guides from "@/components/Guides";
 import Mascot from "@/components/Mascot";
+import { useLang } from "@/components/LanguageProvider";
 
 export default function ChatPage() {
+  const { t, lang } = useLang();
   const [chat, setChat] = useState<ChatItem[]>([]);
   const [profile, setProfile] = useState<Record<string, unknown>>({});
   const [history, setHistory] = useState<string[]>([]);
@@ -24,15 +26,12 @@ export default function ChatPage() {
     setBusy(true);
     setChat((c) => [...c, { role: "user", text }]);
     try {
-      const res = await sendMessage(text, profile, history);
+      const res = await sendMessage(text, profile, history, lang);
       setProfile(res.profile);
       setHistory((h) => [...h, text]);
       setChat((c) => [...c, { role: "assistant", text: res.guidance, data: res }]);
     } catch {
-      setChat((c) => [
-        ...c,
-        { role: "assistant", text: "দুঃখিত, সার্ভারের সাথে সংযোগ করা গেল না। ব্যাকএন্ড চালু আছে কিনা দেখুন।" },
-      ]);
+      setChat((c) => [...c, { role: "assistant", text: t("chat.errorConnect") }]);
     } finally {
       setBusy(false);
     }
@@ -41,17 +40,15 @@ export default function ChatPage() {
   async function handleGuide(topic: string) {
     setBusy(true);
     try {
-      const res = await explainGuide(topic);
+      const res = await explainGuide(topic, lang);
+      const title = lang === "en" ? res.guide.title_en || res.guide.title_bn : res.guide.title_bn;
       setChat((c) => [
         ...c,
-        { role: "user", text: `${res.guide.icon} ${res.guide.title_bn}` },
+        { role: "user", text: `${res.guide.icon} ${title}` },
         { role: "assistant", text: res.guidance },
       ]);
     } catch {
-      setChat((c) => [
-        ...c,
-        { role: "assistant", text: "দুঃখিত, এই মুহূর্তে তথ্যটি আনা গেল না।" },
-      ]);
+      setChat((c) => [...c, { role: "assistant", text: t("chat.errorFetch") }]);
     } finally {
       setBusy(false);
     }
@@ -67,11 +64,10 @@ export default function ChatPage() {
             <Mascot size={92} />
           </div>
           <h1 className="mt-5 font-display text-[26px] font-bold leading-tight text-plum">
-            আপনার শরীরের কথা বলুন
+            {t("chat.introTitle")}
           </h1>
           <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-plum/60">
-            বাংলায় লিখুন বা কণ্ঠে বলুন — আমি বুঝব ও নিরাপদ পরামর্শ দেব।
-            সব কথা গোপন থাকবে, লজ্জার কিছু নেই।
+            {t("chat.introDesc")}
           </p>
 
           <div className="mt-7 w-full">
@@ -79,11 +75,11 @@ export default function ChatPage() {
           </div>
 
           <div className="mt-8 w-full">
-            <p className="mb-2.5 text-xs font-semibold text-plum/45">এভাবে শুরু করতে পারেন</p>
+            <p className="mb-2.5 text-xs font-semibold text-plum/45">{t("chat.startWith")}</p>
             <Examples onPick={handleSend} />
           </div>
           <div className="mt-5 w-full">
-            <p className="mb-2.5 text-xs font-semibold text-plum/45">অথবা একটি বিষয়ে জানুন</p>
+            <p className="mb-2.5 text-xs font-semibold text-plum/45">{t("chat.orLearn")}</p>
             <Guides onPick={handleGuide} />
           </div>
         </section>
@@ -100,7 +96,7 @@ export default function ChatPage() {
                 <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-blush ring-1 ring-rose-soft">
                   <Mascot size={34} />
                 </span>
-                <span className="animate-pulse">সখী ভাবছে…</span>
+                <span className="animate-pulse">{t("chat.thinking")}</span>
               </div>
             )}
             <div ref={endRef} />
@@ -111,9 +107,7 @@ export default function ChatPage() {
               <Examples onPick={handleSend} />
             </div>
             <Composer onSend={handleSend} busy={busy} />
-            <p className="mt-2.5 text-center text-xs text-plum/45">
-              🔒 বিনামূল্যে ও গোপনীয় · ☎️ ১৬২৬৩ · 🚨 জরুরি ৯৯৯
-            </p>
+            <p className="mt-2.5 text-center text-xs text-plum/45">{t("chat.privacyLine")}</p>
           </div>
         </>
       )}

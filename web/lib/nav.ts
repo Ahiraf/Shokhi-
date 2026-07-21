@@ -1,10 +1,13 @@
-// Shared site navigation — used by the top Nav and the Footer.
-export const NAV: { href: string; label: string }[] = [
-  { href: "/", label: "হোম" },
-  { href: "/chat", label: "পরামর্শ" },
-  { href: "/tracker", label: "ট্র্যাকার" },
-  { href: "/guides", label: "গাইড" },
-  { href: "/learn", label: "রোগ-জ্ঞান" },
-  { href: "/myths", label: "ভুল ধারণা" },
-  { href: "/hotline", label: "হটলাইন" },
+import type { StringKey } from "@/lib/i18n";
+
+// Shared site navigation — used by the top Nav and the Footer. Labels are i18n keys
+// (see lib/i18n.ts) so the whole nav switches with the Bangla/English toggle.
+export const NAV: { href: string; key: StringKey }[] = [
+  { href: "/", key: "nav.home" },
+  { href: "/chat", key: "nav.chat" },
+  { href: "/tracker", key: "nav.tracker" },
+  { href: "/guides", key: "nav.guides" },
+  { href: "/learn", key: "nav.learn" },
+  { href: "/myths", key: "nav.myths" },
+  { href: "/hotline", key: "nav.hotline" },
 ];

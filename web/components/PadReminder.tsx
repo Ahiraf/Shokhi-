@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLang } from "./LanguageProvider";
 
 const STORE_KEY = "shokhi_pad_reminder";
 const BN = "০১২৩৪৫৬৭৮৯";
@@ -24,6 +25,8 @@ function load(): Reminder | null {
  * pings her when the time is up. Honest about that limitation in the UI.
  */
 export default function PadReminder() {
+  const { t, lang } = useLang();
+  const num = (n: number) => (lang === "en" ? String(n) : toBn(n));
   const [reminder, setReminder] = useState<Reminder | null>(null);
   const [now, setNow] = useState(() => Date.now());
   const [done, setDone] = useState(false);
@@ -49,9 +52,7 @@ export default function PadReminder() {
     if (reminder && !done && remaining <= 0) {
       setDone(true);
       if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "granted") {
-        new Notification("সখী", {
-          body: "প্যাড বদলানোর সময় হয়েছে 🌸 পরিষ্কার থাকুন, ভালো থাকুন।",
-        });
+        new Notification(t("pad.notifTitle"), { body: t("pad.notifBody") });
       }
     }
   }, [remaining, reminder, done]);
@@ -79,10 +80,8 @@ export default function PadReminder() {
 
   return (
     <div className="mt-4 rounded-2xl bg-white/70 p-4 ring-1 ring-rose-soft">
-      <h2 className="text-base font-bold text-rose-deep">⏰ প্যাড বদলানোর রিমাইন্ডার</h2>
-      <p className="mt-1 text-sm text-rose-deep/70">
-        প্রতি ৪–৬ ঘণ্টায় প্যাড বদলানো ভালো — এতে র‍্যাশ ও সংক্রমণ এড়ানো যায়।
-      </p>
+      <h2 className="text-base font-bold text-rose-deep">{t("pad.title")}</h2>
+      <p className="mt-1 text-sm text-rose-deep/70">{t("pad.intro")}</p>
 
       {!active && !done && (
         <div className="mt-3 flex gap-2">
@@ -92,7 +91,7 @@ export default function PadReminder() {
               onClick={() => start(h)}
               className="flex-1 rounded-full bg-rose-soft py-2 text-sm font-semibold text-rose-deep transition hover:bg-rose-soft/70"
             >
-              {toBn(h)} ঘণ্টা পর মনে করাও
+              {num(h)} {t("pad.remindIn")}
             </button>
           ))}
         </div>
@@ -101,23 +100,21 @@ export default function PadReminder() {
       {active && (
         <div className="mt-3 flex items-center justify-between">
           <span className="text-sm font-medium text-rose-deep">
-            ⏳ {hrsLeft > 0 ? `${toBn(hrsLeft)} ঘণ্টা ` : ""}
-            {toBn(minLeft)} মিনিট বাকি
+            ⏳ {hrsLeft > 0 ? `${num(hrsLeft)} ${t("pad.hours")} ` : ""}
+            {num(minLeft)} {t("pad.minutes")} {t("pad.left")}
           </span>
           <button
             onClick={cancel}
             className="rounded-full px-3 py-1 text-sm text-rose-deep/60 hover:text-rose-deep"
           >
-            বাতিল
+            {t("pad.cancel")}
           </button>
         </div>
       )}
 
       {done && (
         <div className="mt-3 rounded-xl bg-rose-soft px-3 py-2.5">
-          <p className="text-sm font-semibold text-rose-deep">
-            🌸 প্যাড বদলানোর সময় হয়েছে।
-          </p>
+          <p className="text-sm font-semibold text-rose-deep">{t("pad.timeUp")}</p>
           <div className="mt-2 flex gap-2">
             {[4, 6].map((h) => (
               <button
@@ -125,16 +122,14 @@ export default function PadReminder() {
                 onClick={() => start(h)}
                 className="flex-1 rounded-full bg-white py-1.5 text-sm font-medium text-rose-deep ring-1 ring-rose-soft"
               >
-                আবার {toBn(h)} ঘণ্টা
+                {t("pad.again")} {num(h)} {t("pad.againHours")}
               </button>
             ))}
           </div>
         </div>
       )}
 
-      <p className="mt-2.5 text-xs text-rose-deep/45">
-        🔒 রিমাইন্ডার এই ফোনেই থাকে। অ্যাপ খোলা থাকলে সময় গুনবে; অনুমতি দিলে নোটিফিকেশনও পাবেন।
-      </p>
+      <p className="mt-2.5 text-xs text-rose-deep/45">{t("pad.footer")}</p>
     </div>
   );
 }

@@ -3,21 +3,23 @@
 import { useEffect, useMemo, useState } from "react";
 import { analyzeCycle } from "@/lib/api";
 import type { CycleLog, CycleAnalysis } from "@/lib/types";
+import { useLang } from "./LanguageProvider";
+import type { StringKey } from "@/lib/i18n";
 
 const STORE_KEY = "shokhi_cycle_logs";
 
-const FLOW_LABELS: Record<NonNullable<CycleLog["flow"]>, string> = {
-  light: "কম",
-  normal: "স্বাভাবিক",
-  heavy: "বেশি",
+const FLOW_KEY: Record<NonNullable<CycleLog["flow"]>, StringKey> = {
+  light: "flow.light",
+  normal: "flow.normal",
+  heavy: "flow.heavy",
 };
-const PAIN_LABELS = ["ব্যথা নেই", "হালকা", "মাঝারি", "তীব্র"];
+const PAIN_KEY: StringKey[] = ["pain.0", "pain.1", "pain.2", "pain.3"];
 // pads soaked per day; 6+ is a heavy-bleeding (menorrhagia) signal
-const PAD_OPTIONS: { value: number; label: string }[] = [
-  { value: 2, label: "১–২" },
-  { value: 4, label: "৩–৪" },
-  { value: 6, label: "৫–৬" },
-  { value: 8, label: "৬+" },
+const PAD_OPTIONS: { value: number; label_bn: string; label_en: string }[] = [
+  { value: 2, label_bn: "১–২", label_en: "1–2" },
+  { value: 4, label_bn: "৩–৪", label_en: "3–4" },
+  { value: 6, label_bn: "৫–৬", label_en: "5–6" },
+  { value: 8, label_bn: "৬+", label_en: "6+" },
 ];
 
 function loadLogs(): CycleLog[] {
@@ -32,11 +34,12 @@ function loadLogs(): CycleLog[] {
 /**
  * Client-side menstrual cycle & symptom tracker. History is kept privately in the
  * browser (localStorage) — nothing personal is stored on the server. On demand it sends
- * just the dates/flow/pain/pad-count to /api/cycle/analyze for Bangla pattern insight,
- * which is exactly how PCOS/endometriosis/heavy-bleeding get noticed over months instead
- * of one message.
+ * just the dates/flow/pain/pad-count to /api/cycle/analyze (with the chosen language) for
+ * pattern insight, which is exactly how PCOS/endometriosis/heavy-bleeding get noticed
+ * over months instead of one message.
  */
 export default function CycleTracker() {
+  const { t, lang } = useLang();
   const [logs, setLogs] = useState<CycleLog[]>([]);
   const [start, setStart] = useState("");
   const [flow, setFlow] = useState<CycleLog["flow"]>("normal");
@@ -75,7 +78,7 @@ export default function CycleTracker() {
   async function runAnalysis() {
     setBusy(true);
     try {
-      setAnalysis(await analyzeCycle(logs));
+      setAnalysis(await analyzeCycle(logs, lang));
     } catch {
       setAnalysis(null);
     } finally {
@@ -83,23 +86,21 @@ export default function CycleTracker() {
     }
   }
 
+  const padLabel = (n: number) =>
+    n >= 6 ? (lang === "en" ? "6+" : "৬+") : String(n);
+
   return (
     <div className="space-y-6 py-6">
       <div className="rounded-2xl bg-rose-soft/50 p-4">
-        <h2 className="text-lg font-bold text-rose-deep">🩸 মাসিক ট্র্যাকার</h2>
-        <p className="mt-1 text-sm text-rose-deep/70">
-          প্রতিবার মাসিক শুরু হলে তারিখটি লিখুন। সখী আপনার চক্র বুঝে জানাবে এটি নিয়মিত
-          কিনা এবং কিছু নিয়ে ভাবার আছে কিনা।
-        </p>
-        <p className="mt-1 text-xs text-rose-deep/50">
-          🔒 আপনার তথ্য শুধু এই ফোনেই থাকে, সার্ভারে জমা হয় না।
-        </p>
+        <h2 className="text-lg font-bold text-rose-deep">{t("tracker.cardTitle")}</h2>
+        <p className="mt-1 text-sm text-rose-deep/70">{t("tracker.cardIntro")}</p>
+        <p className="mt-1 text-xs text-rose-deep/50">{t("tracker.privacy")}</p>
       </div>
 
       {/* add a log */}
       <div className="space-y-3 rounded-2xl border border-rose-soft p-4">
         <label className="block text-sm font-medium text-rose-deep/80">
-          মাসিক শুরুর তারিখ
+          {t("tracker.startDate")}
           <input
             type="date"
             value={start}
@@ -111,55 +112,49 @@ export default function CycleTracker() {
 
         <div className="flex flex-wrap gap-4 text-sm">
           <div>
-            <span className="text-rose-deep/70">রক্তক্ষরণ</span>
+            <span className="text-rose-deep/70">{t("tracker.flow")}</span>
             <div className="mt-1 flex gap-1">
               {(["light", "normal", "heavy"] as const).map((f) => (
                 <button
                   key={f}
                   onClick={() => setFlow(f)}
                   className={`rounded-full px-3 py-1 ${
-                    flow === f
-                      ? "bg-rose-deep text-white"
-                      : "bg-rose-soft text-rose-deep"
+                    flow === f ? "bg-rose-deep text-white" : "bg-rose-soft text-rose-deep"
                   }`}
                 >
-                  {FLOW_LABELS[f]}
+                  {t(FLOW_KEY[f])}
                 </button>
               ))}
             </div>
           </div>
           <div>
-            <span className="text-rose-deep/70">ব্যথা</span>
+            <span className="text-rose-deep/70">{t("tracker.pain")}</span>
             <div className="mt-1 flex gap-1">
               {[0, 1, 2, 3].map((p) => (
                 <button
                   key={p}
                   onClick={() => setPain(p as CycleLog["pain"])}
                   className={`rounded-full px-3 py-1 ${
-                    pain === p
-                      ? "bg-rose-deep text-white"
-                      : "bg-rose-soft text-rose-deep"
+                    pain === p ? "bg-rose-deep text-white" : "bg-rose-soft text-rose-deep"
                   }`}
                 >
-                  {PAIN_LABELS[p]}
+                  {t(PAIN_KEY[p])}
                 </button>
               ))}
             </div>
           </div>
           <div>
-            <span className="text-rose-deep/70">দিনে প্যাড</span>
+            <span className="text-rose-deep/70">{t("tracker.padsPerDay")}</span>
             <div className="mt-1 flex gap-1">
               {PAD_OPTIONS.map((o) => (
                 <button
                   key={o.value}
                   onClick={() => setPads(pads === o.value ? 0 : o.value)}
                   className={`rounded-full px-3 py-1 ${
-                    pads === o.value
-                      ? "bg-rose-deep text-white"
-                      : "bg-rose-soft text-rose-deep"
+                    pads === o.value ? "bg-rose-deep text-white" : "bg-rose-soft text-rose-deep"
                   }`}
                 >
-                  {o.label}
+                  {lang === "en" ? o.label_en : o.label_bn}
                 </button>
               ))}
             </div>
@@ -171,7 +166,7 @@ export default function CycleTracker() {
           disabled={!start}
           className="w-full rounded-full bg-rose-deep py-2.5 font-medium text-white transition hover:bg-rose-deep/90 disabled:opacity-40"
         >
-          + যোগ করুন
+          {t("tracker.add")}
         </button>
       </div>
 
@@ -179,7 +174,7 @@ export default function CycleTracker() {
       {sorted.length > 0 && (
         <div className="space-y-2">
           <p className="text-sm font-medium text-rose-deep/60">
-            লেখা মাসিক ({sorted.length})
+            {t("tracker.logged")} ({sorted.length})
           </p>
           {sorted.map((l) => (
             <div
@@ -188,14 +183,14 @@ export default function CycleTracker() {
             >
               <span className="text-rose-deep">
                 📅 {l.start}
-                {l.flow && ` · রক্ত: ${FLOW_LABELS[l.flow]}`}
-                {typeof l.pain === "number" && ` · ${PAIN_LABELS[l.pain]}`}
-                {l.pads ? ` · প্যাড: ${l.pads >= 6 ? "৬+" : l.pads}` : ""}
+                {l.flow && ` · ${t("tracker.flowShort")}: ${t(FLOW_KEY[l.flow])}`}
+                {typeof l.pain === "number" && ` · ${t(PAIN_KEY[l.pain])}`}
+                {l.pads ? ` · ${t("tracker.padShort")}: ${padLabel(l.pads)}` : ""}
               </span>
               <button
                 onClick={() => removeLog(l.start)}
                 className="text-rose-deep/40 hover:text-rose-deep"
-                aria-label="মুছুন"
+                aria-label={t("tracker.delete")}
               >
                 ✕
               </button>
@@ -208,10 +203,10 @@ export default function CycleTracker() {
             className="mt-2 w-full rounded-full bg-rose-soft py-2.5 font-medium text-rose-deep transition hover:bg-rose-soft disabled:opacity-40"
           >
             {busy
-              ? "দেখা হচ্ছে…"
+              ? t("tracker.analyzing")
               : logs.length < 2
-              ? "প্যাটার্ন দেখতে অন্তত ২টি তারিখ লিখুন"
-              : "🔍 আমার চক্র বিশ্লেষণ করুন"}
+              ? t("tracker.needTwo")
+              : t("tracker.analyze")}
           </button>
         </div>
       )}
@@ -222,16 +217,16 @@ export default function CycleTracker() {
           {analysis.avg_cycle_length && (
             <div className="flex flex-wrap gap-2 text-sm">
               <span className="rounded-full bg-white px-3 py-1 font-medium text-rose-deep">
-                গড় চক্র: {analysis.avg_cycle_length} দিন
+                {t("tracker.avgCycle")}: {analysis.avg_cycle_length} {t("tracker.days")}
               </span>
               {analysis.regular !== null && (
                 <span className="rounded-full bg-white px-3 py-1 font-medium text-rose-deep">
-                  {analysis.regular ? "নিয়মিত ✅" : "অনিয়মিত ⚠️"}
+                  {analysis.regular ? t("tracker.regular") : t("tracker.irregular")}
                 </span>
               )}
               {analysis.predicted_next_start && (
                 <span className="rounded-full bg-white px-3 py-1 font-medium text-rose-deep">
-                  পরবর্তী আনুমানিক: {analysis.predicted_next_start}
+                  {t("tracker.nextEst")}: {analysis.predicted_next_start}
                 </span>
               )}
             </div>

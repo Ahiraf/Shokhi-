@@ -110,7 +110,9 @@ def _match_conditions(knowledge: dict, profile: dict) -> list[dict]:
                 "urgency": cond["urgency"], "about_bn": cond["about_bn"],
                 "about_en": cond["about_en"],
                 "self_care_bn": cond.get("self_care_bn", []),
+                "self_care_en": cond.get("self_care_en", []),
                 "see_doctor_bn": cond.get("see_doctor_bn", ""),
+                "see_doctor_en": cond.get("see_doctor_en", ""),
             })
     return suspected
 

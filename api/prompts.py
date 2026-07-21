@@ -11,6 +11,21 @@ Gemma's jobs:
   3. bust_myth()        – a menstrual-health myth -> gentle Bangla fact
 """
 
+# --- language directive -------------------------------------------------------
+# Appended to a system prompt to force the reply language. Shokhi is Bangla-first, so
+# Bangla is the default; the UI's English toggle passes lang="en" through to here.
+LANGUAGE_DIRECTIVE = {
+    "bn": "\n\nIMPORTANT: Write your entire reply in warm, simple, spoken-style Bangla.",
+    "en": "\n\nIMPORTANT: Write your entire reply in warm, simple, clear English "
+          "(NOT Bangla). Keep the same caring, non-judgmental tone.",
+}
+
+
+def with_language(system: str, lang: str = "bn") -> str:
+    """Return the system prompt with an explicit reply-language instruction appended."""
+    return system + LANGUAGE_DIRECTIVE.get(lang, LANGUAGE_DIRECTIVE["bn"])
+
+
 # Symptom fields Gemma may fill. Mirrors knowledge.json symptom_schema.
 SYMPTOM_FIELDS = [
     "age", "is_pregnant_possible", "is_pregnant", "recently_gave_birth",

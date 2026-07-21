@@ -48,9 +48,63 @@ def _sorted_starts(logs: list[dict]) -> list[date]:
     return sorted(d for d in (_parse(l.get("start", "")) for l in logs) if d)
 
 
-def analyze(logs: list[dict], today: date | None = None) -> dict:
-    """Analyse a list of period logs into numbers + Bangla insights + suggested symptoms."""
+# Bilingual insight phrases. The result keeps `insights_bn`/`disclaimer_bn` as its field
+# names (so the frontend needn't change), but they are filled in the requested language.
+_MSG = {
+    "bn": {
+        "disclaimer": "এটি শুধু আপনার লেখা তথ্যের ভিত্তিতে একটি ধারণা — নিশ্চিত রোগ নির্ণয় "
+                      "নয়। কোনো দুশ্চিন্তা থাকলে ডাক্তার দেখান।",
+        "need_two": "প্যাটার্ন বুঝতে অন্তত ২টি মাসিকের তারিখ লিখুন। প্রতিবার মাসিক শুরু হলে "
+                    "তারিখটি এখানে যোগ করুন — সখী আপনার চক্র বুঝতে সাহায্য করবে।",
+        "avg": lambda avg: f"আপনার গড় মাসিক চক্র প্রায় {avg} দিন।",
+        "duration": lambda d: f"মাসিক সাধারণত {d} দিন স্থায়ী হয়।",
+        "regular": "আপনার মাসিক মোটামুটি নিয়মিত — এটি ভালো লক্ষণ।",
+        "irregular": lambda lo, hi: f"আপনার চক্র কিছুটা অনিয়মিত (সবচেয়ে ছোট {lo} দিন, বড় "
+                     f"{hi} দিন)। মাঝে মাঝে এমন হতে পারে, তবে ধারাবাহিক হলে ডাক্তার দেখান।",
+        "long": "আপনার চক্র স্বাভাবিকের চেয়ে লম্বা। দীর্ঘ ও অনিয়মিত চক্র কখনো কখনো পিসিওএস-এর "
+                "সাথে যুক্ত থাকে — একজন স্ত্রীরোগ বিশেষজ্ঞের সাথে আলোচনা করা ভালো।",
+        "short": "আপনার চক্র স্বাভাবিকের চেয়ে ছোট — একজন ডাক্তারের সাথে আলোচনা করা ভালো।",
+        "gap": lambda g: f"শেষ মাসিকের পর প্রায় {g} দিন হয়ে গেছে। ৩ মাসের বেশি মাসিক বন্ধ "
+               "থাকলে (গর্ভাবস্থা ছাড়া) ডাক্তার দেখানো উচিত।",
+        "heavy_pads": lambda p: f"আপনি দিনে প্রায় {p}টি প্যাড ব্যবহার করছেন। দিনে ৬টির বেশি প্যাড "
+                      "ভিজে গেলে তা অতিরিক্ত রক্তক্ষরণ (মেনোরেজিয়া) হতে পারে — রক্তস্বল্পতা এড়াতে "
+                      "ডাক্তার দেখান এবং আয়রন-সমৃদ্ধ খাবার খান।",
+        "heavy_repeat": "কয়েকবার ভারী রক্তক্ষরণ লিখেছেন। বারবার অতিরিক্ত রক্তক্ষরণে রক্তস্বল্পতা "
+                        "হতে পারে — ডাক্তার দেখান ও আয়রন-সমৃদ্ধ খাবার খান।",
+        "pain_repeat": "কয়েকবার তীব্র ব্যথা লিখেছেন। মাসিকের তীব্র ব্যথা যা জীবন থামিয়ে দেয় তা "
+                       "'স্বাভাবিক' নয় — এটি নিয়ে ডাক্তারের সাথে কথা বলুন।",
+    },
+    "en": {
+        "disclaimer": "This is only an impression based on what you've logged — not a "
+                      "diagnosis. See a doctor if anything worries you.",
+        "need_two": "Log at least 2 period dates to see a pattern. Add the date each time your "
+                    "period starts — Shokhi will help you understand your cycle.",
+        "avg": lambda avg: f"Your average cycle is about {avg} days.",
+        "duration": lambda d: f"Your period usually lasts about {d} days.",
+        "regular": "Your periods are fairly regular — that's a good sign.",
+        "irregular": lambda lo, hi: f"Your cycle is a bit irregular (shortest {lo} days, longest "
+                     f"{hi} days). This can happen sometimes, but if it's consistent, see a doctor.",
+        "long": "Your cycle is longer than usual. Long, irregular cycles are sometimes linked to "
+                "PCOS — it's good to discuss this with a gynaecologist.",
+        "short": "Your cycle is shorter than usual — it's good to discuss this with a doctor.",
+        "gap": lambda g: f"About {g} days have passed since your last period. If periods stop for "
+               "more than 3 months (and you're not pregnant), you should see a doctor.",
+        "heavy_pads": lambda p: f"You're using about {p} pads a day. Soaking more than 6 pads a "
+                      "day can mean heavy bleeding (menorrhagia) — to avoid anaemia, see a doctor "
+                      "and eat iron-rich foods.",
+        "heavy_repeat": "You've logged heavy bleeding a few times. Repeated heavy bleeding can "
+                        "cause anaemia — see a doctor and eat iron-rich foods.",
+        "pain_repeat": "You've logged severe pain a few times. Severe period pain that stops your "
+                       "daily life is not 'normal' — please talk to a doctor about it.",
+    },
+}
+
+
+def analyze(logs: list[dict], today: date | None = None, lang: str = "bn") -> dict:
+    """Analyse a list of period logs into numbers + insights (Bangla/English) + suggested
+    symptoms. The `insights_bn`/`disclaimer_bn` fields carry the requested language."""
     today = today or date.today()
+    m = _MSG.get(lang, _MSG["bn"])
     starts = _sorted_starts(logs)
 
     result: dict = {
@@ -65,15 +119,11 @@ def analyze(logs: list[dict], today: date | None = None) -> dict:
         "days_until_next": None,
         "insights_bn": [],
         "suggested_symptoms": {},
-        "disclaimer_bn": "এটি শুধু আপনার লেখা তথ্যের ভিত্তিতে একটি ধারণা — নিশ্চিত "
-                         "রোগ নির্ণয় নয়। কোনো দুশ্চিন্তা থাকলে ডাক্তার দেখান।",
+        "disclaimer_bn": m["disclaimer"],
     }
 
     if len(starts) < 2:
-        result["insights_bn"].append(
-            "প্যাটার্ন বুঝতে অন্তত ২টি মাসিকের তারিখ লিখুন। প্রতিবার মাসিক শুরু হলে "
-            "তারিখটি এখানে যোগ করুন — সখী আপনার চক্র বুঝতে সাহায্য করবে।"
-        )
+        result["insights_bn"].append(m["need_two"])
         return result
 
     # cycle lengths = gaps between consecutive start dates
@@ -105,38 +155,29 @@ def analyze(logs: list[dict], today: date | None = None) -> dict:
     result["predicted_next_start"] = predicted.isoformat()
     result["days_until_next"] = (predicted - today).days
 
-    # --- Bangla insights + suggested symptom flags ----------------------------
+    # --- insights + suggested symptom flags -----------------------------------
     ins = result["insights_bn"]
-    ins.append(f"আপনার গড় মাসিক চক্র প্রায় {avg} দিন।")
+    ins.append(m["avg"](avg))
     if result["avg_period_length"]:
-        ins.append(f"মাসিক সাধারণত {result['avg_period_length']} দিন স্থায়ী হয়।")
+        ins.append(m["duration"](result["avg_period_length"]))
 
     if regular:
-        ins.append("আপনার মাসিক মোটামুটি নিয়মিত — এটি ভালো লক্ষণ।")
+        ins.append(m["regular"])
     else:
-        ins.append(
-            f"আপনার চক্র কিছুটা অনিয়মিত (সবচেয়ে ছোট {min(lengths)} দিন, বড় "
-            f"{max(lengths)} দিন)। মাঝে মাঝে এমন হতে পারে, তবে ধারাবাহিক হলে ডাক্তার দেখান।"
-        )
+        ins.append(m["irregular"](min(lengths), max(lengths)))
         result["suggested_symptoms"]["cycles_irregular"] = True
 
     if avg > _NORMAL_CYCLE_MAX:
-        ins.append(
-            "আপনার চক্র স্বাভাবিকের চেয়ে লম্বা। দীর্ঘ ও অনিয়মিত চক্র কখনো কখনো "
-            "পিসিওএস-এর সাথে যুক্ত থাকে — একজন স্ত্রীরোগ বিশেষজ্ঞের সাথে আলোচনা করা ভালো।"
-        )
+        ins.append(m["long"])
         result["suggested_symptoms"]["cycles_irregular"] = True
     elif avg < _NORMAL_CYCLE_MIN:
-        ins.append("আপনার চক্র স্বাভাবিকের চেয়ে ছোট — একজন ডাক্তারের সাথে আলোচনা করা ভালো।")
+        ins.append(m["short"])
         result["suggested_symptoms"]["cycles_irregular"] = True
 
     # a very long gap since the last period
     gap_since_last = (today - starts[-1]).days
     if gap_since_last >= _LONG_GAP_MISSED:
-        ins.append(
-            f"শেষ মাসিকের পর প্রায় {gap_since_last} দিন হয়ে গেছে। ৩ মাসের বেশি মাসিক বন্ধ "
-            "থাকলে (গর্ভাবস্থা ছাড়া) ডাক্তার দেখানো উচিত।"
-        )
+        ins.append(m["gap"](gap_since_last))
         result["suggested_symptoms"]["missed_periods_3plus"] = True
 
     # flow heaviness — from the flow label AND the pad count (objective)
@@ -153,19 +194,13 @@ def analyze(logs: list[dict], today: date | None = None) -> dict:
     severe_pain = sum(1 for l in logs if isinstance(l.get("pain"), (int, float)) and l["pain"] >= 3)
 
     if max_pads >= _HEAVY_PADS_PER_DAY:
-        ins.append(
-            f"আপনি দিনে প্রায় {max_pads}টি প্যাড ব্যবহার করছেন। দিনে ৬টির বেশি প্যাড "
-            "ভিজে গেলে তা অতিরিক্ত রক্তক্ষরণ (মেনোরেজিয়া) হতে পারে — রক্তস্বল্পতা এড়াতে "
-            "ডাক্তার দেখান এবং আয়রন-সমৃদ্ধ খাবার খান।"
-        )
+        ins.append(m["heavy_pads"](max_pads))
         result["suggested_symptoms"]["heavy_bleeding"] = True
     elif heavy >= 2:
-        ins.append("কয়েকবার ভারী রক্তক্ষরণ লিখেছেন। বারবার অতিরিক্ত রক্তক্ষরণে "
-                   "রক্তস্বল্পতা হতে পারে — ডাক্তার দেখান ও আয়রন-সমৃদ্ধ খাবার খান।")
+        ins.append(m["heavy_repeat"])
         result["suggested_symptoms"]["heavy_bleeding"] = True
     if severe_pain >= 2:
-        ins.append("কয়েকবার তীব্র ব্যথা লিখেছেন। মাসিকের তীব্র ব্যথা যা জীবন থামিয়ে দেয় "
-                   "তা 'স্বাভাবিক' নয় — এটি নিয়ে ডাক্তারের সাথে কথা বলুন।")
+        ins.append(m["pain_repeat"])
         result["suggested_symptoms"]["periods_disrupt_daily_life"] = True
 
     return result

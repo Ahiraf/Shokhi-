@@ -42,28 +42,35 @@ class GemmaBackend(ABC):
         """Return a dict of NEWLY extracted symptom fields from the conversation."""
 
     @abstractmethod
-    def explain_triage(self, triage_result: dict) -> str:
-        """Return warm Bangla guidance explaining the triage result."""
+    def explain_triage(self, triage_result: dict, lang: str = "bn") -> str:
+        """Return warm guidance (Bangla or English) explaining the triage result."""
 
     @abstractmethod
-    def bust_myth(self, belief: str, fact: str = "") -> str:
-        """Return a gentle Bangla correction of a menstrual-health belief."""
+    def bust_myth(self, belief: str, fact: str = "", lang: str = "bn") -> str:
+        """Return a gentle correction (Bangla or English) of a menstrual-health belief."""
 
-    def explain_guide(self, guide: dict, question: str = "") -> str:
-        """Return warm Bangla guidance for a health-info guide (contraception, family
-        planning, menopause care, nutrition …). Default is a deterministic render of the
-        knowledge-base points, so every backend works offline; LLM backends override it
-        with a fluent explanation."""
+    def explain_guide(self, guide: dict, question: str = "", lang: str = "bn") -> str:
+        """Return warm guidance for a health-info guide (contraception, family planning,
+        menopause care, nutrition …) in the requested language. Default is a deterministic
+        render of the knowledge-base points, so every backend works offline; LLM backends
+        override it with a fluent explanation."""
+        sfx = "_en" if lang == "en" else "_bn"
+
+        def field(base: str):
+            return guide.get(base + sfx) or guide.get(base + "_bn")
+
         lines: list[str] = []
-        title = guide.get("title_bn", "")
+        title = field("title")
         if title:
             lines.append(f"**{guide.get('icon', '🌸')} {title}**\n")
-        if guide.get("summary_bn"):
-            lines.append(guide["summary_bn"] + "\n")
-        for p in guide.get("points_bn", []):
+        summary = field("summary")
+        if summary:
+            lines.append(summary + "\n")
+        for p in (field("points") or []):
             lines.append(f"• {p}")
-        if guide.get("when_see_doctor_bn"):
-            lines.append(f"\n🩺 {guide['when_see_doctor_bn']}")
+        wsd = field("when_see_doctor")
+        if wsd:
+            lines.append(f"\n🩺 {wsd}")
         return "\n".join(lines)
 
     # --- optional multimodal: Gemma 4 native audio (E2B/E4B) ------------------
@@ -183,62 +190,102 @@ class MockGemmaBackend(GemmaBackend):
 
         return {k: v for k, v in out.items() if known_profile.get(k) != v}
 
-    def explain_triage(self, triage_result: dict) -> str:
+    # Small scaffolding phrase table so the deterministic mock can speak either language.
+    _T = {
+        "bn": {
+            "emergency": "⚠️ **এটি জরুরি অবস্থা হতে পারে।**\n",
+            "call": "\n📞 জরুরি প্রয়োজনে কল করুন: **{n}**",
+            "discuss": "আপনার বর্ণনা শুনে নিচের বিষয়গুলো একজন ডাক্তারের সাথে আলোচনা করা ভালো "
+                       "(এটি নিশ্চিত রোগ নির্ণয় নয়):\n",
+            "can_do": "  যা করতে পারেন:",
+            "no_danger": "আপনার বর্ণনায় এই মুহূর্তে বিপদের কোনো লক্ষণ পাওয়া যায়নি। "
+                         "তবে কোনো দুশ্চিন্তা থাকলে নির্দ্বিধায় জিজ্ঞাসা করুন।",
+            "risk": "\n📊 আপনার উপসর্গের ভিত্তিতে একটি সহায়ক ঝুঁকি-ইঙ্গিত "
+                    "(নিশ্চিত রোগ নয়, শুধু ডাক্তার দেখানোর তাগিদ):",
+            "risk_line": "  • {name}: ~{pct}% ইঙ্গিত — একজন ডাক্তারের সাথে যাচাই করুন।",
+            "hotline": "\n☎️ স্বাস্থ্য পরামর্শের জন্য বিনামূল্যে কল করতে পারেন: {n}",
+            "myth_fact": "আপনি যা শুনেছেন তা অনেকেই বিশ্বাস করেন, তবে আসল তথ্যটি হলো: {fact}",
+            "myth_generic": "এই বিষয়ে অনেক ভুল ধারণা প্রচলিত আছে। নির্ভরযোগ্য তথ্যের জন্য একজন "
+                            "স্বাস্থ্যকর্মী বা ডাক্তারের সাথে কথা বলুন — লজ্জার কিছু নেই।",
+        },
+        "en": {
+            "emergency": "⚠️ **This may be an emergency.**\n",
+            "call": "\n📞 In an emergency, call: **{n}**",
+            "discuss": "From what you've described, it's worth discussing the following with a "
+                       "doctor (this is not a confirmed diagnosis):\n",
+            "can_do": "  What you can do:",
+            "no_danger": "From what you've described, there's no sign of danger right now. "
+                         "But if anything worries you, feel free to ask.",
+            "risk": "\n📊 Based on your symptoms, one supporting risk signal "
+                    "(not a diagnosis, just a nudge to see a doctor):",
+            "risk_line": "  • {name}: ~{pct}% signal — please check with a doctor.",
+            "hotline": "\n☎️ For free health advice you can call: {n}",
+            "myth_fact": "Many people believe what you've heard, but the real fact is: {fact}",
+            "myth_generic": "There are many myths about this. For reliable information, talk to a "
+                            "health worker or doctor — there's nothing to be shy about.",
+        },
+    }
+
+    def explain_triage(self, triage_result: dict, lang: str = "bn") -> str:
+        tr = self._T.get(lang, self._T["bn"])
+        sfx = "_en" if lang == "en" else "_bn"
+
+        def fld(obj: dict, base: str):
+            return obj.get(base + sfx) or obj.get(base + "_bn")
+
         urgency = triage_result.get("urgency", "info")
         lines: list[str] = []
 
         if urgency == "emergency":
-            lines.append("⚠️ **এটি জরুরি অবস্থা হতে পারে।**\n")
+            lines.append(tr["emergency"])
             for rf in triage_result.get("red_flags", []):
-                lines.append(f"• {rf['message_bn']}")
-                lines.append(f"  👉 {rf['action_bn']}")
-            lines.append(f"\n📞 জরুরি প্রয়োজনে কল করুন: **{triage_result.get('emergency_number_bd', '999')}**")
+                lines.append(f"• {fld(rf, 'message')}")
+                lines.append(f"  👉 {fld(rf, 'action')}")
+            lines.append(tr["call"].format(n=triage_result.get("emergency_number_bd", "999")))
         else:
-            label = triage_result.get("urgency_label_bn", "")
+            label = fld(triage_result, "urgency_label")
             if label:
                 lines.append(f"**{label}**\n")
 
             for rf in triage_result.get("red_flags", []):
-                lines.append(f"• {rf['message_bn']} — {rf['action_bn']}")
+                lines.append(f"• {fld(rf, 'message')} — {fld(rf, 'action')}")
 
             conds = triage_result.get("suspected_conditions", [])
             if conds:
-                lines.append("আপনার বর্ণনা শুনে নিচের বিষয়গুলো একজন ডাক্তারের সাথে আলোচনা করা ভালো "
-                             "(এটি নিশ্চিত রোগ নির্ণয় নয়):\n")
+                lines.append(tr["discuss"])
                 for c in conds:
-                    lines.append(f"**• {c['name_bn']}** — {c['about_bn']}")
-                    if c.get("self_care_bn"):
-                        lines.append("  যা করতে পারেন:")
-                        for tip in c["self_care_bn"]:
+                    lines.append(f"**• {fld(c, 'name')}** — {fld(c, 'about')}")
+                    if fld(c, "self_care"):
+                        lines.append(tr["can_do"])
+                        for tip in fld(c, "self_care"):
                             lines.append(f"    - {tip}")
-                    if c.get("see_doctor_bn"):
-                        lines.append(f"  🩺 {c['see_doctor_bn']}")
+                    if fld(c, "see_doctor"):
+                        lines.append(f"  🩺 {fld(c, 'see_doctor')}")
                     lines.append("")
             elif urgency == "info":
-                lines.append("আপনার বর্ণনায় এই মুহূর্তে বিপদের কোনো লক্ষণ পাওয়া যায়নি। "
-                             "তবে কোনো দুশ্চিন্তা থাকলে নির্দ্বিধায় জিজ্ঞাসা করুন।")
+                lines.append(tr["no_danger"])
 
         # optional ML risk signals (support only)
         signals = [s for s in triage_result.get("risk_signals", []) if s.get("elevated")]
         if signals:
-            lines.append("\n📊 আপনার উপসর্গের ভিত্তিতে একটি সহায়ক ঝুঁকি-ইঙ্গিত "
-                         "(নিশ্চিত রোগ নয়, শুধু ডাক্তার দেখানোর তাগিদ):")
+            lines.append(tr["risk"])
             for s in signals:
                 pct = int(round(s["probability"] * 100))
-                lines.append(f"  • {s['name_bn']}: ~{pct}% ইঙ্গিত — একজন ডাক্তারের সাথে যাচাই করুন।")
+                lines.append(tr["risk_line"].format(name=fld(s, "name"), pct=pct))
 
         hotline = triage_result.get("health_hotline_bd")
         if hotline:
-            lines.append(f"\n☎️ স্বাস্থ্য পরামর্শের জন্য বিনামূল্যে কল করতে পারেন: {hotline}")
-        if triage_result.get("disclaimer_bn"):
-            lines.append(f"\nℹ️ {triage_result['disclaimer_bn']}")
+            lines.append(tr["hotline"].format(n=hotline))
+        disclaimer = fld(triage_result, "disclaimer")
+        if disclaimer:
+            lines.append(f"\nℹ️ {disclaimer}")
         return "\n".join(lines)
 
-    def bust_myth(self, belief: str, fact: str = "") -> str:
+    def bust_myth(self, belief: str, fact: str = "", lang: str = "bn") -> str:
+        tr = self._T.get(lang, self._T["bn"])
         if fact:
-            return f"আপনি যা শুনেছেন তা অনেকেই বিশ্বাস করেন, তবে আসল তথ্যটি হলো: {fact}"
-        return ("এই বিষয়ে অনেক ভুল ধারণা প্রচলিত আছে। নির্ভরযোগ্য তথ্যের জন্য একজন "
-                "স্বাস্থ্যকর্মী বা ডাক্তারের সাথে কথা বলুন — লজ্জার কিছু নেই।")
+            return tr["myth_fact"].format(fact=fact)
+        return tr["myth_generic"]
 
 
 # =============================================================================
@@ -327,20 +374,20 @@ class OllamaBackend(GemmaBackend):
                 out[k] = v
         return out
 
-    def explain_triage(self, triage_result: dict) -> str:
+    def explain_triage(self, triage_result: dict, lang: str = "bn") -> str:
         user = prompts.EXPLAIN_USER_TEMPLATE.format(
             triage_result=json.dumps(triage_result, ensure_ascii=False),
         )
-        return self._chat(prompts.EXPLAIN_SYSTEM, user, temperature=0.4)
+        return self._chat(prompts.with_language(prompts.EXPLAIN_SYSTEM, lang), user, temperature=0.4)
 
-    def bust_myth(self, belief: str, fact: str = "") -> str:
+    def bust_myth(self, belief: str, fact: str = "", lang: str = "bn") -> str:
         user = prompts.MYTH_USER_TEMPLATE.format(belief=belief, fact=fact or "N/A")
-        return self._chat(prompts.MYTH_SYSTEM, user, temperature=0.4)
+        return self._chat(prompts.with_language(prompts.MYTH_SYSTEM, lang), user, temperature=0.4)
 
-    def explain_guide(self, guide: dict, question: str = "") -> str:
+    def explain_guide(self, guide: dict, question: str = "", lang: str = "bn") -> str:
         user = prompts.GUIDE_USER_TEMPLATE.format(
             guide=json.dumps(guide, ensure_ascii=False), question=question or "N/A")
-        return self._chat(prompts.GUIDE_SYSTEM, user, temperature=0.4)
+        return self._chat(prompts.with_language(prompts.GUIDE_SYSTEM, lang), user, temperature=0.4)
 
 
 # =============================================================================
@@ -481,20 +528,20 @@ class GeminiApiBackend(GemmaBackend):
                 out[k] = v
         return out
 
-    def explain_triage(self, triage_result: dict) -> str:
+    def explain_triage(self, triage_result: dict, lang: str = "bn") -> str:
         user = prompts.EXPLAIN_USER_TEMPLATE.format(
             triage_result=json.dumps(triage_result, ensure_ascii=False),
         )
-        return self._generate(prompts.EXPLAIN_SYSTEM, user, temperature=0.4)
+        return self._generate(prompts.with_language(prompts.EXPLAIN_SYSTEM, lang), user, temperature=0.4)
 
-    def bust_myth(self, belief: str, fact: str = "") -> str:
+    def bust_myth(self, belief: str, fact: str = "", lang: str = "bn") -> str:
         user = prompts.MYTH_USER_TEMPLATE.format(belief=belief, fact=fact or "N/A")
-        return self._generate(prompts.MYTH_SYSTEM, user, temperature=0.4)
+        return self._generate(prompts.with_language(prompts.MYTH_SYSTEM, lang), user, temperature=0.4)
 
-    def explain_guide(self, guide: dict, question: str = "") -> str:
+    def explain_guide(self, guide: dict, question: str = "", lang: str = "bn") -> str:
         user = prompts.GUIDE_USER_TEMPLATE.format(
             guide=json.dumps(guide, ensure_ascii=False), question=question or "N/A")
-        return self._generate(prompts.GUIDE_SYSTEM, user, temperature=0.4)
+        return self._generate(prompts.with_language(prompts.GUIDE_SYSTEM, lang), user, temperature=0.4)
 
     # --- native audio: speech -> text, through Gemma 4 itself -----------------
     def supports_audio(self) -> bool:

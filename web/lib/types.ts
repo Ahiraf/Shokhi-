@@ -17,7 +17,9 @@ export interface Condition {
   about_bn: string;
   about_en?: string;
   self_care_bn: string[];
+  self_care_en?: string[];
   see_doctor_bn: string;
+  see_doctor_en?: string;
 }
 
 export interface Myth {
@@ -68,6 +70,7 @@ export interface GuideCard {
   title_bn: string;
   title_en: string;
   summary_bn: string;
+  summary_en?: string;
 }
 
 export interface GuideResponse {
@@ -83,7 +86,9 @@ export interface GuideFull {
   summary_bn: string;
   summary_en?: string;
   points_bn: string[];
+  points_en?: string[];
   when_see_doctor_bn: string;
+  when_see_doctor_en?: string;
 }
 
 export interface KnowledgeResponse {
