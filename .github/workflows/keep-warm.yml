@@ -1,0 +1,30 @@
+name: Keep backend warm
+
+# Render's free tier spins the backend down after ~15 min idle (cold start ~50s on the
+# next request). This workflow pings the health endpoint on a schedule so the API stays
+# warm — so the first chat after a quiet period is instant. GitHub Actions is free and
+# unlimited on public repos.
+#
+# Setup: after deploying to Render, add a repo VARIABLE named BACKEND_URL
+#   GitHub → repo Settings → Secrets and variables → Actions → Variables → New:
+#   BACKEND_URL = https://shokhi-api.onrender.com   (your Render URL, no trailing slash)
+
+on:
+  schedule:
+    - cron: "*/10 * * * *" # every 10 minutes (UTC); GitHub may delay a few minutes
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping backend /api/health
+        run: |
+          URL="${{ vars.BACKEND_URL }}"
+          if [ -z "$URL" ]; then
+            echo "BACKEND_URL repo variable is not set yet — skipping. See this file's header to enable."
+            exit 0
+          fi
+          echo "Pinging ${URL}/api/health"
+          curl -fsS --max-time 90 "${URL}/api/health" && echo "" && echo "ok" \
+            || echo "ping failed (backend may be waking up — that's fine)"
