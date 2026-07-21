@@ -16,5 +16,9 @@ services:
         value: gemma-4-26b-a4b-it
       - key: GOOGLE_API_KEY
         sync: false        # set this secret in the dashboard
+      - key: GOOGLE_API_KEY_2
+        sync: false        # optional 2nd key (different Google account) for quota fallback
+      - key: GOOGLE_API_KEY_3
+        sync: false        # optional 3rd key for quota fallback
       - key: ALLOWED_ORIGINS
         sync: false        # e.g. https://shokhi.vercel.app

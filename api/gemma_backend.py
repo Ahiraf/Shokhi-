@@ -344,6 +344,42 @@ class OllamaBackend(GemmaBackend):
 
 
 # =============================================================================
+# Multi-key fallback — rotate API keys when one hits its quota/rate limit.
+# =============================================================================
+def _gemini_api_keys(explicit: str | None = None) -> list[str]:
+    """API keys in priority order. Set GOOGLE_API_KEY (+ optional GOOGLE_API_KEY_2/_3)
+    so that when one Google account's free quota is exhausted we fall back to the next.
+    GEMINI_API_KEY* are accepted as aliases. Placeholders and blanks are skipped."""
+    if explicit:
+        return [explicit]
+    candidates = [
+        os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY"),
+        os.environ.get("GOOGLE_API_KEY_2") or os.environ.get("GEMINI_API_KEY_2"),
+        os.environ.get("GOOGLE_API_KEY_3") or os.environ.get("GEMINI_API_KEY_3"),
+    ]
+    seen: set[str] = set()
+    keys: list[str] = []
+    for k in candidates:
+        if not k or k.startswith("paste_your") or k in seen:
+            continue
+        seen.add(k)
+        keys.append(k)
+    return keys
+
+
+def _is_retryable_error(err: Exception) -> bool:
+    """True when an error means 'this key is spent / temporarily unavailable' — so we
+    should try the next key rather than failing (quota, rate limit, bad/blocked key,
+    or a transient server hiccup). Mirrors ClimaGuard's fallback logic."""
+    msg = str(err).lower()
+    return any(m in msg for m in (
+        "429", "quota", "resource_exhausted", "rate limit", "too many requests",
+        "503", "overloaded", "service unavailable", "500", "internal server error",
+        "invalid api key", "api_key_invalid", "permission_denied", "401", "403",
+    ))
+
+
+# =============================================================================
 # Real backend — hosted Gemma 4 via Google AI Studio API (no download, API key).
 # =============================================================================
 class GeminiApiBackend(GemmaBackend):
@@ -357,6 +393,10 @@ class GeminiApiBackend(GemmaBackend):
         export SHOKHI_BACKEND=gemini
         export SHOKHI_GEMMA_MODEL=gemma-4-26b-a4b-it   # or gemma-4-31b-it (flagship)
 
+    Add GOOGLE_API_KEY_2 / GOOGLE_API_KEY_3 (keys from other Google accounts) and the
+    backend automatically rotates to the next one when a key hits its free-tier quota
+    or rate limit — so the app keeps working instead of erroring out.
+
     Gemma models on AI Studio don't take a separate system role, so we prepend the
     system instruction to the user turn. Responses are parsed defensively for JSON.
     """
@@ -368,22 +408,48 @@ class GeminiApiBackend(GemmaBackend):
         # Native audio lives in the E-series (E2B/E4B). Configurable, defaults to E4B.
         self.audio_model = audio_model or os.environ.get(
             "SHOKHI_GEMMA_AUDIO_MODEL", "gemma-4-e4b-it")
-        key = api_key or os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")
-        if not key:
+        self._keys = _gemini_api_keys(api_key)
+        if not self._keys:
             raise RuntimeError(
-                "No API key. Set GOOGLE_API_KEY (get one free at aistudio.google.com)."
+                "No API key. Set GOOGLE_API_KEY (get one free at aistudio.google.com). "
+                "Optionally add GOOGLE_API_KEY_2 / _3 for quota fallback."
             )
         from google import genai  # deferred so other backends need no SDK
-        self._client = genai.Client(api_key=key)
+        # One client per key; built lazily so an unused key never touches the network.
+        self._clients: list = [None] * len(self._keys)
+        self._genai = genai
+
+    def _client_for(self, i: int):
+        if self._clients[i] is None:
+            self._clients[i] = self._genai.Client(api_key=self._keys[i])
+        return self._clients[i]
+
+    def _with_fallback(self, call):
+        """Run call(client); on a quota/rate-limit error rotate to the next key."""
+        last_err: Exception | None = None
+        for i in range(len(self._keys)):
+            try:
+                result = call(self._client_for(i))
+                if i > 0:
+                    print(f"[gemini] succeeded with API key #{i + 1}")
+                return result
+            except Exception as err:  # noqa: BLE001 — decide by message
+                last_err = err
+                if _is_retryable_error(err) and i < len(self._keys) - 1:
+                    print(f"[gemini] key #{i + 1} exhausted ({str(err)[:80]}), "
+                          f"falling back to key #{i + 2}…")
+                    continue
+                raise
+        raise RuntimeError(f"All Gemini API keys exhausted. Last error: {last_err}")
 
     def _generate(self, system: str, user: str, temperature: float = 0.3) -> str:
         from google.genai import types
         prompt = f"{system}\n\n{user}"
-        resp = self._client.models.generate_content(
+        resp = self._with_fallback(lambda client: client.models.generate_content(
             model=self.model,
             contents=prompt,
             config=types.GenerateContentConfig(temperature=temperature),
-        )
+        ))
         return (resp.text or "").strip()
 
     # reuse Ollama's defensive JSON parser
@@ -441,13 +507,13 @@ class GeminiApiBackend(GemmaBackend):
         for the voice path. The transcript is then fed into the normal pipeline.
         """
         from google.genai import types
-        resp = self._client.models.generate_content(
+        resp = self._with_fallback(lambda client: client.models.generate_content(
             model=self.audio_model,
             contents=[
                 prompts.TRANSCRIBE_INSTRUCTION,
                 types.Part.from_bytes(data=audio_bytes, mime_type=mime_type),
             ],
-        )
+        ))
         return (resp.text or "").strip()
 
 
