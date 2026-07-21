@@ -87,7 +87,7 @@ Shokhi is built on a **"one Gemma brain, a safety rail underneath"** architectur
           ▼
   ┌───────────────────┐   DETERMINISTIC — never the LLM
   │  Triage engine    │   urgency + red flags + suspected conditions
-  │  (triage.py)      │   (emergency / see-doctor / self-care / info)
+  │  (triage.ts)      │   (emergency / see-doctor / self-care / info)
   └───────────────────┘
           │  safety-checked result (JSON)
           ▼
@@ -109,7 +109,7 @@ deterministic logic for safety-critical decisions.*
 The **voice path also runs through Gemma 4**: its native audio (E-series, E2B/E4B)
 transcribes spoken Bangla directly — so even speech input uses Gemma, with no separate
 speech-to-text library. Supporting (non-generative, allowed) tools: a knowledge base of
-red flags/conditions/myths, and Bangla text-to-speech (gTTS) so guidance can be **heard**.
+red flags / conditions / myths, and the two logistic-regression risk classifiers.
 
 ---
 
@@ -117,16 +117,15 @@ red flags/conditions/myths, and Bangla text-to-speech (gTTS) so guidance can be 
 
 | User | Front door | Status |
 |---|---|---|
-| Urban teen / literate woman | **Web app** (text + voice) | ✅ this repo |
-| Health worker / NGO field staff | Same web app (checklist mode) | ✅ this repo |
-| **Rural, low-literacy woman** | **IVR voice hotline** — dial, speak Bangla, hear guidance; no smartphone, no reading | ✅ this repo (`api/ivr.py`) |
+| Urban teen / literate woman | **Web app** (text + voice input) | ✅ this repo |
+| Health worker / NGO field staff | Same web app | ✅ this repo |
+| **Rural, low-literacy woman** | **IVR voice hotline** — dial, speak Bangla, hear guidance; no smartphone, no reading | 🛣️ roadmap |
 
 Because the triage engine and Gemma backend are fully decoupled from the UI, the *same
-core* powers the web app **and** the phone hotline. The IVR path (`/api/ivr/*`, Twilio/
-Exotel TwiML) greets the caller, records her spoken Bangla, transcribes it with Gemma's
-native audio, runs the **identical** triage, and speaks the guidance back (gTTS, falling
-back to `<Say bn-IN>`) — every path has a safe spoken fallback to **16263 / 999** so a
-call never dead-ends.
+core* can power the web app **and** a future phone hotline. The web app already accepts
+**spoken Bangla** (Gemma 4's native audio transcribes it, then the identical triage runs);
+the planned IVR path reuses that exact core behind a Twilio/Exotel phone number so a call
+never dead-ends, always with a spoken fallback to **16263 / 999**.
 
 ---
 
@@ -137,19 +136,20 @@ period to menopause — as **one warm companion**:
 
 | Area | What it does | Where |
 |---|---|---|
-| **Symptom triage** | Free-form Bangla → urgency + red flags + suspected conditions | `triage.py` |
-| **Menstrual cycle tracker** | Log periods privately (on-device); get regularity, next-period estimate, and PCOS/anaemia pattern hints over months | `cycle.py`, `web/…/CycleTracker.tsx` |
+| **Bangla ↔ English** | A language toggle across the whole app; curated content is bilingual and Gemma replies in the chosen language | `web/lib/i18n.ts` |
+| **Symptom triage** | Free-form Bangla → urgency + red flags + suspected conditions | `lib/server/triage.ts` |
+| **Menstrual cycle tracker** | Log periods privately (on-device); get regularity, next-period estimate, and PCOS/anaemia pattern hints over months | `lib/server/cycle.ts` |
 | **Pregnancy & postpartum** | Danger-sign triage: eclampsia, pre-eclampsia, bleeding, reduced fetal movement, postpartum haemorrhage/sepsis, mastitis, postpartum depression | `knowledge.json` |
 | **Menopause / perimenopause** | Recognises hot flashes, night sweats, dryness, mood changes; flags post-menopausal bleeding | `knowledge.json` |
-| **Health guides** | Warm, grounded explainers: **contraception, family planning**, menopause care, nutrition/anaemia, first period, menstrual hygiene | `/api/guides`, `web/…/Guides.tsx` |
+| **Health guides** | Warm, grounded explainers: **contraception, family planning**, menopause care, nutrition/anaemia, first period, menstrual hygiene | `/api/guides` |
 | **More conditions** | + UTI, vaginal infection, anaemia, breast-change screening | `knowledge.json` |
-| **Voice hotline (IVR)** | Dial, speak Bangla, hear guidance — no smartphone, no reading | `ivr.py` |
 | **Myth-busting** | Gentle, shame-free corrections of common beliefs | `/api/myth` |
+| **Voice hotline (IVR)** | Dial, speak Bangla, hear guidance — no smartphone, no reading | 🛣️ roadmap |
 
 The **safety model is identical everywhere**: every urgency decision is made by
-deterministic rules in `triage.py`/`cycle.py`, never by the LLM; Gemma only understands
+deterministic rules in `triage.ts`/`cycle.ts`, never by the LLM; Gemma only understands
 messy Bangla and speaks back with warmth. New danger signs (e.g. pregnancy `any`-clause
-red flags) plug into the same rules table, so they are fully unit-tested.
+red flags) plug into the same rules table.
 
 ---
 
@@ -164,8 +164,8 @@ language understanding and generates all guidance; the classifier only nudges a 
 
 | Model | Dataset | Records | Test accuracy | Test AUC |
 |---|---|---:|---:|---:|
-| PCOS risk | Kaggle *Polycystic Ovary Syndrome (PCOS)* (P. Kottarathil) | 541 | 0.79 | **0.84** |
-| Endometriosis risk | *Self-report symptom-based endometriosis prediction* (Scientific Reports, 2023) | 886 | 0.85 | **0.93** |
+| PCOS risk | Kaggle *Polycystic Ovary Syndrome (PCOS)* (P. Kottarathil) | 541 | 0.82 | **0.88** |
+| Endometriosis risk | *Self-report symptom-based endometriosis prediction* (Scientific Reports, 2023) | 886 | 0.88 | **0.93** |
 
 Key design choice: the models are trained **only on features a woman can self-report in
 conversation** (cycle regularity, weight gain, excess hair, acne, period pain, pain during
@@ -173,53 +173,38 @@ sex, pelvic pain, infertility) — *not* lab values (FSH/LH/AMH/ultrasound) that
 can't provide — so the same symptoms Gemma extracts drive the prediction. The risk signal
 **never overrides** the deterministic urgency; an emergency stays an emergency.
 
+The classifiers are **logistic regression**, trained offline and **exported to plain JSON
+coefficients** (`web/lib/server/risk-models.json`) so inference runs in pure TypeScript at
+request time — **no Python, no ML runtime** on the server. Retrain any time:
+
 ```bash
-cd src && python3 train_risk_models.py     # trains + saves models to data/models/
+python3 ml/train_export.py     # retrains from ml/datasets/ and rewrites the JSON
 ```
 
-The layer is **fully optional**: if scikit-learn or the trained models are absent, the
-signal simply turns off and the app runs unchanged. *Dataset licenses: verify on source
-before redistribution; used here for research/education.*
+The layer is **fully optional**: if the JSON is absent the signal simply turns off and the
+app runs unchanged. *Dataset licenses: verify on source before redistribution; used here
+for research/education.*
 
 ## 🚀 Quick start
 
-Shokhi is a **Next.js frontend** (`web/`, → Vercel) talking to a **FastAPI backend**
-(`api/`, → Render). Run both locally:
+Shokhi is a **single Next.js app** (`web/`): the UI and the backend live together as
+API routes (`app/api/*`), so there's one thing to run and one thing to deploy.
 
-**1. Backend** (terminal 1):
-```bash
-cd api
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000        # runs on the mock backend by default
-
-# For live Gemma 4 (same API key that works for Gemini):
-export SHOKHI_BACKEND=gemini
-export SHOKHI_GEMMA_MODEL=gemma-4-26b-a4b-it   # or gemma-4-31b-it (flagship)
-export GOOGLE_API_KEY=your_key
-uvicorn main:app --reload --port 8000
-
-# Or fully offline via Ollama:
-#   ollama pull gemma4:e4b && export SHOKHI_BACKEND=ollama SHOKHI_GEMMA_MODEL=gemma4:e4b
-```
-
-**2. Frontend** (terminal 2):
 ```bash
 cd web
 npm install
-cp .env.local.example .env.local             # points at http://localhost:8000
-npm run dev                                   # open http://localhost:3000
+cp .env.local.example .env.local     # add your GOOGLE_API_KEY (or leave blank for the mock)
+npm run dev                          # open http://localhost:3001
 ```
 
-Run the backend tests (no UI, no model needed):
+- **Without a key** the app runs on a **deterministic mock backend** — the full flow works
+  offline, just with keyword-based (not real Gemma) understanding.
+- **For live Gemma 4**, put a Google AI Studio key in `.env.local` as `GOOGLE_API_KEY`
+  (optionally `GOOGLE_API_KEY_2`/`_3` for quota fallback). The server auto-selects Gemma.
+
+The two risk classifiers are retrained/exported offline (Python, not needed to run the app):
 ```bash
-cd api
-python3 test_triage.py       # 27 safety-engine tests (incl. pregnancy/postpartum/menopause)
-python3 test_assistant.py    # 10 orchestrator tests
-python3 test_risk_model.py   #  5 ML-support tests
-python3 test_guides.py       #  6 health-guide tests
-python3 test_cycle.py        #  8 cycle-tracking tests
-python3 test_ivr.py          #  7 IVR voice-hotline tests
-# 63 tests total, zero external dependencies
+python3 ml/train_export.py     # → web/lib/server/risk-models.json
 ```
 
 ---
@@ -228,72 +213,62 @@ python3 test_ivr.py          #  7 IVR voice-hotline tests
 
 ```
 Shokhi/
-├── web/                     # Next.js + Tailwind frontend  → Vercel
-│   ├── app/                 # page.tsx (chat + tracker tabs), layout.tsx, globals.css
-│   ├── components/          # Message, Composer, UrgencyPill, RiskBar, Examples,
-│   │                        #   Guides, CycleTracker
-│   └── lib/                 # api.ts (backend client), types.ts
-├── api/                     # FastAPI backend             → Render
-│   ├── main.py              # JSON API (message / checklist / guides / cycle / transcribe)
-│   ├── triage.py            # deterministic triage/safety engine (no LLM)
-│   ├── cycle.py             # deterministic cycle-tracking analysis (no LLM)
-│   ├── ivr.py               # IVR voice-hotline TwiML webhooks (Twilio/Exotel)
-│   ├── gemma_backend.py     # Mock + Ollama + Gemini(API) backends + native audio + guides
-│   ├── prompts.py           # Gemma 4 prompt templates
-│   ├── assistant.py         # orchestrator (conversation → triage → guidance, guides)
-│   ├── risk_model.py        # optional ML risk-signal inference (PCOS/endo)
-│   ├── train_risk_models.py # trains the two classifiers from public datasets
-│   ├── test_*.py            # 63 tests (triage 27 + assistant 10 + risk 5 +
-│   │                        #   guides 6 + cycle 8 + ivr 7)
-│   └── data/                # knowledge.json, models/*.joblib, datasets/
-├── render.yaml              # Render blueprint for the backend
-├── docs/                    # writeup, platform decision PDF
+├── web/                       # The whole app (UI + backend)  → Vercel
+│   ├── app/
+│   │   ├── (pages)            # landing, chat, tracker, guides, learn, myths, hotline,
+│   │   │                      #   about, profile — one route per feature, bilingual
+│   │   └── api/               # the backend, as Next.js route handlers:
+│   │                          #   message, myth, guide, guides/[id], knowledge,
+│   │                          #   cycle/analyze, transcribe, health
+│   ├── components/            # Nav, Message, Composer, CycleTracker, Mascot3D, PageIntro …
+│   └── lib/
+│       ├── api.ts, i18n.ts    # client-side API calls + Bangla/English strings
+│       └── server/            # the ported backend (server-only):
+│                              #   triage.ts (deterministic safety engine, no LLM),
+│                              #   cycle.ts, assistant.ts, gemma.ts (mock + Gemma via
+│                              #   @google/genai), prompts.ts, risk.ts,
+│                              #   knowledge.json, risk-models.json
+├── ml/                        # OFFLINE only (not deployed)
+│   └── train_export.py        # retrains the LR classifiers → web/lib/server/risk-models.json
+├── docs/                      # writeup, platform decision PDF
 └── README.md
 ```
 
-## 🌐 Deploy (Vercel + Render)
+## 🌐 Deploy (one click, Vercel)
 
-Two services, **connected** by one env var + CORS:
+Because the backend is part of the Next.js app, there's **one deployment** — always-on,
+no separate server, no CORS, no cold-start "sleep" to work around:
 
-1. **Backend → Render:** New → Blueprint (uses `render.yaml`, root `api/`). In the
-   dashboard set `GOOGLE_API_KEY` and `ALLOWED_ORIGINS` (your Vercel URL). You get
-   `https://shokhi-api.onrender.com`.
-2. **Frontend → Vercel:** Import the repo, set **Root Directory = `web`**, and add env
-   var `NEXT_PUBLIC_API_URL=https://shokhi-api.onrender.com`. Deploy → public link.
-
-The frontend calls the backend via `NEXT_PUBLIC_API_URL`; the backend allows the frontend
-via `ALLOWED_ORIGINS`. That wiring is what makes the two separate deployments work together.
+1. Import the repo at [vercel.com/new](https://vercel.com/new), set **Root Directory = `web`**.
+2. Add environment variables (server-side): `GOOGLE_API_KEY` (+ optional `GOOGLE_API_KEY_2`/`_3`).
+3. Deploy → public link. That's it.
 
 ## ⚙️ Configuration
 
+All server-side (set in `.env.local` locally, or Vercel env vars in prod):
+
 | Env var | Default | Meaning |
 |---|---|---|
-| `SHOKHI_BACKEND` | `mock` | `mock` (offline demo), `gemini` (hosted Gemma 4, API key), or `ollama` (local Gemma 4) |
-| `SHOKHI_GEMMA_MODEL` | `gemma4:e4b` | Gemma 4 tag — Ollama (`gemma4:e4b`/`:12b`/`:31b`) or AI Studio (`gemma-4-26b-a4b-it`/`gemma-4-31b-it`) |
-| `GOOGLE_API_KEY` | — | Google AI Studio key (only for `gemini` backend) |
-| `OLLAMA_HOST` | `http://localhost:11434` | Ollama server URL (only for `ollama` backend) |
+| `GOOGLE_API_KEY` | — | Google AI Studio key for live Gemma 4. Absent → deterministic mock backend. |
+| `GOOGLE_API_KEY_2`, `_3` | — | Optional extra keys (other Google accounts) for automatic quota fallback. |
+| `SHOKHI_GEMMA_MODEL` | `gemma-4-26b-a4b-it` | Gemma 4 model on AI Studio (e.g. `gemma-4-31b-it`). |
+| `SHOKHI_BACKEND` | auto | Force `gemini` or `mock`. Default: `gemini` if a key is present, else `mock`. |
 
 ## 🔮 Future plans
 
 ### Offline, edge deployment for no-internet rural clinics
 
-Shokhi supports two ways to run Gemma 4, and the second unlocks a future the existing
-apps cannot reach:
+The Gemma backend sits behind **one swappable interface** (`web/lib/server/gemma.ts` —
+today `mock` and hosted `gemini`). A **local Gemma 4** backend (e.g. via Ollama) can drop
+into that same interface with zero changes to the rest of the app — which unlocks a future
+the existing apps cannot reach:
 
-- **Hosted (API key) — reach the whole country over the internet.** The cloud runs
-  Gemma 4; any woman opens the web link from any browser. This is the standard web
-  deployment (like any website, it needs internet). *This is the near-term product.*
-- **Local (Ollama) — genuinely offline, for places with no internet.** With Ollama, the
-  Gemma 4 model runs **entirely on the device it's installed on** — a laptop, mini-PC, or
-  kiosk. The important nuance: this serves **whoever is physically at that device**, not
-  the open internet (a model on one machine is not a public server).
-
-That local mode is exactly what a **rural health center or Union Parishad office with no
-connectivity** needs: place one device running Shokhi + Gemma 4 at the center, and a
-health worker can help every woman who walks in — no internet, no data cost, no cloud.
-Because the Gemma backend is fully swappable (`mock` / `gemini` / `ollama`) behind one
-interface, the **same codebase** powers both the online web app and the offline clinic
-device with zero rewrite.
+- **Hosted (API key) — reach the whole country over the internet.** The cloud runs Gemma 4;
+  any woman opens the web link from any browser. *This is the near-term product.*
+- **Local (roadmap) — genuinely offline, for places with no internet.** A single device
+  (laptop / mini-PC / kiosk) at a **rural health center or Union Parishad office** runs
+  Gemma 4 on-device, serving whoever is physically there — no internet, no data cost, no
+  cloud. Same codebase, just a different backend behind the interface.
 
 ### Other planned work
 - **Bangla voice hotline (IVR):** the top priority for reaching phone-only, low-literacy
