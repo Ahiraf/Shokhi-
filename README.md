@@ -245,7 +245,6 @@ Shokhi/
 │   ├── train_risk_models.py # trains the two classifiers from public datasets
 │   ├── test_*.py            # 63 tests (triage 27 + assistant 10 + risk 5 +
 │   │                        #   guides 6 + cycle 8 + ivr 7)
-│   ├── legacy_streamlit/    # old Streamlit UI (optional offline demo)
 │   └── data/                # knowledge.json, models/*.joblib, datasets/
 ├── render.yaml              # Render blueprint for the backend
 ├── docs/                    # writeup, platform decision PDF

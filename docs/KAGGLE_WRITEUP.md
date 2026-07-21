@@ -133,9 +133,10 @@ Lightweight, dependency-minimal Python, so it runs anywhere and is fully testabl
   These are allowed "traditional ML that supports, not replaces" Gemma 4: the signal
   **never overrides** the deterministic urgency, and Gemma 4 stays the primary AI. The
   layer is optional and degrades gracefully if the models are absent.
-- **`app/streamlit_app.py`** — the Bangla web UI: chat, a symptom **checklist** (so a
-  health worker can help a woman who can't type), **voice input**, colored urgency cards,
-  and optional **Bangla text-to-speech** to hear the guidance aloud.
+- **`web/`** — the Bangla web UI (Next.js, backed by the FastAPI service in `api/`):
+  chat, a symptom **checklist** (so a health worker can help a woman who can't type),
+  **voice input**, colored urgency cards, and optional **Bangla text-to-speech** to hear
+  the guidance aloud.
 - **Tests:** 13 triage + 10 orchestrator + 5 risk-model = **28 passing**, focused on the
   safety layer (emergencies must never be downgraded; the ML signal never overrides
   urgency; PCOS/endo suspicion fires correctly).

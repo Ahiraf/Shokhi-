@@ -7,7 +7,6 @@ venv/
 env/
 
 # --- Secrets (NEVER commit your API key) ---
-.streamlit/secrets.toml
 .env
 *.key
 
@@ -26,4 +25,5 @@ node_modules/
 .DS_Store
 .idea/
 .vscode/
+.puku/
 *.log
