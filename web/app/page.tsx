@@ -75,7 +75,7 @@ export default function Home() {
 
           <div className="order-first flex justify-center sm:order-none">
             <div className="animate-float">
-              <Mascot3D size={260} priority />
+              <Mascot3D variant="hero" size={260} priority />
             </div>
           </div>
         </div>

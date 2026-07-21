@@ -71,7 +71,7 @@ export default function ChatPage() {
       {!started && (
         <section className="flex flex-1 flex-col items-center justify-center py-10 text-center">
           <div className="animate-float">
-            <Mascot3D size={140} />
+            <Mascot3D variant="chat" size={140} />
           </div>
           {name && (
             <p className="mt-4 text-sm font-semibold text-rose">

@@ -34,7 +34,7 @@ export default function HotlinePage() {
 
       <div className="mt-8 flex flex-col items-center gap-5 rounded-3xl bg-gradient-to-br from-plum to-plum-deep px-6 py-8 text-center text-white sm:flex-row sm:text-left">
         <div className="shrink-0">
-          <Mascot3D size={110} />
+          <Mascot3D variant="hotline" size={110} />
         </div>
         <div>
           <p className="text-sm text-white/70">{t("hotline.anyPhone")}</p>

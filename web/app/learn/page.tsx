@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getKnowledge } from "@/lib/api";
 import type { Condition } from "@/lib/types";
 import PageHeader from "@/components/PageHeader";
+import Mascot3D from "@/components/Mascot3D";
 import { useLang } from "@/components/LanguageProvider";
 import type { StringKey } from "@/lib/i18n";
 
@@ -26,6 +27,9 @@ export default function LearnPage() {
 
   return (
     <main className="mx-auto max-w-4xl px-5 py-10">
+      <div className="mb-2 flex justify-center">
+        <Mascot3D variant="learn" size={120} />
+      </div>
       <PageHeader icon="🧠" title={t("learn.title")} sub={t("learn.sub")} />
 
       {error && <p className="mt-8 text-center text-sm text-plum/50">{t("learn.error")}</p>}
