@@ -136,7 +136,7 @@ period to menopause — as **one warm companion**:
 
 | Area | What it does | Where |
 |---|---|---|
-| **Bangla ↔ English** | A language toggle across the whole app; curated content is bilingual and Gemma replies in the chosen language | `web/lib/i18n.ts` |
+| **Bangla ↔ English** | A language toggle across the whole app; curated content is bilingual and Gemma replies in the chosen language | `lib/i18n.ts` |
 | **Symptom triage** | Free-form Bangla → urgency + red flags + suspected conditions | `lib/server/triage.ts` |
 | **Menstrual cycle tracker** | Log periods privately (on-device); get regularity, next-period estimate, and PCOS/anaemia pattern hints over months | `lib/server/cycle.ts` |
 | **Pregnancy & postpartum** | Danger-sign triage: eclampsia, pre-eclampsia, bleeding, reduced fetal movement, postpartum haemorrhage/sepsis, mastitis, postpartum depression | `knowledge.json` |
@@ -174,7 +174,7 @@ can't provide — so the same symptoms Gemma extracts drive the prediction. The 
 **never overrides** the deterministic urgency; an emergency stays an emergency.
 
 The classifiers are **logistic regression**, trained offline and **exported to plain JSON
-coefficients** (`web/lib/server/risk-models.json`) so inference runs in pure TypeScript at
+coefficients** (`lib/server/risk-models.json`) so inference runs in pure TypeScript at
 request time — **no Python, no ML runtime** on the server. Retrain any time:
 
 ```bash
@@ -187,11 +187,10 @@ for research/education.*
 
 ## 🚀 Quick start
 
-Shokhi is a **single Next.js app** (`web/`): the UI and the backend live together as
-API routes (`app/api/*`), so there's one thing to run and one thing to deploy.
+Shokhi is a **single Next.js app** at the repo root: the UI and the backend live together
+as API routes (`app/api/*`), so there's one thing to run and one thing to deploy.
 
 ```bash
-cd web
 npm install
 cp .env.local.example .env.local     # add your GOOGLE_API_KEY (or leave blank for the mock)
 npm run dev                          # open http://localhost:3001
@@ -204,33 +203,35 @@ npm run dev                          # open http://localhost:3001
 
 The two risk classifiers are retrained/exported offline (Python, not needed to run the app):
 ```bash
-python3 ml/train_export.py     # → web/lib/server/risk-models.json
+python3 ml/train_export.py     # → lib/server/risk-models.json
 ```
 
 ---
 
 ## 🗂️ Project structure
 
+The Next.js app lives at the **repo root** (deploys to Vercel with no root-directory config):
+
 ```
 Shokhi/
-├── web/                       # The whole app (UI + backend)  → Vercel
-│   ├── app/
-│   │   ├── (pages)            # landing, chat, tracker, guides, learn, myths, hotline,
-│   │   │                      #   about, profile — one route per feature, bilingual
-│   │   └── api/               # the backend, as Next.js route handlers:
-│   │                          #   message, myth, guide, guides/[id], knowledge,
-│   │                          #   cycle/analyze, transcribe, health
-│   ├── components/            # Nav, Message, Composer, CycleTracker, Mascot3D, PageIntro …
-│   └── lib/
-│       ├── api.ts, i18n.ts    # client-side API calls + Bangla/English strings
-│       └── server/            # the ported backend (server-only):
-│                              #   triage.ts (deterministic safety engine, no LLM),
-│                              #   cycle.ts, assistant.ts, gemma.ts (mock + Gemma via
-│                              #   @google/genai), prompts.ts, risk.ts,
-│                              #   knowledge.json, risk-models.json
-├── ml/                        # OFFLINE only (not deployed)
-│   └── train_export.py        # retrains the LR classifiers → web/lib/server/risk-models.json
-├── docs/                      # writeup, platform decision PDF
+├── app/
+│   ├── (pages)            # landing, chat, tracker, guides, learn, myths, hotline,
+│   │                      #   about, profile — one route per feature, bilingual
+│   └── api/               # the backend, as Next.js route handlers:
+│                          #   message, myth, guide, guides/[id], knowledge,
+│                          #   cycle/analyze, transcribe, health
+├── components/            # Nav, Message, Composer, CycleTracker, Mascot3D, PageIntro …
+├── lib/
+│   ├── api.ts, i18n.ts    # client-side API calls + Bangla/English strings
+│   └── server/            # the backend (server-only):
+│                          #   triage.ts (deterministic safety engine, no LLM),
+│                          #   cycle.ts, assistant.ts, gemma.ts (mock + Gemma via
+│                          #   @google/genai), prompts.ts, risk.ts,
+│                          #   knowledge.json, risk-models.json
+├── public/                # logo, favicons, 3D-mascot poses
+├── ml/                    # OFFLINE only (not deployed)
+│   └── train_export.py    # retrains the LR classifiers → lib/server/risk-models.json
+├── docs/                  # writeup, platform decision PDF
 └── README.md
 ```
 
@@ -239,7 +240,8 @@ Shokhi/
 Because the backend is part of the Next.js app, there's **one deployment** — always-on,
 no separate server, no CORS, no cold-start "sleep" to work around:
 
-1. Import the repo at [vercel.com/new](https://vercel.com/new), set **Root Directory = `web`**.
+1. Import the repo at [vercel.com/new](https://vercel.com/new) (the app is at the repo root —
+   no root-directory setting needed).
 2. Add environment variables (server-side): `GOOGLE_API_KEY` (+ optional `GOOGLE_API_KEY_2`/`_3`).
 3. Deploy → public link. That's it.
 
@@ -258,7 +260,7 @@ All server-side (set in `.env.local` locally, or Vercel env vars in prod):
 
 ### Offline, edge deployment for no-internet rural clinics
 
-The Gemma backend sits behind **one swappable interface** (`web/lib/server/gemma.ts` —
+The Gemma backend sits behind **one swappable interface** (`lib/server/gemma.ts` —
 today `mock` and hosted `gemini`). A **local Gemma 4** backend (e.g. via Ollama) can drop
 into that same interface with zero changes to the rest of the app — which unlocks a future
 the existing apps cannot reach:

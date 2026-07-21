@@ -1,25 +1,25 @@
-# --- Python ---
-__pycache__/
-*.py[cod]
-*.egg-info/
-.venv/
-venv/
-env/
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+.vercel
+*.tsbuildinfo
+next-env.d.ts
 
 # --- Secrets (NEVER commit your API key) ---
 .env
+.env.local
+.env*.local
 *.key
 
-# --- Training datasets (licensed; re-download with api/fetch_datasets.py) ---
-api/data/datasets/
+# --- Training datasets (public; sources documented in ml/train_export.py) ---
+ml/datasets/
 
-# NOTE: api/data/models/*.joblib ARE committed on purpose — small, and the deployed
-# app needs them for the risk signal. Retrain anytime with train_risk_models.py.
-
-# --- Node / Next.js (also has web/.gitignore) ---
-node_modules/
-.next/
-.env.local
+# --- Python (only the offline ml/ retrain script uses it) ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
 
 # --- OS / editor ---
 .DS_Store
@@ -27,4 +27,3 @@ node_modules/
 .vscode/
 .puku/
 *.log
-ml/datasets/

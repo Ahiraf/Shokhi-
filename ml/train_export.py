@@ -19,7 +19,7 @@ from sklearn.metrics import roc_auc_score, accuracy_score
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = Path(__file__).resolve().parent / "datasets"   # ml/datasets/ (public sources; gitignored)
-OUT = ROOT / "web" / "lib" / "server" / "risk-models.json"
+OUT = ROOT / "lib" / "server" / "risk-models.json"
 
 PCOS_FEATURES = ["age", "cycles_irregular", "unexplained_weight_gain", "excess_hair", "persistent_acne"]
 ENDO_FEATURES = ["cycles_irregular", "heavy_bleeding", "periods_disrupt_daily_life",
