@@ -4,8 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getGuides } from "@/lib/api";
 import type { GuideCard } from "@/lib/types";
-import PageHeader from "@/components/PageHeader";
-import Mascot3D from "@/components/Mascot3D";
+import PageIntro from "@/components/PageIntro";
 import { useLang } from "@/components/LanguageProvider";
 
 export default function GuidesPage() {
@@ -19,10 +18,7 @@ export default function GuidesPage() {
 
   return (
     <main className="mx-auto max-w-4xl px-5 py-10">
-      <div className="mb-2 flex justify-center">
-        <Mascot3D variant="guides" size={120} />
-      </div>
-      <PageHeader icon="📚" title={t("guides.title")} sub={t("guides.sub")} />
+      <PageIntro icon="📚" title={t("guides.title")} sub={t("guides.sub")} variant="guides" side="left" size={165} />
 
       {error && (
         <p className="mt-8 text-center text-sm text-plum/50">{t("guides.error")}</p>
