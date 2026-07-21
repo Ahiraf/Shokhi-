@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getKnowledge, bustMyth } from "@/lib/api";
 import type { Myth } from "@/lib/types";
 import PageHeader from "@/components/PageHeader";
+import Mascot3D from "@/components/Mascot3D";
 import { useLang } from "@/components/LanguageProvider";
 
 export default function MythsPage() {
@@ -33,6 +34,9 @@ export default function MythsPage() {
 
   return (
     <main className="mx-auto max-w-2xl px-5 py-10">
+      <div className="mb-2 flex justify-center">
+        <Mascot3D variant="myths" size={120} />
+      </div>
       <PageHeader icon="💡" title={t("myths.title")} sub={t("myths.sub")} />
 
       {/* ask about a belief */}
