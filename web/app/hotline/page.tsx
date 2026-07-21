@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
-import Mascot from "@/components/Mascot";
+import Mascot3D from "@/components/Mascot3D";
 import { useLang } from "@/components/LanguageProvider";
 
 const STEPS: { icon: string; title_bn: string; title_en: string; desc_bn: string; desc_en: string }[] = [
@@ -33,8 +33,8 @@ export default function HotlinePage() {
       <PageHeader icon="☎️" title={t("hotline.title")} sub={t("hotline.sub")} />
 
       <div className="mt-8 flex flex-col items-center gap-5 rounded-3xl bg-gradient-to-br from-plum to-plum-deep px-6 py-8 text-center text-white sm:flex-row sm:text-left">
-        <div className="shrink-0 rounded-full bg-white/10 p-3">
-          <Mascot size={84} />
+        <div className="shrink-0">
+          <Mascot3D size={110} />
         </div>
         <div>
           <p className="text-sm text-white/70">{t("hotline.anyPhone")}</p>

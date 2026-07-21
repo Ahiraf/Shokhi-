@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Mascot from "@/components/Mascot";
+import Mascot3D from "@/components/Mascot3D";
 import FeatureCard from "@/components/FeatureCard";
 import { FEATURES } from "@/lib/features";
 import { useLang } from "@/components/LanguageProvider";
@@ -74,8 +74,8 @@ export default function Home() {
           </div>
 
           <div className="order-first flex justify-center sm:order-none">
-            <div className="animate-float rounded-full bg-white/60 p-4 ring-1 ring-rose-soft">
-              <Mascot size={180} />
+            <div className="animate-float">
+              <Mascot3D size={260} priority />
             </div>
           </div>
         </div>

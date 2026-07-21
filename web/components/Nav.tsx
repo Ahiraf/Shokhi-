@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { NAV } from "@/lib/nav";
 import { useLang } from "./LanguageProvider";
-import Mascot from "./Mascot";
 
 /** Sticky top navigation shared across every page, with a mobile menu. */
 export default function Nav() {
@@ -48,8 +48,15 @@ export default function Nav() {
     <header className="sticky top-0 z-40 border-b border-rose-soft/70 bg-cream/85 backdrop-blur">
       <nav className="mx-auto flex max-w-5xl items-center justify-between px-5 py-3">
         <Link href="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
-          <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-blush ring-1 ring-rose-soft">
-            <Mascot size={34} />
+          <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full ring-1 ring-rose-soft">
+            <Image
+              src="/shokhi-mark.png"
+              alt="Shokhi logo"
+              width={36}
+              height={36}
+              className="h-full w-full object-cover"
+              priority
+            />
           </span>
           <span className="font-display text-lg font-bold text-plum">সখী</span>
         </Link>

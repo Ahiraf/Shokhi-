@@ -7,7 +7,8 @@ import Message from "@/components/Message";
 import Composer from "@/components/Composer";
 import Examples from "@/components/Examples";
 import Guides from "@/components/Guides";
-import Mascot from "@/components/Mascot";
+import Mascot3D from "@/components/Mascot3D";
+import LogoMark from "@/components/LogoMark";
 import { useLang } from "@/components/LanguageProvider";
 import { loadProfile, toChatProfile } from "@/lib/profile";
 
@@ -70,7 +71,7 @@ export default function ChatPage() {
       {!started && (
         <section className="flex flex-1 flex-col items-center justify-center py-10 text-center">
           <div className="animate-float">
-            <Mascot size={92} />
+            <Mascot3D size={140} />
           </div>
           {name && (
             <p className="mt-4 text-sm font-semibold text-rose">
@@ -107,8 +108,8 @@ export default function ChatPage() {
             ))}
             {busy && (
               <div className="flex items-center gap-2.5 pl-1 text-plum/50">
-                <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-blush ring-1 ring-rose-soft">
-                  <Mascot size={34} />
+                <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full ring-1 ring-rose-soft">
+                  <LogoMark size={36} />
                 </span>
                 <span className="animate-pulse">{t("chat.thinking")}</span>
               </div>

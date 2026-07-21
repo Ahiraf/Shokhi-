@@ -3,7 +3,7 @@
 import type { ChatItem } from "@/lib/types";
 import UrgencyPill from "./UrgencyPill";
 import RiskBar from "./RiskBar";
-import Mascot from "./Mascot";
+import LogoMark from "./LogoMark";
 import { useLang } from "./LanguageProvider";
 import { pickField } from "@/lib/i18n";
 
@@ -27,8 +27,8 @@ export default function Message({ item }: { item: ChatItem }) {
 
   return (
     <div className="flex animate-rise items-start gap-2.5">
-      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blush ring-1 ring-rose-soft">
-        <Mascot size={34} />
+      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full ring-1 ring-rose-soft">
+        <LogoMark size={36} />
       </span>
       <div className="max-w-[85%] rounded-3xl rounded-tl-lg bg-white px-4 py-3 shadow-soft ring-1 ring-rose-soft">
         {t && (
