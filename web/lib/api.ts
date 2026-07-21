@@ -8,8 +8,9 @@ import type {
   CycleAnalysis,
 } from "./types";
 
-const BASE =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://localhost:8000";
+// The backend now lives in this same Next.js app (app/api/*), so calls are same-origin
+// (relative). NEXT_PUBLIC_API_URL is only needed if you point at an external backend.
+const BASE = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "";
 
 async function post<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {

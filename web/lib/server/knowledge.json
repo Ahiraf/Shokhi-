@@ -1,0 +1,622 @@
+{
+  "meta": {
+    "app_name_bn": "সখী",
+    "app_name_en": "Shokhi",
+    "emergency_number_bd": "999",
+    "health_hotline_bd": "16263",
+    "disclaimer_bn": "সখী একজন স্বাস্থ্য-সহায়ক, ডাক্তার নয়। এটি প্রাথমিক ধারণা ও নিরাপদ পরামর্শ দেয়; নিশ্চিত রোগ নির্ণয় ও চিকিৎসার জন্য অবশ্যই একজন চিকিৎসকের পরামর্শ নিন।",
+    "disclaimer_en": "Shokhi is a health companion, not a doctor. It gives an initial sense and safe guidance; always see a qualified doctor for diagnosis and treatment.",
+    "urgency_levels": {
+      "emergency": {"rank": 3, "label_bn": "জরুরি — এখনই হাসপাতালে যান", "label_en": "Emergency — go to hospital now"},
+      "see_doctor_soon": {"rank": 2, "label_bn": "শীঘ্রই ডাক্তার দেখান", "label_en": "See a doctor soon"},
+      "self_care": {"rank": 1, "label_bn": "ঘরোয়া যত্ন যথেষ্ট", "label_en": "Home care is usually enough"},
+      "info": {"rank": 0, "label_bn": "সাধারণ তথ্য", "label_en": "General information"}
+    }
+  },
+
+  "symptom_schema": {
+    "age": {"type": "int", "desc_bn": "বয়স", "desc_en": "age", "question_bn": "আপনার বয়স কত?"},
+    "is_pregnant_possible": {"type": "bool", "desc_bn": "গর্ভবতী হওয়ার সম্ভাবনা", "desc_en": "possibly pregnant", "question_bn": "আপনার কি এই মুহূর্তে গর্ভবতী হওয়ার সম্ভাবনা আছে?"},
+    "is_pregnant": {"type": "bool", "desc_bn": "এখন গর্ভবতী", "desc_en": "currently pregnant", "question_bn": "আপনি কি এখন গর্ভবতী?"},
+    "recently_gave_birth": {"type": "bool", "desc_bn": "সম্প্রতি সন্তান প্রসব করেছেন (৬ সপ্তাহের মধ্যে)", "desc_en": "gave birth in the last 6 weeks", "question_bn": "আপনি কি সম্প্রতি (৬ সপ্তাহের মধ্যে) সন্তান প্রসব করেছেন?"},
+    "post_menopausal": {"type": "bool", "desc_bn": "মাসিক বন্ধ হয়ে গেছে (মেনোপজ)", "desc_en": "periods have stopped (menopause)", "question_bn": "আপনার মাসিক কি স্থায়ীভাবে বন্ধ হয়ে গেছে?"},
+    "bleeding_now": {"type": "bool", "desc_bn": "এখন রক্তক্ষরণ হচ্ছে", "desc_en": "bleeding now", "question_bn": "আপনার কি এখন রক্তক্ষরণ হচ্ছে?"},
+    "severe_pelvic_pain": {"type": "bool", "desc_bn": "তীব্র তলপেটে ব্যথা", "desc_en": "severe lower-abdominal/pelvic pain", "question_bn": "আপনার তলপেটে ব্যথা কি অসহনীয় বা তীব্র?"},
+    "heavy_bleeding": {"type": "bool", "desc_bn": "অতিরিক্ত রক্তক্ষরণ (প্রতি ঘণ্টায় প্যাড ভিজে যাওয়া / বড় চাকা)", "desc_en": "very heavy bleeding (soaking a pad hourly or large clots)", "question_bn": "আপনার কি এত রক্ত যাচ্ছে যে প্রতি ঘণ্টায় প্যাড বা কাপড় ভিজে যাচ্ছে?"},
+    "fainting_or_dizzy": {"type": "bool", "desc_bn": "মাথা ঘোরা / অজ্ঞান হওয়া / প্রচণ্ড দুর্বলতা", "desc_en": "fainting, dizziness or severe weakness", "question_bn": "আপনার কি মাথা ঘুরছে, অজ্ঞান লাগছে বা খুব দুর্বল লাগছে?"},
+    "fever": {"type": "bool", "desc_bn": "জ্বর", "desc_en": "fever", "question_bn": "আপনার কি জ্বর আছে?"},
+    "foul_discharge": {"type": "bool", "desc_bn": "দুর্গন্ধযুক্ত স্রাব", "desc_en": "foul-smelling discharge", "question_bn": "আপনার কি দুর্গন্ধযুক্ত স্রাব হচ্ছে?"},
+    "genital_itching": {"type": "bool", "desc_bn": "যৌনাঙ্গে চুলকানি বা জ্বালা", "desc_en": "genital itching or irritation", "question_bn": "আপনার যৌনাঙ্গে কি চুলকানি বা জ্বালাপোড়া হয়?"},
+    "painful_urination": {"type": "bool", "desc_bn": "প্রস্রাবে জ্বালা/ব্যথা", "desc_en": "burning or pain when urinating", "question_bn": "প্রস্রাব করার সময় কি জ্বালা বা ব্যথা হয়?"},
+    "frequent_urination": {"type": "bool", "desc_bn": "বারবার প্রস্রাবের বেগ", "desc_en": "needing to urinate very often", "question_bn": "আপনার কি বারবার প্রস্রাবের বেগ আসে?"},
+    "fatigue_weakness": {"type": "bool", "desc_bn": "সবসময় ক্লান্তি ও দুর্বলতা", "desc_en": "persistent tiredness and weakness", "question_bn": "আপনি কি সবসময় ক্লান্ত ও দুর্বল বোধ করেন?"},
+    "breast_lump": {"type": "bool", "desc_bn": "স্তনে নতুন চাকা বা পরিবর্তন", "desc_en": "new breast lump or change", "question_bn": "আপনার স্তনে কি নতুন কোনো চাকা বা পরিবর্তন লক্ষ্য করেছেন?"},
+    "bleeding_between_periods": {"type": "bool", "desc_bn": "দুই মাসিকের মাঝে রক্তক্ষরণ", "desc_en": "bleeding between periods", "question_bn": "দুই মাসিকের মাঝখানে কি রক্তক্ষরণ হয়?"},
+    "bleeding_after_sex": {"type": "bool", "desc_bn": "সহবাসের পর রক্তক্ষরণ", "desc_en": "bleeding after intercourse", "question_bn": "সহবাসের পর কি রক্তক্ষরণ হয়?"},
+    "cycles_irregular": {"type": "bool", "desc_bn": "অনিয়মিত মাসিক", "desc_en": "irregular periods", "question_bn": "আপনার মাসিক কি অনিয়মিত (কখনো আগে, কখনো অনেক দেরিতে)?"},
+    "missed_periods_3plus": {"type": "bool", "desc_bn": "৩ মাস বা তার বেশি মাসিক বন্ধ", "desc_en": "no period for 3+ months (not pregnant)", "question_bn": "আপনার কি টানা ৩ মাস বা বেশি সময় মাসিক বন্ধ আছে?"},
+    "excess_hair": {"type": "bool", "desc_bn": "মুখে/শরীরে অতিরিক্ত লোম", "desc_en": "excess facial/body hair (hirsutism)", "question_bn": "মুখে বা শরীরে কি অস্বাভাবিক লোম বাড়ছে?"},
+    "persistent_acne": {"type": "bool", "desc_bn": "দীর্ঘস্থায়ী ব্রণ", "desc_en": "persistent acne", "question_bn": "মুখে কি দীর্ঘদিন ধরে ব্রণ থাকছে?"},
+    "unexplained_weight_gain": {"type": "bool", "desc_bn": "অকারণে ওজন বৃদ্ধি", "desc_en": "unexplained weight gain", "question_bn": "কারণ ছাড়াই কি ওজন বেড়ে যাচ্ছে?"},
+    "pain_during_sex": {"type": "bool", "desc_bn": "সহবাসের সময় ব্যথা", "desc_en": "pain during intercourse", "question_bn": "সহবাসের সময় কি ব্যথা হয়?"},
+    "periods_disrupt_daily_life": {"type": "bool", "desc_bn": "মাসিকের ব্যথায় দৈনন্দিন কাজ/স্কুল বন্ধ", "desc_en": "period pain stops daily life/school/work", "question_bn": "মাসিকের ব্যথায় কি আপনার স্কুল/কাজ/দৈনন্দিন জীবন থেমে যায়?"},
+    "chronic_pelvic_pain": {"type": "bool", "desc_bn": "মাসিক ছাড়াও নিয়মিত তলপেটে ব্যথা", "desc_en": "pelvic pain even outside periods", "question_bn": "মাসিক না থাকলেও কি নিয়মিত তলপেটে ব্যথা হয়?"},
+    "trouble_conceiving": {"type": "bool", "desc_bn": "সন্তান নিতে সমস্যা", "desc_en": "difficulty conceiving", "question_bn": "চেষ্টা করেও কি সন্তান নিতে সমস্যা হচ্ছে?"},
+    "pms_mood_symptoms": {"type": "bool", "desc_bn": "মাসিকের আগে মেজাজ খারাপ/কান্না/উদ্বেগ", "desc_en": "mood swings/irritability/anxiety before period", "question_bn": "মাসিকের আগে কি মেজাজ খারাপ, কান্না বা উদ্বেগ বাড়ে?"},
+    "pms_physical_symptoms": {"type": "bool", "desc_bn": "মাসিকের আগে পেট ফাঁপা/স্তনে ব্যথা/মাথাব্যথা", "desc_en": "bloating/breast tenderness/headache before period", "question_bn": "মাসিকের আগে কি পেট ফাঁপা, স্তনে ব্যথা বা মাথাব্যথা হয়?"},
+
+    "pregnancy_bleeding": {"type": "bool", "desc_bn": "গর্ভাবস্থায় রক্তক্ষরণ", "desc_en": "bleeding during pregnancy", "question_bn": "গর্ভাবস্থায় কি আপনার রক্তক্ষরণ হচ্ছে?"},
+    "pregnancy_severe_headache": {"type": "bool", "desc_bn": "গর্ভাবস্থায় তীব্র মাথাব্যথা", "desc_en": "severe headache during pregnancy", "question_bn": "গর্ভাবস্থায় কি আপনার তীব্র মাথাব্যথা হচ্ছে?"},
+    "pregnancy_vision_changes": {"type": "bool", "desc_bn": "গর্ভাবস্থায় ঝাপসা দেখা/চোখে আলো ঝলকানি", "desc_en": "blurred vision or flashing lights during pregnancy", "question_bn": "গর্ভাবস্থায় কি চোখে ঝাপসা দেখছেন বা আলো ঝলকাচ্ছে?"},
+    "pregnancy_face_hand_swelling": {"type": "bool", "desc_bn": "গর্ভাবস্থায় মুখ/হাত হঠাৎ ফুলে যাওয়া", "desc_en": "sudden swelling of face/hands in pregnancy", "question_bn": "গর্ভাবস্থায় কি হঠাৎ আপনার মুখ বা হাত ফুলে গেছে?"},
+    "pregnancy_convulsions": {"type": "bool", "desc_bn": "গর্ভাবস্থায় খিঁচুনি", "desc_en": "convulsions/fits during pregnancy", "question_bn": "গর্ভাবস্থায় কি খিঁচুনি হয়েছে?"},
+    "reduced_fetal_movement": {"type": "bool", "desc_bn": "শিশুর নড়াচড়া কমে যাওয়া", "desc_en": "baby's movements reduced or stopped", "question_bn": "গর্ভের শিশুর নড়াচড়া কি কমে গেছে বা বন্ধ হয়ে গেছে?"},
+
+    "postpartum_heavy_bleeding": {"type": "bool", "desc_bn": "প্রসবের পর অতিরিক্ত রক্তক্ষরণ", "desc_en": "heavy bleeding after childbirth", "question_bn": "সন্তান প্রসবের পর কি অতিরিক্ত রক্তক্ষরণ হচ্ছে?"},
+    "postpartum_fever": {"type": "bool", "desc_bn": "প্রসবের পর জ্বর", "desc_en": "fever after childbirth", "question_bn": "সন্তান প্রসবের পর কি আপনার জ্বর এসেছে?"},
+    "postpartum_foul_lochia": {"type": "bool", "desc_bn": "প্রসবের পর দুর্গন্ধযুক্ত স্রাব", "desc_en": "foul-smelling discharge after childbirth", "question_bn": "প্রসবের পর কি দুর্গন্ধযুক্ত স্রাব হচ্ছে?"},
+    "breast_pain_fever": {"type": "bool", "desc_bn": "স্তনে ব্যথা/লালচে ভাব ও জ্বর", "desc_en": "painful, red breast with fever", "question_bn": "আপনার কি স্তন ব্যথা/লাল হয়ে জ্বর এসেছে?"},
+    "postpartum_sadness": {"type": "bool", "desc_bn": "প্রসবের পর দীর্ঘস্থায়ী মন খারাপ/কান্না", "desc_en": "persistent sadness/crying after childbirth", "question_bn": "প্রসবের পর কি আপনার দীর্ঘদিন ধরে মন খারাপ, কান্না বা দুশ্চিন্তা থাকছে?"},
+
+    "hot_flashes": {"type": "bool", "desc_bn": "হঠাৎ শরীর গরম হয়ে ঘাম হওয়া (হট ফ্ল্যাশ)", "desc_en": "sudden hot flushes with sweating", "question_bn": "আপনার কি হঠাৎ শরীর গরম হয়ে ঘাম হয় (হট ফ্ল্যাশ)?"},
+    "night_sweats": {"type": "bool", "desc_bn": "রাতে ঘাম হওয়া", "desc_en": "night sweats", "question_bn": "রাতে ঘুমের মধ্যে কি অতিরিক্ত ঘাম হয়?"},
+    "vaginal_dryness": {"type": "bool", "desc_bn": "যোনিপথে শুষ্কতা", "desc_en": "vaginal dryness", "question_bn": "আপনার কি যোনিপথে শুষ্কতা অনুভব হয়?"},
+    "menopause_mood_changes": {"type": "bool", "desc_bn": "মাঝবয়সে মেজাজের পরিবর্তন/ঘুমের সমস্যা", "desc_en": "mid-life mood changes / sleep problems", "question_bn": "ইদানীং কি আপনার মেজাজের পরিবর্তন বা ঘুমের সমস্যা হচ্ছে?"}
+  },
+
+  "red_flags": [
+    {
+      "id": "eclampsia",
+      "name_bn": "গর্ভাবস্থায় খিঁচুনি (একলাম্পসিয়া)",
+      "name_en": "Convulsions in pregnancy (eclampsia)",
+      "urgency": "emergency",
+      "when": [{"field": "pregnancy_convulsions", "op": "is_true"}],
+      "message_bn": "গর্ভাবস্থায় খিঁচুনি মা ও শিশুর জন্য প্রাণঘাতী জরুরি অবস্থা।",
+      "message_en": "Convulsions during pregnancy are a life-threatening emergency for mother and baby.",
+      "action_bn": "এক মুহূর্তও দেরি না করে এখনই হাসপাতালে নিন বা ৯৯৯-এ কল করুন।",
+      "action_en": "Get to a hospital right now or call 999 — do not delay a moment."
+    },
+    {
+      "id": "preeclampsia",
+      "name_bn": "গর্ভাবস্থায় বিপদচিহ্ন (সম্ভাব্য প্রি-একলাম্পসিয়া)",
+      "name_en": "Pregnancy danger signs (possible pre-eclampsia)",
+      "urgency": "emergency",
+      "when": [{"field": "is_pregnant", "op": "is_true"}],
+      "any": [
+        {"field": "pregnancy_severe_headache", "op": "is_true"},
+        {"field": "pregnancy_vision_changes", "op": "is_true"},
+        {"field": "pregnancy_face_hand_swelling", "op": "is_true"}
+      ],
+      "message_bn": "গর্ভাবস্থায় তীব্র মাথাব্যথা, ঝাপসা দেখা বা হঠাৎ মুখ-হাত ফুলে যাওয়া বিপজ্জনক হতে পারে।",
+      "message_en": "Severe headache, blurred vision or sudden swelling in pregnancy can be dangerous.",
+      "action_bn": "আজই এখনই হাসপাতালে যান — দেরি করবেন না।",
+      "action_en": "Go to a hospital now, today — do not wait."
+    },
+    {
+      "id": "pregnancy_bleeding",
+      "name_bn": "গর্ভাবস্থায় রক্তক্ষরণ",
+      "name_en": "Bleeding during pregnancy",
+      "urgency": "emergency",
+      "when": [{"field": "is_pregnant", "op": "is_true"}, {"field": "pregnancy_bleeding", "op": "is_true"}],
+      "message_bn": "গর্ভাবস্থায় যেকোনো রক্তক্ষরণ জরুরি — এটি মা বা শিশুর বিপদের লক্ষণ হতে পারে।",
+      "message_en": "Any bleeding during pregnancy is urgent and can signal danger to mother or baby.",
+      "action_bn": "এখনই হাসপাতালে যান বা ৯৯৯-এ কল করুন।",
+      "action_en": "Go to a hospital now or call 999."
+    },
+    {
+      "id": "reduced_fetal_movement",
+      "name_bn": "শিশুর নড়াচড়া কমে যাওয়া",
+      "name_en": "Reduced fetal movement",
+      "urgency": "emergency",
+      "when": [{"field": "is_pregnant", "op": "is_true"}, {"field": "reduced_fetal_movement", "op": "is_true"}],
+      "message_bn": "গর্ভের শিশুর নড়াচড়া কমে গেলে বা বন্ধ হলে দ্রুত পরীক্ষা দরকার।",
+      "message_en": "If the baby's movements reduce or stop, it needs urgent checking.",
+      "action_bn": "আজই এখনই হাসপাতালে গিয়ে শিশুর অবস্থা পরীক্ষা করান।",
+      "action_en": "Go to a hospital today, now, to check the baby."
+    },
+    {
+      "id": "ectopic_risk",
+      "name_bn": "সম্ভাব্য অ্যাক্টোপিক প্রেগন্যান্সি / জরুরি অবস্থা",
+      "name_en": "Possible ectopic pregnancy / emergency",
+      "urgency": "emergency",
+      "when": [{"field": "is_pregnant_possible", "op": "is_true"}, {"field": "severe_pelvic_pain", "op": "is_true"}],
+      "message_bn": "গর্ভাবস্থার সম্ভাবনার সাথে তীব্র তলপেটে ব্যথা জরুরি বিপদ সংকেত হতে পারে।",
+      "message_en": "Severe pelvic pain with possible pregnancy can be a life-threatening emergency.",
+      "action_bn": "এখনই নিকটস্থ হাসপাতালের জরুরি বিভাগে যান বা ৯৯৯-এ কল করুন। দেরি করবেন না।",
+      "action_en": "Go to the nearest hospital emergency now or call 999. Do not delay."
+    },
+    {
+      "id": "postpartum_hemorrhage",
+      "name_bn": "প্রসবের পর মারাত্মক রক্তক্ষরণ",
+      "name_en": "Postpartum haemorrhage",
+      "urgency": "emergency",
+      "when": [{"field": "recently_gave_birth", "op": "is_true"}, {"field": "postpartum_heavy_bleeding", "op": "is_true"}],
+      "message_bn": "সন্তান প্রসবের পর অতিরিক্ত রক্তক্ষরণ প্রাণঘাতী হতে পারে।",
+      "message_en": "Heavy bleeding after childbirth can be life-threatening.",
+      "action_bn": "এখনই হাসপাতালে যান বা ৯৯৯-এ কল করুন।",
+      "action_en": "Go to a hospital now or call 999."
+    },
+    {
+      "id": "postpartum_sepsis",
+      "name_bn": "প্রসবের পর সংক্রমণ (সম্ভাব্য সেপসিস)",
+      "name_en": "Postpartum infection (possible sepsis)",
+      "urgency": "emergency",
+      "when": [{"field": "recently_gave_birth", "op": "is_true"}, {"field": "postpartum_fever", "op": "is_true"}],
+      "message_bn": "প্রসবের পর জ্বর গুরুতর সংক্রমণের লক্ষণ হতে পারে, বিশেষত দুর্গন্ধযুক্ত স্রাবের সাথে।",
+      "message_en": "Fever after childbirth can signal a serious infection, especially with foul-smelling discharge.",
+      "action_bn": "আজই এখনই হাসপাতালে যান — দেরি করবেন না।",
+      "action_en": "Go to a hospital now, today — do not delay."
+    },
+    {
+      "id": "hemorrhage",
+      "name_bn": "মারাত্মক রক্তক্ষরণ",
+      "name_en": "Dangerous heavy bleeding",
+      "urgency": "emergency",
+      "when": [{"field": "heavy_bleeding", "op": "is_true"}, {"field": "fainting_or_dizzy", "op": "is_true"}],
+      "message_bn": "অতিরিক্ত রক্তক্ষরণের সাথে মাথা ঘোরা বা অজ্ঞান হওয়া বিপজ্জনক।",
+      "message_en": "Heavy bleeding with dizziness or fainting is dangerous.",
+      "action_bn": "এখনই হাসপাতালে যান বা ৯৯৯-এ কল করুন।",
+      "action_en": "Go to hospital now or call 999."
+    },
+    {
+      "id": "pelvic_infection",
+      "name_bn": "সম্ভাব্য প্রজনন অঙ্গের সংক্রমণ",
+      "name_en": "Possible pelvic infection",
+      "urgency": "emergency",
+      "when": [{"field": "fever", "op": "is_true"}, {"field": "severe_pelvic_pain", "op": "is_true"}],
+      "message_bn": "জ্বরের সাথে তীব্র তলপেটে ব্যথা গুরুতর সংক্রমণের লক্ষণ হতে পারে।",
+      "message_en": "Fever with severe pelvic pain may signal a serious infection.",
+      "action_bn": "আজই ডাক্তার বা হাসপাতালে যান।",
+      "action_en": "See a doctor or hospital today."
+    },
+    {
+      "id": "mastitis",
+      "name_bn": "স্তন প্রদাহ (ম্যাস্টাইটিস)",
+      "name_en": "Breast infection (mastitis)",
+      "urgency": "see_doctor_soon",
+      "when": [{"field": "breast_pain_fever", "op": "is_true"}],
+      "message_bn": "জ্বরসহ স্তনে ব্যথা ও লালচে ভাব সংক্রমণের লক্ষণ হতে পারে — এটি চিকিৎসাযোগ্য।",
+      "message_en": "A painful, red breast with fever can be an infection — it is treatable.",
+      "action_bn": "শীঘ্রই ডাক্তার দেখান; বুকের দুধ খাওয়ানো সাধারণত চালিয়ে যাওয়া যায়।",
+      "action_en": "See a doctor soon; breastfeeding can usually continue."
+    },
+    {
+      "id": "postmenopausal_bleeding",
+      "name_bn": "মেনোপজের পর রক্তক্ষরণ",
+      "name_en": "Bleeding after menopause",
+      "urgency": "see_doctor_soon",
+      "when": [{"field": "post_menopausal", "op": "is_true"}, {"field": "bleeding_now", "op": "is_true"}],
+      "message_bn": "মাসিক বন্ধ হওয়ার পর যেকোনো রক্তক্ষরণ অবশ্যই পরীক্ষা করাতে হবে।",
+      "message_en": "Any bleeding after menopause must always be checked by a doctor.",
+      "action_bn": "যত দ্রুত সম্ভব একজন স্ত্রীরোগ বিশেষজ্ঞের সাথে দেখা করুন।",
+      "action_en": "See a gynaecologist as soon as possible."
+    },
+    {
+      "id": "breast_change",
+      "name_bn": "স্তনে নতুন চাকা বা পরিবর্তন",
+      "name_en": "New breast lump or change",
+      "urgency": "see_doctor_soon",
+      "when": [{"field": "breast_lump", "op": "is_true"}],
+      "message_bn": "স্তনে নতুন চাকা বা পরিবর্তন বেশিরভাগ সময় ক্ষতিকর নয়, তবে সবসময় পরীক্ষা করানো উচিত।",
+      "message_en": "A new breast lump or change is most often harmless, but should always be checked.",
+      "action_bn": "একজন ডাক্তার দেখান — লজ্জা বা ভয়ের কিছু নেই, তাড়াতাড়ি পরীক্ষা করানোই ভালো।",
+      "action_en": "See a doctor — there is nothing to fear or feel shy about; earlier is better."
+    },
+    {
+      "id": "abnormal_bleeding",
+      "name_bn": "অস্বাভাবিক রক্তক্ষরণ",
+      "name_en": "Abnormal bleeding",
+      "urgency": "see_doctor_soon",
+      "when": [{"field": "bleeding_between_periods", "op": "is_true"}],
+      "message_bn": "দুই মাসিকের মাঝে রক্তক্ষরণ পরীক্ষা করানো দরকার।",
+      "message_en": "Bleeding between periods should be checked.",
+      "action_bn": "একজন স্ত্রীরোগ বিশেষজ্ঞের পরামর্শ নিন।",
+      "action_en": "Consult a gynaecologist."
+    },
+    {
+      "id": "postcoital_bleeding",
+      "name_bn": "সহবাসের পর রক্তক্ষরণ",
+      "name_en": "Bleeding after intercourse",
+      "urgency": "see_doctor_soon",
+      "when": [{"field": "bleeding_after_sex", "op": "is_true"}],
+      "message_bn": "সহবাসের পর নিয়মিত রক্তক্ষরণ পরীক্ষা করানো প্রয়োজন।",
+      "message_en": "Regular bleeding after intercourse needs evaluation.",
+      "action_bn": "একজন স্ত্রীরোগ বিশেষজ্ঞের পরামর্শ নিন।",
+      "action_en": "Consult a gynaecologist."
+    }
+  ],
+
+  "conditions": [
+    {
+      "id": "pcos",
+      "name_bn": "পিসিওএস (পলিসিস্টিক ওভারি সিনড্রোম)",
+      "name_en": "PCOS (Polycystic Ovary Syndrome)",
+      "urgency": "see_doctor_soon",
+      "suspect_when": {
+        "all": [{"field": "cycles_irregular", "op": "is_true"}],
+        "any": [
+          {"field": "excess_hair", "op": "is_true"},
+          {"field": "persistent_acne", "op": "is_true"},
+          {"field": "unexplained_weight_gain", "op": "is_true"},
+          {"field": "missed_periods_3plus", "op": "is_true"}
+        ]
+      },
+      "about_bn": "অনিয়মিত মাসিকের সাথে অতিরিক্ত লোম, ব্রণ বা ওজন বৃদ্ধি পিসিওএস-এর লক্ষণ হতে পারে। এটি বাংলাদেশে খুব সাধারণ এবং চিকিৎসাযোগ্য।",
+      "about_en": "Irregular periods with excess hair, acne or weight gain can suggest PCOS. It is common in Bangladesh and manageable.",
+      "self_care_bn": ["নিয়মিত হাঁটা বা ব্যায়াম", "চিনি ও প্রক্রিয়াজাত খাবার কমানো", "ওজন নিয়ন্ত্রণে রাখা", "পর্যাপ্ত ঘুম ও মানসিক চাপ কমানো"],
+      "self_care_en": ["Regular walking or exercise", "Cut down on sugar and processed food", "Keep your weight in a healthy range", "Enough sleep and less stress"],
+      "see_doctor_bn": "নিশ্চিত হতে হরমোন পরীক্ষা ও আল্ট্রাসাউন্ড লাগতে পারে — একজন স্ত্রীরোগ বিশেষজ্ঞ দেখান।",
+      "see_doctor_en": "Confirming it may need hormone tests and an ultrasound — see a gynaecologist."
+    },
+    {
+      "id": "endometriosis",
+      "name_bn": "এন্ডোমেট্রিওসিস",
+      "name_en": "Endometriosis",
+      "urgency": "see_doctor_soon",
+      "suspect_when": {
+        "any": [
+          {"field": "periods_disrupt_daily_life", "op": "is_true"},
+          {"field": "chronic_pelvic_pain", "op": "is_true"},
+          {"field": "pain_during_sex", "op": "is_true"},
+          {"field": "trouble_conceiving", "op": "is_true"}
+        ]
+      },
+      "about_bn": "অত্যন্ত তীব্র মাসিক ব্যথা যা দৈনন্দিন জীবন থামিয়ে দেয়, সহবাসে ব্যথা বা সন্তান নিতে সমস্যা এন্ডোমেট্রিওসিসের লক্ষণ হতে পারে। এই ব্যথা 'স্বাভাবিক' নয় — সাহায্য পাওয়া যায়।",
+      "about_en": "Very severe period pain that stops daily life, pain during sex, or trouble conceiving can suggest endometriosis. This pain is not 'normal' — help is available.",
+      "self_care_bn": ["ব্যথার সময় গরম সেঁক", "ব্যথানাশক (ডাক্তারের পরামর্শে)", "হালকা ব্যায়াম ও বিশ্রাম"],
+      "self_care_en": ["A warm compress during pain", "Pain relief (on a doctor's advice)", "Light exercise and rest"],
+      "see_doctor_bn": "তীব্র বা দীর্ঘস্থায়ী ব্যথা কখনোই উপেক্ষা করবেন না — একজন স্ত্রীরোগ বিশেষজ্ঞ দেখান।",
+      "see_doctor_en": "Never ignore severe or long-lasting pain — see a gynaecologist."
+    },
+    {
+      "id": "uti",
+      "name_bn": "মূত্রনালীর সংক্রমণ (ইউটিআই)",
+      "name_en": "Urinary tract infection (UTI)",
+      "urgency": "see_doctor_soon",
+      "suspect_when": {
+        "all": [{"field": "painful_urination", "op": "is_true"}]
+      },
+      "about_bn": "প্রস্রাবে জ্বালা, বারবার প্রস্রাবের বেগ মূত্রনালীর সংক্রমণের লক্ষণ। নারীদের এটি খুব সাধারণ এবং সহজেই চিকিৎসাযোগ্য।",
+      "about_en": "Burning urine and frequent urge are signs of a UTI. It is very common in women and easily treated.",
+      "self_care_bn": ["প্রচুর পানি পান করুন", "প্রস্রাব চেপে রাখবেন না", "পরিষ্কার-পরিচ্ছন্নতা বজায় রাখুন"],
+      "self_care_en": ["Drink plenty of water", "Don't hold in your urine", "Keep clean and hygienic"],
+      "see_doctor_bn": "জ্বর, পিঠে ব্যথা বা রক্ত এলে দ্রুত ডাক্তার দেখান; অ্যান্টিবায়োটিক লাগতে পারে।",
+      "see_doctor_en": "See a doctor quickly if you get fever, back pain or blood; antibiotics may be needed."
+    },
+    {
+      "id": "vaginal_infection",
+      "name_bn": "যোনিপথের সংক্রমণ",
+      "name_en": "Vaginal infection",
+      "urgency": "see_doctor_soon",
+      "suspect_when": {
+        "all": [{"field": "genital_itching", "op": "is_true"}]
+      },
+      "about_bn": "যোনিপথে চুলকানি বা অস্বাভাবিক স্রাব সাধারণত ছত্রাক বা ব্যাকটেরিয়ার সংক্রমণ — এটি সাধারণ ও চিকিৎসাযোগ্য, লজ্জার কিছু নয়।",
+      "about_en": "Itching or unusual discharge is usually a yeast or bacterial infection — common, treatable and nothing to be ashamed of.",
+      "self_care_bn": ["পরিষ্কার ও শুকনো রাখুন", "সুতির অন্তর্বাস পরুন", "সুগন্ধি সাবান এড়িয়ে চলুন"],
+      "self_care_en": ["Keep the area clean and dry", "Wear cotton underwear", "Avoid scented soaps"],
+      "see_doctor_bn": "দুর্গন্ধ, ব্যথা বা জ্বর থাকলে ডাক্তার দেখান — সঠিক ওষুধে দ্রুত ভালো হয়।",
+      "see_doctor_en": "See a doctor if there's a foul smell, pain or fever — the right medicine clears it quickly."
+    },
+    {
+      "id": "anemia",
+      "name_bn": "রক্তস্বল্পতা (অ্যানিমিয়া)",
+      "name_en": "Anaemia (low blood/iron)",
+      "urgency": "see_doctor_soon",
+      "suspect_when": {
+        "all": [{"field": "fatigue_weakness", "op": "is_true"}],
+        "any": [
+          {"field": "heavy_bleeding", "op": "is_true"},
+          {"field": "periods_disrupt_daily_life", "op": "is_true"}
+        ]
+      },
+      "about_bn": "সবসময় ক্লান্তি ও দুর্বলতা, বিশেষত ভারী মাসিকের সাথে, রক্তস্বল্পতার লক্ষণ হতে পারে। বাংলাদেশে নারীদের মধ্যে এটি খুব সাধারণ।",
+      "about_en": "Constant tiredness and weakness, especially with heavy periods, can suggest anaemia. It is very common among women in Bangladesh.",
+      "self_care_bn": ["আয়রন-সমৃদ্ধ খাবার: কলিজা, ডিম, কালো শাক, ডাল", "ভিটামিন সি-যুক্ত ফল (লেবু, পেয়ারা) খাবারের সাথে", "চা/কফি খাবারের সাথে কমানো"],
+      "self_care_en": ["Iron-rich foods: liver, eggs, dark leafy greens, lentils", "Vitamin C fruits (lemon, guava) with meals", "Cut down on tea/coffee with meals"],
+      "see_doctor_bn": "রক্ত পরীক্ষা (হিমোগ্লোবিন) করান; আয়রন ট্যাবলেট লাগতে পারে — ডাক্তার দেখান।",
+      "see_doctor_en": "Get a blood test (haemoglobin); you may need iron tablets — see a doctor."
+    },
+    {
+      "id": "menopause",
+      "name_bn": "মেনোপজ / পেরিমেনোপজ (মাসিক বন্ধ হওয়ার সময়)",
+      "name_en": "Menopause / perimenopause",
+      "urgency": "self_care",
+      "suspect_when": {
+        "any": [
+          {"field": "hot_flashes", "op": "is_true"},
+          {"field": "night_sweats", "op": "is_true"},
+          {"field": "vaginal_dryness", "op": "is_true"},
+          {"field": "menopause_mood_changes", "op": "is_true"}
+        ]
+      },
+      "about_bn": "মাঝবয়সে হট ফ্ল্যাশ, রাতে ঘাম, যোনিপথে শুষ্কতা বা মেজাজের পরিবর্তন মাসিক বন্ধ হওয়ার (মেনোপজ) স্বাভাবিক অংশ। এটি রোগ নয়, তবে অস্বস্তি কমানো যায়।",
+      "about_en": "In mid-life, hot flashes, night sweats, vaginal dryness or mood changes are a normal part of menopause. It is not a disease, but the discomfort can be eased.",
+      "self_care_bn": ["পাতলা, ঢিলা সুতির কাপড় পরুন", "ক্যালসিয়াম ও ভিটামিন ডি-যুক্ত খাবার (দুধ, ছোট মাছ, রোদ)", "নিয়মিত হাঁটা ও ব্যায়াম হাড় শক্ত রাখে", "ক্যাফেইন ও ঝাল খাবার কমালে হট ফ্ল্যাশ কমে"],
+      "self_care_en": ["Wear light, loose cotton clothes", "Calcium- and vitamin-D-rich foods (milk, small fish, sunlight)", "Regular walking and exercise keep bones strong", "Less caffeine and spicy food eases hot flashes"],
+      "see_doctor_bn": "মাসিক বন্ধ হওয়ার পর রক্তক্ষরণ, খুব তীব্র উপসর্গ বা হাড়ের সমস্যা হলে ডাক্তার দেখান।",
+      "see_doctor_en": "See a doctor for any bleeding after periods stop, very severe symptoms, or bone problems."
+    },
+    {
+      "id": "postpartum_depression",
+      "name_bn": "প্রসব-পরবর্তী বিষণ্নতা",
+      "name_en": "Postpartum depression",
+      "urgency": "see_doctor_soon",
+      "suspect_when": {
+        "all": [{"field": "postpartum_sadness", "op": "is_true"}]
+      },
+      "about_bn": "সন্তান জন্মের পর দীর্ঘদিন মন খারাপ, কান্না বা দুশ্চিন্তা থাকা আপনার দোষ নয় — এটি একটি সাধারণ ও চিকিৎসাযোগ্য অবস্থা, সাহায্য পাওয়া যায়।",
+      "about_en": "Lasting sadness, crying or anxiety after birth is not your fault — it is a common, treatable condition and help is available.",
+      "self_care_bn": ["বিশ্বস্ত কাউকে মনের কথা বলুন", "যতটা সম্ভব বিশ্রাম নিন", "নিজেকে দোষ দেবেন না — এটি রোগ, দুর্বলতা নয়"],
+      "self_care_en": ["Share how you feel with someone you trust", "Rest as much as you can", "Don't blame yourself — this is an illness, not a weakness"],
+      "see_doctor_bn": "উপসর্গ দুই সপ্তাহের বেশি থাকলে বা নিজের/শিশুর ক্ষতির চিন্তা এলে অবশ্যই দ্রুত সাহায্য নিন — ৯৯৯ বা কাছের স্বাস্থ্যকেন্দ্র।",
+      "see_doctor_en": "If symptoms last more than two weeks, or you have thoughts of harming yourself or the baby, get help urgently — call 999 or your nearest health centre."
+    },
+    {
+      "id": "pms",
+      "name_bn": "মাসিক-পূর্ব উপসর্গ (পিএমএস)",
+      "name_en": "Premenstrual Syndrome (PMS)",
+      "urgency": "self_care",
+      "suspect_when": {
+        "any": [
+          {"field": "pms_mood_symptoms", "op": "is_true"},
+          {"field": "pms_physical_symptoms", "op": "is_true"}
+        ]
+      },
+      "about_bn": "মাসিকের আগে মেজাজের পরিবর্তন, পেট ফাঁপা বা মাথাব্যথা সাধারণ এবং সামলানো যায়। খুব তীব্র হলে (পিএমডিডি) ডাক্তারের সাহায্য নেওয়া যায়।",
+      "about_en": "Mood changes, bloating or headaches before periods are common and manageable. If very severe (PMDD), a doctor can help.",
+      "self_care_bn": ["নিয়মিত ঘুম ও হালকা ব্যায়াম", "লবণ, ক্যাফেইন ও চিনি কমানো", "শ্বাস-প্রশ্বাসের ব্যায়াম / মানসিক চাপ কমানো", "পানি বেশি পান করা"],
+      "self_care_en": ["Regular sleep and light exercise", "Cut down on salt, caffeine and sugar", "Breathing exercises / less stress", "Drink more water"],
+      "see_doctor_bn": "উপসর্গ যদি জীবন থামিয়ে দেয় বা প্রচণ্ড বিষণ্নতা আনে, তবে ডাক্তার দেখান।",
+      "see_doctor_en": "See a doctor if the symptoms stop your daily life or bring severe low mood."
+    },
+    {
+      "id": "primary_dysmenorrhea",
+      "name_bn": "সাধারণ মাসিক ব্যথা",
+      "name_en": "Common period cramps",
+      "urgency": "self_care",
+      "suspect_when": {
+        "any": [{"field": "bleeding_now", "op": "is_true"}]
+      },
+      "about_bn": "মাসিকের সময় হালকা থেকে মাঝারি তলপেটে ব্যথা স্বাভাবিক এবং ঘরোয়া যত্নে সামলানো যায়।",
+      "about_en": "Mild-to-moderate cramps during periods are normal and can be managed at home.",
+      "self_care_bn": ["গরম পানির সেঁক", "হালকা হাঁটা", "পর্যাপ্ত পানি ও বিশ্রাম", "প্রয়োজনে ব্যথানাশক"],
+      "self_care_en": ["A hot-water compress", "Light walking", "Enough water and rest", "Pain relief if needed"],
+      "see_doctor_bn": "ব্যথা যদি অসহনীয় হয় বা ওষুধে না কমে, ডাক্তার দেখান।",
+      "see_doctor_en": "See a doctor if the pain is unbearable or doesn't ease with medicine."
+    }
+  ],
+
+  "myths": [
+    {"myth_bn": "মাসিকের সময় গোসল করা যাবে না।", "fact_bn": "মাসিকের সময় গোসল করা নিরাপদ ও স্বাস্থ্যকর — বরং পরিষ্কার-পরিচ্ছন্নতা জরুরি।", "myth_en": "You cannot bathe during your period.", "fact_en": "Bathing during your period is safe and healthy; hygiene is important."},
+    {"myth_bn": "মাসিক 'অপবিত্র' বা লজ্জার বিষয়।", "fact_bn": "মাসিক একটি স্বাভাবিক জৈবিক প্রক্রিয়া, লজ্জার কিছু নয়।", "myth_en": "Menstruation is 'impure' or shameful.", "fact_en": "Menstruation is a normal biological process, nothing to be ashamed of."},
+    {"myth_bn": "মাসিকের সময় টক বা ঠান্ডা খাবার খাওয়া যাবে না।", "fact_bn": "স্বাভাবিক সুষম খাবার খাওয়া যায়; নির্দিষ্ট খাবার নিষেধের কোনো বৈজ্ঞানিক ভিত্তি নেই।", "myth_en": "You must avoid sour or cold food during periods.", "fact_en": "A normal balanced diet is fine; food restrictions have no scientific basis."},
+    {"myth_bn": "পিসিওএস হলে কখনো সন্তান হবে না।", "fact_bn": "পিসিওএস থাকলেও সঠিক চিকিৎসায় বেশিরভাগ নারী সন্তান ধারণ করতে পারেন।", "myth_en": "PCOS means you can never have children.", "fact_en": "With proper treatment, most women with PCOS can still conceive."},
+    {"myth_bn": "জন্মনিয়ন্ত্রণ পিল ব্যবহার করলে পরে আর কখনো সন্তান হবে না।", "fact_bn": "পিল বন্ধ করার পর বেশিরভাগ নারীর প্রজনন ক্ষমতা স্বাভাবিকভাবে ফিরে আসে; এটি স্থায়ী বন্ধ্যাত্ব ঘটায় না।", "myth_en": "Birth-control pills make you permanently infertile.", "fact_en": "Fertility usually returns after stopping the pill; it does not cause permanent infertility."},
+    {"myth_bn": "বুকের দুধ খাওয়ালে গর্ভবতী হওয়া যায় না, তাই কোনো জন্মনিয়ন্ত্রণ লাগে না।", "fact_bn": "শুধু বুকের দুধ খাওয়ানো কিছুটা সুরক্ষা দেয়, তবে এটি নিশ্চিত নয় — গর্ভধারণ হতে পারে।", "myth_en": "You cannot get pregnant while breastfeeding, so no contraception is needed.", "fact_en": "Breastfeeding gives some protection but is not reliable — pregnancy can still happen."},
+    {"myth_bn": "প্রথম মাসিকের সময় ব্যথা মানেই বড় কোনো রোগ।", "fact_bn": "প্রথম দিকের মাসিকে হালকা ব্যথা স্বাভাবিক; তবে ব্যথা অসহনীয় হলে ডাক্তার দেখানো ভালো।", "myth_en": "Pain during your first period means a serious disease.", "fact_en": "Mild cramps in early periods are normal; but see a doctor if the pain is unbearable."},
+    {"myth_bn": "মেনোপজের পর রক্তক্ষরণ স্বাভাবিক।", "fact_bn": "মাসিক বন্ধ হওয়ার পর যেকোনো রক্তক্ষরণ স্বাভাবিক নয় — অবশ্যই ডাক্তার দেখান।", "myth_en": "Bleeding after menopause is normal.", "fact_en": "Any bleeding after menopause is not normal — always see a doctor."}
+  ],
+
+  "guides": [
+    {
+      "id": "contraception",
+      "icon": "🛡️",
+      "title_bn": "জন্মনিয়ন্ত্রণ পদ্ধতি",
+      "title_en": "Contraception options",
+      "keywords": ["জন্মনিয়ন্ত্রণ", "পিল", "কনডম", "গর্ভনিরোধ", "birth control", "contraception", "condom", "pill", "family planning method"],
+      "summary_bn": "গর্ভধারণ ঠেকাতে অনেক নিরাপদ ও কার্যকর উপায় আছে; আপনার জন্য কোনটি ঠিক তা একজন স্বাস্থ্যকর্মীর সাথে বেছে নেওয়া যায়।",
+      "summary_en": "There are many safe, effective ways to prevent pregnancy; a health worker can help you choose what suits you.",
+      "points_bn": [
+        "স্বল্পমেয়াদি: খাওয়ার পিল, কনডম (যৌনরোগ থেকেও বাঁচায়), মাসিক ইনজেকশন।",
+        "দীর্ঘমেয়াদি (ফেরানো যায়): আইইউডি/কপার-টি, ইমপ্লান্ট — ৩–১০ বছর কার্যকর।",
+        "জরুরি পিল সহবাসের ৭২ ঘণ্টার মধ্যে কাজ করে, তবে এটি নিয়মিত পদ্ধতি নয়।",
+        "স্থায়ী: লাইগেশন (নারী) বা ভ্যাসেকটমি (পুরুষ) — পরিবার সম্পূর্ণ হলে।",
+        "বাংলাদেশে সরকারি স্বাস্থ্যকেন্দ্র ও পরিবার পরিকল্পনা কর্মীর কাছে বিনামূল্যে/স্বল্পমূল্যে পাওয়া যায়।"
+      ],
+      "points_en": [
+        "Short-term: daily pills, condoms (also protect from STIs), monthly injections.",
+        "Long-term (reversible): IUD/copper-T, implants — effective for 3–10 years.",
+        "Emergency pills work within 72 hours of sex, but are not a regular method.",
+        "Permanent: ligation (women) or vasectomy (men) — once your family is complete.",
+        "In Bangladesh these are free or low-cost at government health centres and from family-planning workers."
+      ],
+      "when_see_doctor_bn": "কোন পদ্ধতি আপনার শরীর ও পরিকল্পনার জন্য সবচেয়ে ভালো, তা একজন ডাক্তার বা পরিবার পরিকল্পনা কর্মীর সাথে আলোচনা করে ঠিক করুন।",
+      "when_see_doctor_en": "Talk with a doctor or family-planning worker to choose the method that best suits your body and your plans."
+    },
+    {
+      "id": "family_planning",
+      "icon": "🌱",
+      "title_bn": "পরিবার পরিকল্পনা ও সন্তান নেওয়ার প্রস্তুতি",
+      "title_en": "Family planning & preparing for pregnancy",
+      "keywords": ["পরিবার পরিকল্পনা", "সন্তান নেওয়া", "গর্ভধারণের প্রস্তুতি", "family planning", "planning pregnancy", "conceive", "trying to get pregnant"],
+      "summary_bn": "সন্তান কখন ও কতজন নেবেন তা পরিকল্পনা করা মা ও শিশুর স্বাস্থ্যের জন্য ভালো; সন্তান নেওয়ার আগেও কিছু প্রস্তুতি নেওয়া যায়।",
+      "summary_en": "Planning when and how many children to have is good for mother and baby; some preparation before pregnancy also helps.",
+      "points_bn": [
+        "দুই সন্তানের মাঝে অন্তত ২ বছর বিরতি মা ও শিশুর জন্য নিরাপদ।",
+        "সন্তান নেওয়ার পরিকল্পনা থাকলে আগে থেকে ফলিক অ্যাসিড খাওয়া শিশুর জন্মগত ত্রুটি কমায়।",
+        "মাসিক চক্র বুঝলে উর্বর দিন সম্পর্কে ধারণা পাওয়া যায় (সখীর সাইকেল ট্র্যাকার সাহায্য করতে পারে)।",
+        "গর্ভধারণের আগে রক্তস্বল্পতা, ডায়াবেটিস বা উচ্চ রক্তচাপ পরীক্ষা করানো ভালো।"
+      ],
+      "points_en": [
+        "A gap of at least 2 years between children is safer for mother and baby.",
+        "If you plan to conceive, taking folic acid beforehand lowers the risk of birth defects.",
+        "Understanding your cycle gives a sense of your fertile days (Shokhi's cycle tracker can help).",
+        "Before pregnancy, it's good to check for anaemia, diabetes or high blood pressure."
+      ],
+      "when_see_doctor_bn": "১ বছর (৩৫-এর বেশি হলে ৬ মাস) চেষ্টা করেও সন্তান না হলে, বা কোনো দীর্ঘমেয়াদি রোগ থাকলে ডাক্তার দেখান।",
+      "when_see_doctor_en": "See a doctor if you don't conceive after 1 year of trying (6 months if over 35), or if you have any long-term illness."
+    },
+    {
+      "id": "menopause_care",
+      "icon": "🍃",
+      "title_bn": "মেনোপজের যত্ন",
+      "title_en": "Caring for menopause",
+      "keywords": ["মেনোপজ", "হট ফ্ল্যাশ", "মাসিক বন্ধ", "menopause", "hot flash", "perimenopause"],
+      "summary_bn": "মধ্যবয়সে মাসিক বন্ধ হওয়া একটি স্বাভাবিক পর্যায়; কিছু সহজ অভ্যাসে অস্বস্তি অনেকটাই কমানো যায়।",
+      "summary_en": "Periods stopping in mid-life is a normal stage; simple habits can ease most of the discomfort.",
+      "points_bn": [
+        "হট ফ্ল্যাশ কমাতে পাতলা সুতির কাপড়, কম ক্যাফেইন ও ঝাল খাবার।",
+        "হাড় শক্ত রাখতে ক্যালসিয়াম ও ভিটামিন ডি (দুধ, ছোট মাছ, সকালের রোদ, ব্যায়াম)।",
+        "যোনিপথের শুষ্কতায় স্বস্তির উপায় আছে — ডাক্তারকে নির্দ্বিধায় জিজ্ঞাসা করুন।",
+        "মন ভালো রাখতে ঘুম, হাঁটা ও কাছের মানুষের সাথে কথা বলা।"
+      ],
+      "points_en": [
+        "To ease hot flashes: light cotton clothes, less caffeine and spicy food.",
+        "To keep bones strong: calcium and vitamin D (milk, small fish, morning sun, exercise).",
+        "There are ways to relieve vaginal dryness — ask your doctor without hesitation.",
+        "For your mood: sleep, walking, and talking with people close to you."
+      ],
+      "when_see_doctor_bn": "মাসিক বন্ধ হওয়ার পর যেকোনো রক্তক্ষরণ, খুব তীব্র উপসর্গ বা হাড় ভাঙার ভয় থাকলে ডাক্তার দেখান।",
+      "when_see_doctor_en": "See a doctor for any bleeding after periods stop, very severe symptoms, or worry about bone fractures."
+    },
+    {
+      "id": "nutrition_anemia",
+      "icon": "🥗",
+      "title_bn": "পুষ্টি ও রক্তস্বল্পতা প্রতিরোধ",
+      "title_en": "Nutrition & preventing anaemia",
+      "keywords": ["রক্তস্বল্পতা", "আয়রন", "পুষ্টি", "দুর্বলতা", "anemia", "iron", "nutrition", "weakness"],
+      "summary_bn": "বাংলাদেশে অনেক নারী রক্তস্বল্পতায় ভোগেন, বিশেষত ভারী মাসিকে; সঠিক খাবারে অনেকটাই প্রতিরোধ করা যায়।",
+      "summary_en": "Many women in Bangladesh have anaemia, especially with heavy periods; the right foods can largely prevent it.",
+      "points_bn": [
+        "আয়রন-সমৃদ্ধ খাবার: কলিজা, ডিম, কালো ও সবুজ শাক, ডাল, খেজুর।",
+        "ভিটামিন সি (লেবু, পেয়ারা, আমলকী) খাবারের সাথে খেলে আয়রন ভালো শোষণ হয়।",
+        "খাবারের ঠিক পরপর চা/কফি কমান — এগুলো আয়রন শোষণে বাধা দেয়।",
+        "সবসময় ক্লান্তি, ফ্যাকাশে ভাব বা হাঁপ ধরলে হিমোগ্লোবিন পরীক্ষা করান।"
+      ],
+      "points_en": [
+        "Iron-rich foods: liver, eggs, dark and green leafy vegetables, lentils, dates.",
+        "Vitamin C (lemon, guava, amla) with meals helps your body absorb iron better.",
+        "Cut down on tea/coffee right after meals — they block iron absorption.",
+        "If you feel constantly tired, pale, or breathless, get your haemoglobin checked."
+      ],
+      "when_see_doctor_bn": "খুব দুর্বলতা, বুক ধড়ফড় বা ভারী মাসিকের সাথে ক্লান্তি থাকলে রক্ত পরীক্ষা করিয়ে ডাক্তার দেখান।",
+      "when_see_doctor_en": "If you have severe weakness, palpitations, or tiredness with heavy periods, get a blood test and see a doctor."
+    },
+    {
+      "id": "first_period",
+      "icon": "🌼",
+      "title_bn": "প্রথম মাসিক — কিশোরীদের জন্য",
+      "title_en": "Your first period — for teens",
+      "keywords": ["প্রথম মাসিক", "কিশোরী", "মাসিক শুরু", "first period", "menarche", "teenager period"],
+      "summary_bn": "প্রথম মাসিক বড় হয়ে ওঠার একটি স্বাভাবিক ও সুস্থ চিহ্ন — ভয় বা লজ্জার কিছু নেই।",
+      "summary_en": "Your first period is a normal, healthy sign of growing up — nothing to fear or feel shy about.",
+      "points_bn": [
+        "সাধারণত ৯–১৫ বছর বয়সে প্রথম মাসিক হয়; শুরুতে অনিয়মিত হওয়া স্বাভাবিক।",
+        "পরিষ্কার প্যাড বা কাপড় ব্যবহার করুন এবং প্রতি ৪–৬ ঘণ্টায় বদলান।",
+        "হালকা ব্যথা হলে গরম সেঁক ও বিশ্রাম আরাম দেয়।",
+        "মাসিকের সময়ও পড়াশোনা, খেলা, স্বাভাবিক সব কাজ করা যায়।"
+      ],
+      "points_en": [
+        "The first period usually comes between ages 9–15; being irregular at first is normal.",
+        "Use a clean pad or cloth and change it every 4–6 hours.",
+        "For mild pain, a warm compress and rest bring relief.",
+        "You can study, play and do everything normally during your period."
+      ],
+      "when_see_doctor_bn": "ব্যথা অসহনীয় হলে, খুব বেশি রক্ত গেলে, বা ১৫ বছরেও মাসিক শুরু না হলে একজন বড় কাউকে জানিয়ে ডাক্তার দেখান।",
+      "when_see_doctor_en": "If the pain is unbearable, bleeding is very heavy, or your period hasn't started by 15, tell a trusted adult and see a doctor."
+    },
+    {
+      "id": "menstrual_hygiene",
+      "icon": "🧼",
+      "title_bn": "মাসিক পরিচ্ছন্নতা",
+      "title_en": "Menstrual hygiene",
+      "keywords": ["মাসিক পরিচ্ছন্নতা", "পরিষ্কার", "menstrual hygiene", "sanitary"],
+      "summary_bn": "মাসিকের সময় পরিচ্ছন্নতা সংক্রমণ ঠেকায় এবং আরাম দেয় — এটি সহজ ও সবার জন্য সম্ভব।",
+      "summary_en": "Good hygiene during periods prevents infection and keeps you comfortable — it is simple and possible for everyone.",
+      "points_bn": [
+        "পরিষ্কার প্যাড বা কাপড় প্রতি ৪–৬ ঘণ্টায় বদলান।",
+        "কাপড় ব্যবহার করলে সাবান-পানিতে ধুয়ে রোদে ভালোভাবে শুকান।",
+        "দিনে অন্তত একবার পরিষ্কার পানিতে ধুয়ে শুকনো রাখুন; সুগন্ধি সাবান ভেতরে নয়।",
+        "ব্যবহৃত প্যাড কাগজে মুড়ে নির্দিষ্ট জায়গায় ফেলুন।"
+      ],
+      "points_en": [
+        "Change a clean pad or cloth every 4–6 hours.",
+        "If you use cloth, wash it with soap and water and dry it well in the sun.",
+        "Wash with clean water at least once a day and keep dry; no scented soap inside.",
+        "Wrap a used pad in paper and dispose of it in a proper place."
+      ],
+      "when_see_doctor_bn": "দুর্গন্ধযুক্ত স্রাব, চুলকানি, জ্বালা বা জ্বর হলে সংক্রমণ হতে পারে — ডাক্তার দেখান।",
+      "when_see_doctor_en": "Foul-smelling discharge, itching, burning or fever can mean an infection — see a doctor."
+    },
+    {
+      "id": "cloth_pad",
+      "icon": "🧺",
+      "title_bn": "কাপড়ের প্যাডের নিরাপদ ব্যবহার",
+      "title_en": "Using cloth pads safely",
+      "keywords": ["কাপড়ের প্যাড", "কাপড় প্যাড", "কাপড়ের ন্যাকড়া", "cloth pad", "reusable pad", "cotton cloth"],
+      "summary_bn": "প্যাড কিনতে না পারলে পরিষ্কার নরম সুতির কাপড় নিরাপদে ব্যবহার করা যায় — মূল কথা হলো ভালোভাবে ধুয়ে রোদে শুকানো।",
+      "summary_en": "If pads aren't affordable, clean soft cotton cloth is a safe option — the key is washing well and drying in the sun.",
+      "points_bn": [
+        "নরম, পরিষ্কার সুতির কাপড় ব্যবহার করুন; শক্ত বা খসখসে কাপড় এড়িয়ে চলুন।",
+        "প্রতি ৪–৬ ঘণ্টায় বদলান, ঠিক ডিসপোজেবল প্যাডের মতোই।",
+        "ব্যবহারের পর সাবান ও পরিষ্কার পানিতে ভালোভাবে ধুয়ে ফেলুন।",
+        "সরাসরি রোদে সম্পূর্ণ শুকান — রোদ জীবাণু মারে; স্যাঁতসেঁতে কাপড় সংক্রমণ ঘটাতে পারে।",
+        "শুকনো, পরিষ্কার জায়গায় রাখুন; কাপড় পাতলা বা খসখসে হয়ে গেলে বদলে ফেলুন।",
+        "নিজের কাপড় অন্যের সাথে ভাগ করবেন না।"
+      ],
+      "points_en": [
+        "Use soft, clean cotton cloth; avoid rough or scratchy fabric.",
+        "Change every 4–6 hours, just like a disposable pad.",
+        "After use, wash it thoroughly with soap and clean water.",
+        "Dry it fully in direct sunlight — the sun kills germs; damp cloth can cause infection.",
+        "Store it in a dry, clean place; replace the cloth once it turns thin or rough.",
+        "Never share your cloth with anyone else."
+      ],
+      "when_see_doctor_bn": "চুলকানি, ফুসকুড়ি, দুর্গন্ধযুক্ত স্রাব বা জ্বালাপোড়া হলে ডাক্তার দেখান।",
+      "when_see_doctor_en": "See a doctor if you get itching, a rash, foul-smelling discharge or burning."
+    },
+    {
+      "id": "how_to_use_pad",
+      "icon": "🩹",
+      "title_bn": "প্যাড কীভাবে ব্যবহার করবেন (প্রথমবার)",
+      "title_en": "How to use a pad (first time)",
+      "keywords": ["প্যাড কীভাবে", "প্যাড পরা", "প্যাড ব্যবহার", "how to use pad", "use a pad", "wear a pad", "first pad"],
+      "summary_bn": "প্রথমবার প্যাড ব্যবহার করা সহজ — কয়েকটি ধাপেই হয়ে যায়, ভয়ের কিছু নেই।",
+      "summary_en": "Using a pad for the first time is simple — just a few steps, nothing to fear.",
+      "points_bn": [
+        "প্যাডের মোড়ক খুলে আঠালো দিকটি নিচের দিকে রেখে অন্তর্বাসের ভেতরে বসান।",
+        "পাশে ডানা (উইংস) থাকলে সেগুলো অন্তর্বাসের নিচে ভাঁজ করে আটকে দিন।",
+        "প্যাডটি মাঝ বরাবর বসান যাতে ঠিক জায়গায় থাকে।",
+        "প্রতি ৪–৬ ঘণ্টায় বা ভিজে গেলে বদলান।",
+        "ব্যবহৃত প্যাড কাগজে মুড়ে ঝুড়িতে ফেলুন — টয়লেটে ফেলবেন না।",
+        "প্যাড বদলানোর পর হাত ধুয়ে নিন।"
+      ],
+      "points_en": [
+        "Open the wrapper and place the pad sticky-side down inside your underwear.",
+        "If it has side wings, fold them under your underwear to hold it in place.",
+        "Centre the pad so it sits in the right spot.",
+        "Change it every 4–6 hours, or sooner if it's soaked.",
+        "Wrap the used pad in paper and put it in a bin — don't flush it in the toilet.",
+        "Wash your hands after changing the pad."
+      ],
+      "when_see_doctor_bn": "প্যাড ব্যবহারে ত্বকে ফুসকুড়ি, চুলকানি বা তীব্র ব্যথা হলে একজন বড় কাউকে জানিয়ে ডাক্তার দেখান।",
+      "when_see_doctor_en": "If using a pad gives you a skin rash, itching or severe pain, tell a trusted adult and see a doctor."
+    },
+    {
+      "id": "no_pad_emergency",
+      "icon": "🆘",
+      "title_bn": "এখন প্যাড নেই — কী করবেন",
+      "title_en": "No pad right now — what to do",
+      "keywords": ["প্যাড নেই", "হাতে প্যাড নেই", "প্যাড শেষ", "no pad", "without a pad", "ran out of pads"],
+      "summary_bn": "হাতের কাছে প্যাড না থাকলেও ঘাবড়াবেন না — পরিষ্কার সুতির কাপড় দিয়ে সাময়িকভাবে সামলানো যায়।",
+      "summary_en": "No pad on hand? Don't panic — clean cotton cloth can manage it for now.",
+      "points_bn": [
+        "পরিষ্কার, নরম সুতির কাপড় বা রুমাল কয়েক ভাঁজ করে অন্তর্বাসে প্যাডের মতো ব্যবহার করুন।",
+        "ঘন ঘন বদলান এবং কাপড় পরিষ্কার-শুকনো রাখুন।",
+        "টিস্যু বা কাগজ ব্যবহার না করাই ভালো; শরীরের ভেতরে কিছু প্রবেশ করাবেন না।",
+        "যত দ্রুত সম্ভব একটি প্যাড বা পরিষ্কার কাপড় জোগাড় করুন।",
+        "এটি স্বাভাবিক ঘটনা — লজ্জার কিছু নেই, প্রয়োজনে বিশ্বস্ত কাউকে সাহায্য চাইতে পারেন।"
+      ],
+      "points_en": [
+        "Fold a clean, soft cotton cloth or handkerchief a few times and use it in your underwear like a pad.",
+        "Change it often and keep the cloth clean and dry.",
+        "It's best not to use tissue or paper; don't insert anything inside your body.",
+        "Get a pad or clean cloth as soon as you can.",
+        "This is normal — nothing to be ashamed of; you can ask someone you trust for help if needed."
+      ],
+      "when_see_doctor_bn": "দ্রুত কাপড়/প্যাড ভিজে যাওয়া, মাথা ঘোরা বা তীব্র দুর্বলতা হলে দ্রুত ডাক্তার দেখান।",
+      "when_see_doctor_en": "If the cloth/pad soaks through quickly, or you feel dizzy or very weak, see a doctor promptly."
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "pcos": {
+    "features": [
+      "age",
+      "cycles_irregular",
+      "unexplained_weight_gain",
+      "excess_hair",
+      "persistent_acne"
+    ],
+    "mean": [
+      31.404938,
+      0.288889,
+      0.367901,
+      0.269136,
+      0.491358
+    ],
+    "scale": [
+      5.448658,
+      0.453246,
+      0.482234,
+      0.443511,
+      0.499925
+    ],
+    "coef": [
+      -0.43494,
+      0.569242,
+      0.730312,
+      0.758442,
+      0.47204
+    ],
+    "intercept": -1.035573,
+    "median_fill": {
+      "age": 31
+    },
+    "auc": 0.878,
+    "accuracy": 0.824
+  },
+  "endometriosis": {
+    "features": [
+      "cycles_irregular",
+      "heavy_bleeding",
+      "periods_disrupt_daily_life",
+      "pain_during_sex",
+      "chronic_pelvic_pain",
+      "trouble_conceiving"
+    ],
+    "mean": [
+      0.301205,
+      0.420181,
+      0.439759,
+      0.427711,
+      0.496988,
+      0.195783
+    ],
+    "scale": [
+      0.458782,
+      0.493588,
+      0.496358,
+      0.494747,
+      0.499991,
+      0.396802
+    ],
+    "coef": [
+      0.408174,
+      0.661528,
+      1.287412,
+      0.767575,
+      0.594442,
+      0.606371
+    ],
+    "intercept": 0.869198,
+    "median_fill": {},
+    "auc": 0.934,
+    "accuracy": 0.878
+  }
+}
