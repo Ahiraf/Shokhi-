@@ -70,15 +70,25 @@ export default function ChatPage() {
     <main className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-2xl flex-col px-5">
       {!started && (
         <section className="flex flex-1 flex-col items-center justify-center py-10 text-center">
-          <div className="animate-float">
-            <Mascot3D variant="chat" size={140} />
+          {/* Sitting pose cropped to head→seat with a soft bottom fade, so she appears
+              seated on the heading (the full figure's dangling legs looked awkward). */}
+          <div
+            className="animate-float overflow-hidden"
+            style={{
+              width: 200,
+              height: 210,
+              WebkitMaskImage: "linear-gradient(to bottom, #000 78%, transparent 98%)",
+              maskImage: "linear-gradient(to bottom, #000 78%, transparent 98%)",
+            }}
+          >
+            <Mascot3D variant="chat" size={200} />
           </div>
           {name && (
-            <p className="mt-4 text-sm font-semibold text-rose">
+            <p className="-mt-1 text-sm font-semibold text-rose">
               {t("chat.greeting").replace("{name}", name)} 🌸
             </p>
           )}
-          <h1 className="mt-2 font-display text-[26px] font-bold leading-tight text-plum">
+          <h1 className="mt-1.5 font-display text-[26px] font-bold leading-tight text-plum">
             {t("chat.introTitle")}
           </h1>
           <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-plum/60">
