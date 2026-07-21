@@ -22,6 +22,7 @@ export const STRINGS = {
   "nav.myths": { bn: "ভুল ধারণা", en: "Myths" },
   "nav.hotline": { bn: "হটলাইন", en: "Hotline" },
   "nav.about": { bn: "সম্পর্কে", en: "About" },
+  "nav.profile": { bn: "আমার প্রোফাইল", en: "My Profile" },
   "nav.menu": { bn: "মেনু", en: "Menu" },
   "nav.langLabel": { bn: "EN", en: "বাং" }, // shows the language you can switch TO
 
@@ -304,6 +305,43 @@ export const STRINGS = {
     en: "From urban teenagers to rural women — including those who may not read. By text, by voice, or by phone — talk to Shokhi whichever way is easiest.",
   },
   "about.talkToShokhi": { bn: "সখীর সাথে কথা বলুন", en: "Talk to Shokhi" },
+
+  // --- profile -------------------------------------------------------------
+  "profile.title": { bn: "আমার প্রোফাইল", en: "My Profile" },
+  "profile.sub": {
+    bn: "কয়েকটি তথ্য দিলে সখী আপনাকে আরও ভালোভাবে বুঝতে পারে। সব কিছু শুধু এই ফোনেই থাকে — কোনো অ্যাকাউন্ট বা সার্ভার নেই।",
+    en: "A few details help Shokhi understand you better. Everything stays on this phone only — no account, no server.",
+  },
+  "profile.name": { bn: "নাম (ঐচ্ছিক)", en: "Name (optional)" },
+  "profile.namePlaceholder": { bn: "যেমন: রিমা", en: "e.g. Rima" },
+  "profile.age": { bn: "বয়স", en: "Age" },
+  "profile.agePlaceholder": { bn: "যেমন: ২৪", en: "e.g. 24" },
+  "profile.stage": { bn: "জীবনের ধাপ", en: "Life stage" },
+  "profile.stageNone": { bn: "বলতে চাই না", en: "Prefer not to say" },
+  "profile.conditions": {
+    bn: "পরিচিত স্বাস্থ্য অবস্থা (যদি থাকে)",
+    en: "Known health conditions (if any)",
+  },
+  "profile.cycleTitle": { bn: "আপনার চক্র", en: "Your cycle" },
+  "profile.cycleNone": {
+    bn: "ট্র্যাকারে অন্তত ২টি মাসিক লিখলে এখানে গড় চক্র দেখা যাবে।",
+    en: "Log at least 2 periods in the tracker to see your average cycle here.",
+  },
+  "profile.goTracker": { bn: "ট্র্যাকারে যান →", en: "Go to tracker →" },
+  "profile.save": { bn: "সংরক্ষণ করুন", en: "Save" },
+  "profile.saved": { bn: "✓ সংরক্ষিত হয়েছে", en: "✓ Saved" },
+  "profile.clear": { bn: "প্রোফাইল মুছুন", en: "Clear profile" },
+  "profile.privacy": {
+    bn: "🔒 আপনার প্রোফাইল শুধু এই ফোনেই থাকে, সার্ভারে জমা হয় না। যেকোনো সময় মুছে ফেলতে পারেন।",
+    en: "🔒 Your profile stays on this phone only; nothing is stored on a server. You can clear it anytime.",
+  },
+  "profile.usedInChat": {
+    bn: "এই তথ্য পরামর্শের সময় সখীকে দেওয়া হবে, যাতে সে বারবার একই প্রশ্ন না করে।",
+    en: "This is shared with Shokhi during a consultation so it doesn't have to ask the same things again.",
+  },
+
+  // chat greeting when a name is saved ({name} is replaced)
+  "chat.greeting": { bn: "স্বাগতম, {name}", en: "Welcome, {name}" },
 } as const;
 
 export type StringKey = keyof typeof STRINGS;

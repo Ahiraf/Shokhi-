@@ -9,6 +9,7 @@ import Examples from "@/components/Examples";
 import Guides from "@/components/Guides";
 import Mascot from "@/components/Mascot";
 import { useLang } from "@/components/LanguageProvider";
+import { loadProfile, toChatProfile } from "@/lib/profile";
 
 export default function ChatPage() {
   const { t, lang } = useLang();
@@ -16,7 +17,15 @@ export default function ChatPage() {
   const [profile, setProfile] = useState<Record<string, unknown>>({});
   const [history, setHistory] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
+  const [name, setName] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
+
+  // seed the symptom profile + greeting from the saved local profile (if any)
+  useEffect(() => {
+    const saved = loadProfile();
+    setProfile(toChatProfile(saved));
+    if (saved.name) setName(saved.name);
+  }, []);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -63,7 +72,12 @@ export default function ChatPage() {
           <div className="animate-float">
             <Mascot size={92} />
           </div>
-          <h1 className="mt-5 font-display text-[26px] font-bold leading-tight text-plum">
+          {name && (
+            <p className="mt-4 text-sm font-semibold text-rose">
+              {t("chat.greeting").replace("{name}", name)} 🌸
+            </p>
+          )}
+          <h1 className="mt-2 font-display text-[26px] font-bold leading-tight text-plum">
             {t("chat.introTitle")}
           </h1>
           <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-plum/60">

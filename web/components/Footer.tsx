@@ -29,6 +29,11 @@ export default function Footer() {
                 </li>
               ))}
               <li>
+                <Link href="/profile" className="text-sm text-plum/70 hover:text-rose">
+                  {t("nav.profile")}
+                </Link>
+              </li>
+              <li>
                 <Link href="/about" className="text-sm text-plum/70 hover:text-rose">
                   {t("nav.about")}
                 </Link>

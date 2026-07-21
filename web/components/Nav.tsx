@@ -27,6 +27,23 @@ export default function Nav() {
     </button>
   );
 
+  const profileButton = (
+    <Link
+      href="/profile"
+      onClick={() => setOpen(false)}
+      className={`flex h-9 w-9 items-center justify-center rounded-full ring-1 ring-rose-soft transition ${
+        isActive("/profile") ? "bg-rose text-white" : "bg-white text-plum hover:bg-blush"
+      }`}
+      aria-label={t("nav.profile")}
+      title={t("nav.profile")}
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21c0-4 4-6 8-6s8 2 8 6" />
+      </svg>
+    </Link>
+  );
+
   return (
     <header className="sticky top-0 z-40 border-b border-rose-soft/70 bg-cream/85 backdrop-blur">
       <nav className="mx-auto flex max-w-5xl items-center justify-between px-5 py-3">
@@ -53,11 +70,13 @@ export default function Nav() {
               </Link>
             </li>
           ))}
-          <li className="ml-1">{langButton("")}</li>
+          <li className="ml-1">{profileButton}</li>
+          <li>{langButton("")}</li>
         </ul>
 
-        {/* mobile: language toggle + menu button */}
+        {/* mobile: profile + language toggle + menu button */}
         <div className="flex items-center gap-2 md:hidden">
+          {profileButton}
           {langButton("")}
           <button
             onClick={() => setOpen((o) => !o)}
