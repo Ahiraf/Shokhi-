@@ -1,4 +1,4 @@
-// Gemma 4 backend abstraction — ported from gemma_backend.py.
+// Gemma 4 backend abstraction.
 //   * MockBackend   — deterministic, no network (offline / no-key fallback).
 //   * GeminiBackend — hosted Gemma 4 via Google AI Studio (@google/genai), multi-key
 //                     quota fallback + native-audio transcription.
@@ -35,9 +35,7 @@ function renderGuide(guide: any, lang: Lang): string {
   return lines.join("\n");
 }
 
-// =============================================================================
-// Mock backend
-// =============================================================================
+// --- Mock backend (deterministic, offline) -----------------------------------
 const BN_DIGITS: Record<string, string> = { "০":"0","১":"1","২":"2","৩":"3","৪":"4","৫":"5","৬":"6","৭":"7","৮":"8","৯":"9" };
 const toInt = (s: string) => parseInt(s.replace(/[০-৯]/g, (d) => BN_DIGITS[d]), 10);
 
@@ -189,9 +187,7 @@ class MockBackend implements Backend {
   async transcribeAudio(): Promise<string> { throw new Error("Mock backend has no audio."); }
 }
 
-// =============================================================================
-// Gemini backend (hosted Gemma 4) with multi-key quota fallback
-// =============================================================================
+// --- Gemini backend (hosted Gemma 4) with multi-key quota fallback ------------
 function geminiKeys(): string[] {
   const cands = [
     process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY,
@@ -310,9 +306,7 @@ class GeminiBackend implements Backend {
   }
 }
 
-// =============================================================================
-// Factory — gemini if a key is present (or SHOKHI_BACKEND=gemini), else mock.
-// =============================================================================
+// --- Factory: gemini if a key is present (or SHOKHI_BACKEND=gemini), else mock ---
 let cached: Backend | null = null;
 export function getBackend(): Backend {
   if (cached) return cached;

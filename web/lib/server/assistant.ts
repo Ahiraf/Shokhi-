@@ -1,4 +1,4 @@
-// Shokhi orchestrator — ported from assistant.py. Ties conversation → symptom profile
+// Shokhi orchestrator. Ties conversation → symptom profile
 // (Gemma) → deterministic triage (+ ML risk signals) → warm guidance (Gemma).
 
 import { triage as runTriage, knowledge, type Profile } from "./triage";

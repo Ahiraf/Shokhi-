@@ -1,4 +1,4 @@
-// Prompt templates for Shokhi's Gemma 4 backend — ported from prompts.py.
+// Prompt templates for Shokhi's Gemma 4 backend.
 
 export type Lang = "bn" | "en";
 

@@ -1,4 +1,4 @@
-// Deterministic symptom-triage & safety engine — ported 1:1 from the Python triage.py.
+// Deterministic symptom-triage & safety engine.
 // The URGENCY DECISION is made HERE by rules, never by the LLM, so Gemma can never
 // under-triage an emergency. Pure logic over knowledge.json; no network, no model.
 

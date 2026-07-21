@@ -1,4 +1,4 @@
-// Menstrual cycle & symptom tracking analysis — ported from Python cycle.py.
+// Menstrual cycle & symptom tracking analysis.
 // Pure, deterministic (no LLM): turns a logged period history into plain-language insight
 // (Bangla or English) + suggested symptom flags. The insights_bn/disclaimer_bn fields
 // carry the requested language (kept those names so the frontend needn't change).
