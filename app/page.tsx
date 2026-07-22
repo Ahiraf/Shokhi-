@@ -96,7 +96,7 @@ export default function Home() {
 
       {/* conditions covered */}
       <section className="mx-auto max-w-5xl px-5 py-8">
-        <div className="rounded-3xl bg-gradient-to-br from-plum to-plum-deep px-6 py-10 text-center text-white">
+        <div className="rounded-3xl bg-gradient-to-br from-panel to-panel-deep px-6 py-10 text-center text-white">
           <h2 className="font-display text-2xl font-bold">{t("home.conditionsTitle")}</h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-white/70">{t("home.conditionsSub")}</p>
           <div className="mx-auto mt-6 flex max-w-2xl flex-wrap justify-center gap-2">

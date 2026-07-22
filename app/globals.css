@@ -22,6 +22,8 @@
   --c-blush: 246 235 239;
   --c-gold: 201 138 43;
   --c-surface: 255 255 255;
+  --c-panel: 84 69 76;
+  --c-panel-deep: 62 50 58;
 
   /* body ambient wash */
   --bg-1: #f6e6ec;
@@ -33,28 +35,31 @@
 .dark {
   color-scheme: dark;
 
-  /* ink → light; soft/background tokens → dark; accents kept vivid enough to read on dark */
-  --c-plum: 236 228 232;
-  --c-plum-deep: 250 245 248;
-  --c-plum-soft: 176 162 172;
-  --c-rose: 212 146 166;
-  --c-rose-deep: 226 172 190;
-  --c-rose-soft: 58 45 53;
-  --c-rose-mist: 42 33 40;
-  --c-sage: 150 186 161;
-  --c-sage-deep: 170 202 180;
-  --c-sage-soft: 40 50 44;
-  --c-apricot: 224 190 140;
-  --c-apricot-soft: 56 48 37;
-  --c-cream: 30 26 30;
-  --c-blush: 44 36 43;
-  --c-gold: 216 172 92;
-  --c-surface: 46 40 47;
+  /* Warm plum-charcoal — on-brand dusty rose identity, lifted off pure black, with
+     enough separation between page bg / cards / banners. Ink → light, accents kept vivid. */
+  --c-plum: 240 231 236;
+  --c-plum-deep: 251 246 249;
+  --c-plum-soft: 183 168 177;
+  --c-rose: 219 155 174;
+  --c-rose-deep: 231 179 196;
+  --c-rose-soft: 66 53 62;
+  --c-rose-mist: 50 41 48;
+  --c-sage: 158 192 168;
+  --c-sage-deep: 176 206 186;
+  --c-sage-soft: 48 58 51;
+  --c-apricot: 228 194 144;
+  --c-apricot-soft: 64 53 41;
+  --c-cream: 35 29 36; /* page bg — warm aubergine charcoal */
+  --c-blush: 52 43 51;
+  --c-gold: 220 176 96;
+  --c-surface: 52 43 52; /* cards — clearly above the page bg */
+  --c-panel: 66 52 63; /* dark feature banner (also dark in light mode) */
+  --c-panel-deep: 48 38 47;
 
-  --bg-1: #2a2130;
-  --bg-2: #202a24;
-  --bg-base: #1b171c;
-  --scrollbar: #5b4a55;
+  --bg-1: #33283a; /* warm plum glow */
+  --bg-2: #2c2532; /* subtle warm, no green cast */
+  --bg-base: #221c23;
+  --scrollbar: #5f4d59;
 }
 
 html {

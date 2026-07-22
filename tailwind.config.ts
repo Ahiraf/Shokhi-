@@ -37,6 +37,12 @@ const config: Config = {
         gold: "rgb(var(--c-gold) / <alpha-value>)",
         // Card / raised surface — was literal `white`; a variable so cards darken too.
         surface: "rgb(var(--c-surface) / <alpha-value>)",
+        // Dark feature banner (always dark in BOTH themes, worn with white text).
+        // Distinct from `plum` (ink) so it stays a background, not inverted to light.
+        panel: {
+          DEFAULT: "rgb(var(--c-panel) / <alpha-value>)",
+          deep: "rgb(var(--c-panel-deep) / <alpha-value>)",
+        },
       },
       fontFamily: {
         sans: ["var(--font-hind)", "system-ui", "sans-serif"],
