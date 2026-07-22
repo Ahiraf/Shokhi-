@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { analyzeCycle } from "@/lib/api";
+import { analyze as analyzeLocal } from "@/lib/server/cycle";
 import type { CycleLog, CycleAnalysis } from "@/lib/types";
 import { useLang } from "./LanguageProvider";
 import type { StringKey } from "@/lib/i18n";
@@ -45,8 +45,8 @@ export default function CycleTracker() {
   const [flow, setFlow] = useState<CycleLog["flow"]>("normal");
   const [pain, setPain] = useState<CycleLog["pain"]>(0);
   const [pads, setPads] = useState(0); // 0 = not recorded
+  const [editing, setEditing] = useState<string | null>(null); // original date being edited
   const [analysis, setAnalysis] = useState<CycleAnalysis | null>(null);
-  const [busy, setBusy] = useState(false);
 
   useEffect(() => setLogs(loadLogs()), []);
 
@@ -58,32 +58,48 @@ export default function CycleTracker() {
   function persist(next: CycleLog[]) {
     setLogs(next);
     localStorage.setItem(STORE_KEY, JSON.stringify(next));
-    setAnalysis(null);
+    setAnalysis(null); // any change invalidates the previous analysis
   }
 
-  function addLog() {
-    if (!start) return;
-    if (logs.some((l) => l.start === start)) return; // avoid duplicate date
-    persist([...logs, { start, flow, pain, ...(pads ? { pads } : {}) }]);
+  function resetForm() {
     setStart("");
     setFlow("normal");
     setPain(0);
     setPads(0);
+    setEditing(null);
+  }
+
+  // Handles both adding a new entry and saving edits to an existing one.
+  function addLog() {
+    if (!start) return;
+    // block a duplicate date, unless it's the very entry we're editing
+    if (logs.some((l) => l.start === start && l.start !== editing)) return;
+    const entry: CycleLog = { start, flow, pain, ...(pads ? { pads } : {}) };
+    const next = editing
+      ? logs.map((l) => (l.start === editing ? entry : l))
+      : [...logs, entry];
+    persist(next);
+    resetForm();
+  }
+
+  // Load an existing entry back into the form to edit it.
+  function startEdit(l: CycleLog) {
+    setStart(l.start);
+    setFlow(l.flow ?? "normal");
+    setPain((l.pain ?? 0) as CycleLog["pain"]);
+    setPads(l.pads ?? 0);
+    setEditing(l.start);
   }
 
   function removeLog(date: string) {
+    if (editing === date) resetForm();
     persist(logs.filter((l) => l.start !== date));
   }
 
-  async function runAnalysis() {
-    setBusy(true);
-    try {
-      setAnalysis(await analyzeCycle(logs, lang));
-    } catch {
-      setAnalysis(null);
-    } finally {
-      setBusy(false);
-    }
+  // Analysis is pure, deterministic math — run it on-device (instant, offline-safe,
+  // and the logs never leave the phone, matching the privacy note above).
+  function runAnalysis() {
+    setAnalysis(analyzeLocal(logs, lang) as CycleAnalysis);
   }
 
   const padLabel = (n: number) =>
@@ -161,13 +177,26 @@ export default function CycleTracker() {
           </div>
         </div>
 
-        <button
-          onClick={addLog}
-          disabled={!start}
-          className="w-full rounded-full bg-rose-deep py-2.5 font-medium text-white transition hover:bg-rose-deep/90 disabled:opacity-40"
-        >
-          {t("tracker.add")}
-        </button>
+        {editing && (
+          <p className="text-xs font-medium text-rose-deep/70">✎ {t("tracker.editingHint")}</p>
+        )}
+        <div className="flex gap-2">
+          <button
+            onClick={addLog}
+            disabled={!start}
+            className="w-full rounded-full bg-rose-deep py-2.5 font-medium text-white transition hover:bg-rose-deep/90 disabled:opacity-40"
+          >
+            {editing ? t("tracker.save") : t("tracker.add")}
+          </button>
+          {editing && (
+            <button
+              onClick={resetForm}
+              className="rounded-full bg-rose-soft px-5 py-2.5 font-medium text-rose-deep transition hover:bg-rose-soft/70"
+            >
+              {t("tracker.cancel")}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* logged history */}
@@ -179,7 +208,9 @@ export default function CycleTracker() {
           {sorted.map((l) => (
             <div
               key={l.start}
-              className="flex items-center justify-between rounded-lg bg-surface px-3 py-2 text-sm ring-1 ring-rose-soft"
+              className={`flex items-center justify-between rounded-lg bg-surface px-3 py-2 text-sm ring-1 ${
+                editing === l.start ? "ring-2 ring-rose-deep" : "ring-rose-soft"
+              }`}
             >
               <span className="text-rose-deep">
                 📅 {l.start}
@@ -187,26 +218,36 @@ export default function CycleTracker() {
                 {typeof l.pain === "number" && ` · ${t(PAIN_KEY[l.pain])}`}
                 {l.pads ? ` · ${t("tracker.padShort")}: ${padLabel(l.pads)}` : ""}
               </span>
-              <button
-                onClick={() => removeLog(l.start)}
-                className="text-rose-deep/40 hover:text-rose-deep"
-                aria-label={t("tracker.delete")}
-              >
-                ✕
-              </button>
+              <div className="flex shrink-0 items-center gap-1">
+                <button
+                  onClick={() => startEdit(l)}
+                  className="rounded-md p-1 text-rose-deep/40 transition hover:bg-rose-soft hover:text-rose-deep"
+                  aria-label={t("tracker.edit")}
+                  title={t("tracker.edit")}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 20h9" />
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => removeLog(l.start)}
+                  className="rounded-md p-1 text-rose-deep/40 transition hover:bg-rose-soft hover:text-rose-deep"
+                  aria-label={t("tracker.delete")}
+                  title={t("tracker.delete")}
+                >
+                  ✕
+                </button>
+              </div>
             </div>
           ))}
 
           <button
             onClick={runAnalysis}
-            disabled={busy || logs.length < 2}
+            disabled={logs.length < 2}
             className="mt-2 w-full rounded-full bg-rose-soft py-2.5 font-medium text-rose-deep transition hover:bg-rose-soft disabled:opacity-40"
           >
-            {busy
-              ? t("tracker.analyzing")
-              : logs.length < 2
-              ? t("tracker.needTwo")
-              : t("tracker.analyze")}
+            {logs.length < 2 ? t("tracker.needTwo") : t("tracker.analyze")}
           </button>
         </div>
       )}

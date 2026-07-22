@@ -215,9 +215,13 @@ export const STRINGS = {
   "tracker.pain": { bn: "ব্যথা", en: "Pain" },
   "tracker.padsPerDay": { bn: "দিনে প্যাড", en: "Pads/day" },
   "tracker.add": { bn: "+ যোগ করুন", en: "+ Add" },
+  "tracker.save": { bn: "✔ সংরক্ষণ করুন", en: "✔ Save changes" },
+  "tracker.editingHint": { bn: "এই মাসিকটি সম্পাদনা করছেন", en: "Editing this entry" },
+  "tracker.cancel": { bn: "বাতিল", en: "Cancel" },
   "tracker.logged": { bn: "লেখা মাসিক", en: "Logged periods" },
   "tracker.flowShort": { bn: "রক্ত", en: "flow" },
   "tracker.padShort": { bn: "প্যাড", en: "pads" },
+  "tracker.edit": { bn: "সম্পাদনা", en: "Edit" },
   "tracker.delete": { bn: "মুছুন", en: "Delete" },
   "tracker.analyzing": { bn: "দেখা হচ্ছে…", en: "Analysing…" },
   "tracker.needTwo": {
