@@ -125,6 +125,7 @@ export default function CycleTracker() {
             className="mt-1 block w-full rounded-lg border border-rose-soft px-3 py-2 text-rose-deep focus:outline-none focus:ring-2 focus:ring-rose/40"
           />
         </label>
+        <p className="-mt-1 text-xs text-rose-deep/55">{t("tracker.dateHint")}</p>
 
         <div className="flex flex-wrap gap-4 text-sm">
           <div>

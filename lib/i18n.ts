@@ -211,6 +211,10 @@ export const STRINGS = {
     en: "🔒 Your data stays on this phone only; nothing is stored on a server.",
   },
   "tracker.startDate": { bn: "মাসিক শুরুর তারিখ", en: "Period start date" },
+  "tracker.dateHint": {
+    bn: "মাসিকের প্রতিটি দিন আলাদা করে লিখতে পারেন, বা শুধু প্রথম দিনটি — সখী একই মাসিকের দিনগুলো একসাথে ধরে নেয়।",
+    en: "Log each day of your period, or just the first day — Shokhi groups the days of one period together.",
+  },
   "tracker.flow": { bn: "রক্তক্ষরণ", en: "Flow" },
   "tracker.pain": { bn: "ব্যথা", en: "Pain" },
   "tracker.padsPerDay": { bn: "দিনে প্যাড", en: "Pads/day" },

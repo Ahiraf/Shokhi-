@@ -11,11 +11,18 @@ const NORMAL_CYCLE_MAX = 35;
 const IRREGULAR_SPREAD = 9;
 const LONG_GAP_MISSED = 90;
 const HEAVY_PADS_PER_DAY = 6;
+// Logged dates closer together than this belong to the SAME period (consecutive bleeding
+// days), not two different cycles. A real new cycle starts weeks later, so anything within
+// ~10 days is treated as one period episode — this is how "cycle length" (start-to-start)
+// stays meaningful even when someone logs each day of their period.
+const SAME_PERIOD_GAP = 10;
 
 const MSG = {
   bn: {
     disclaimer: "এটি শুধু আপনার লেখা তথ্যের ভিত্তিতে একটি ধারণা — নিশ্চিত রোগ নির্ণয় নয়। কোনো দুশ্চিন্তা থাকলে ডাক্তার দেখান।",
     needTwo: "প্যাটার্ন বুঝতে অন্তত ২টি মাসিকের তারিখ লিখুন। প্রতিবার মাসিক শুরু হলে তারিখটি এখানে যোগ করুন — সখী আপনার চক্র বুঝতে সাহায্য করবে।",
+    oneOnly: "আপনি এখন পর্যন্ত একটি মাসিক লিখেছেন। চক্রের দৈর্ঘ্য (এক মাসিক থেকে পরের মাসিক) বুঝতে পরের মাসিক শুরু হলে সেই তারিখটিও যোগ করুন।",
+    oneWithDuration: (d: number) => `আপনি একটি মাসিক লিখেছেন, যা প্রায় ${d} দিন ধরে চলেছে। চক্রের দৈর্ঘ্য বুঝতে পরের মাসিক শুরু হলে সেই তারিখটিও যোগ করুন।`,
     avg: (a: number) => `আপনার গড় মাসিক চক্র প্রায় ${a} দিন।`,
     duration: (d: number) => `মাসিক সাধারণত ${d} দিন স্থায়ী হয়।`,
     regular: "আপনার মাসিক মোটামুটি নিয়মিত — এটি ভালো লক্ষণ।",
@@ -30,6 +37,8 @@ const MSG = {
   en: {
     disclaimer: "This is only an impression based on what you've logged — not a diagnosis. See a doctor if anything worries you.",
     needTwo: "Log at least 2 period dates to see a pattern. Add the date each time your period starts — Shokhi will help you understand your cycle.",
+    oneOnly: "You've logged one period so far. To see your cycle length (the gap from one period to the next), add the start date of your next period when it comes.",
+    oneWithDuration: (d: number) => `You've logged one period, lasting about ${d} days. To see your cycle length, add the start date of your next period when it comes.`,
     avg: (a: number) => `Your average cycle is about ${a} days.`,
     duration: (d: number) => `Your period usually lasts about ${d} days.`,
     regular: "Your periods are fairly regular — that's a good sign.",
@@ -70,25 +79,28 @@ export function analyze(logs: Log[], lang: Lang = "bn", todayDays?: number): any
     disclaimer_bn: m.disclaimer,
   };
 
-  if (starts.length < 2) {
-    result.insights_bn.push(m.needTwo);
+  const ins: string[] = result.insights_bn;
+
+  if (starts.length === 0) {
+    ins.push(m.needTwo);
     return result;
   }
 
-  const lengths: number[] = [];
-  for (let i = 1; i < starts.length; i++) {
-    const d = starts[i] - starts[i - 1];
-    if (d > 0) lengths.push(d);
+  // Group logged days into period EPISODES: consecutive bleeding days (within
+  // SAME_PERIOD_GAP) are one period, not separate cycles. Cycle length is then the gap
+  // between one period's start and the next period's start — which needs ≥2 episodes.
+  const episodes: number[][] = [];
+  for (const d of starts) {
+    const last = episodes[episodes.length - 1];
+    if (last && d - last[last.length - 1] <= SAME_PERIOD_GAP) last.push(d);
+    else episodes.push([d]);
   }
-  if (!lengths.length) return result;
+  const episodeStarts = episodes.map((e) => e[0]);
 
-  const avg = Math.round(mean(lengths));
-  result.cycle_lengths = lengths;
-  result.avg_cycle_length = avg;
-  result.shortest_cycle = Math.min(...lengths);
-  result.longest_cycle = Math.max(...lengths);
-
+  // Period duration = span of days within an episode (only when >1 day was logged);
+  // also honour explicit start/end pairs if ever provided.
   const durations: number[] = [];
+  for (const e of episodes) if (e.length > 1) durations.push(e[e.length - 1] - e[0] + 1);
   for (const l of logs) {
     const s = parseDate(l.start);
     const e = parseDate(l.end);
@@ -96,34 +108,51 @@ export function analyze(logs: Log[], lang: Lang = "bn", todayDays?: number): any
   }
   if (durations.length) result.avg_period_length = Math.round(mean(durations));
 
-  const spread = Math.max(...lengths) - Math.min(...lengths);
-  const regular = spread <= IRREGULAR_SPREAD && avg >= NORMAL_CYCLE_MIN && avg <= NORMAL_CYCLE_MAX;
-  result.regular = regular;
+  // cycle lengths between consecutive period starts
+  const lengths: number[] = [];
+  for (let i = 1; i < episodeStarts.length; i++) {
+    const d = episodeStarts[i] - episodeStarts[i - 1];
+    if (d > 0) lengths.push(d);
+  }
 
-  const predicted = starts[starts.length - 1] + avg;
-  result.predicted_next_start = new Date(predicted * 86_400_000).toISOString().slice(0, 10);
-  result.days_until_next = predicted - today;
-
-  const ins: string[] = result.insights_bn;
-  ins.push(m.avg(avg));
-  if (result.avg_period_length) ins.push(m.duration(result.avg_period_length));
-
-  if (regular) {
-    ins.push(m.regular);
+  if (lengths.length === 0) {
+    // only one period logged so far — can't compute a cycle length yet
+    ins.push(result.avg_period_length ? m.oneWithDuration(result.avg_period_length) : m.oneOnly);
   } else {
-    ins.push(m.irregular(Math.min(...lengths), Math.max(...lengths)));
-    result.suggested_symptoms.cycles_irregular = true;
+    const avg = Math.round(mean(lengths));
+    result.cycle_lengths = lengths;
+    result.avg_cycle_length = avg;
+    result.shortest_cycle = Math.min(...lengths);
+    result.longest_cycle = Math.max(...lengths);
+
+    const spread = Math.max(...lengths) - Math.min(...lengths);
+    const regular = spread <= IRREGULAR_SPREAD && avg >= NORMAL_CYCLE_MIN && avg <= NORMAL_CYCLE_MAX;
+    result.regular = regular;
+
+    const predicted = episodeStarts[episodeStarts.length - 1] + avg;
+    result.predicted_next_start = new Date(predicted * 86_400_000).toISOString().slice(0, 10);
+    result.days_until_next = predicted - today;
+
+    ins.push(m.avg(avg));
+    if (result.avg_period_length) ins.push(m.duration(result.avg_period_length));
+
+    if (regular) {
+      ins.push(m.regular);
+    } else {
+      ins.push(m.irregular(Math.min(...lengths), Math.max(...lengths)));
+      result.suggested_symptoms.cycles_irregular = true;
+    }
+
+    if (avg > NORMAL_CYCLE_MAX) {
+      ins.push(m.long);
+      result.suggested_symptoms.cycles_irregular = true;
+    } else if (avg < NORMAL_CYCLE_MIN) {
+      ins.push(m.short);
+      result.suggested_symptoms.cycles_irregular = true;
+    }
   }
 
-  if (avg > NORMAL_CYCLE_MAX) {
-    ins.push(m.long);
-    result.suggested_symptoms.cycles_irregular = true;
-  } else if (avg < NORMAL_CYCLE_MIN) {
-    ins.push(m.short);
-    result.suggested_symptoms.cycles_irregular = true;
-  }
-
-  const gapSinceLast = today - starts[starts.length - 1];
+  const gapSinceLast = today - episodeStarts[episodeStarts.length - 1];
   if (gapSinceLast >= LONG_GAP_MISSED) {
     ins.push(m.gap(gapSinceLast));
     result.suggested_symptoms.missed_periods_3plus = true;
