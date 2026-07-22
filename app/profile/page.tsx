@@ -77,7 +77,7 @@ export default function ProfilePage() {
                 setSaved(false);
               }}
               placeholder={t("profile.namePlaceholder")}
-              className="mt-1.5 block w-full rounded-xl bg-white px-3 py-2.5 text-plum outline-none ring-1 ring-rose-soft placeholder:text-plum/40 focus:ring-2 focus:ring-rose/40"
+              className="mt-1.5 block w-full rounded-xl bg-surface px-3 py-2.5 text-plum outline-none ring-1 ring-rose-soft placeholder:text-plum/40 focus:ring-2 focus:ring-rose/40"
             />
           </label>
           <label className="block text-sm font-medium text-plum/80">
@@ -92,7 +92,7 @@ export default function ProfilePage() {
                 setSaved(false);
               }}
               placeholder={t("profile.agePlaceholder")}
-              className="mt-1.5 block w-full rounded-xl bg-white px-3 py-2.5 text-plum outline-none ring-1 ring-rose-soft placeholder:text-plum/40 focus:ring-2 focus:ring-rose/40"
+              className="mt-1.5 block w-full rounded-xl bg-surface px-3 py-2.5 text-plum outline-none ring-1 ring-rose-soft placeholder:text-plum/40 focus:ring-2 focus:ring-rose/40"
             />
           </label>
         </div>
@@ -111,7 +111,7 @@ export default function ProfilePage() {
                 className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
                   stage === o.value
                     ? "bg-rose text-white"
-                    : "bg-white text-plum/70 ring-1 ring-rose-soft hover:bg-blush"
+                    : "bg-surface text-plum/70 ring-1 ring-rose-soft hover:bg-blush"
                 }`}
               >
                 {label(o)}
@@ -131,7 +131,7 @@ export default function ProfilePage() {
                 className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
                   conditions.includes(o.id)
                     ? "bg-sage-deep text-white"
-                    : "bg-white text-plum/70 ring-1 ring-rose-soft hover:bg-blush"
+                    : "bg-surface text-plum/70 ring-1 ring-rose-soft hover:bg-blush"
                 }`}
               >
                 {conditions.includes(o.id) ? "✓ " : ""}

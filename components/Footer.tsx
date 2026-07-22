@@ -41,7 +41,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="rounded-2xl bg-white/70 px-4 py-3 ring-1 ring-rose-soft">
+          <div className="rounded-2xl bg-surface/70 px-4 py-3 ring-1 ring-rose-soft">
             <p className="text-sm font-semibold text-rose-deep">{t("footer.emergencyNumbers")}</p>
             <p className="mt-1 text-sm text-plum/70">{t("footer.nationalEmergency")} — <b>{emergency}</b></p>
             <p className="text-sm text-plum/70">{t("footer.healthHotline")} — <b>{hotline}</b></p>

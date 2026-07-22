@@ -16,7 +16,7 @@ export default function FeatureCard({ feature }: { feature: Feature }) {
   return (
     <Link
       href={feature.href}
-      className="group flex flex-col rounded-2xl bg-white/80 p-5 ring-1 ring-rose-soft transition hover:-translate-y-0.5 hover:shadow-card"
+      className="group flex flex-col rounded-2xl bg-surface/80 p-5 ring-1 ring-rose-soft transition hover:-translate-y-0.5 hover:shadow-card"
     >
       <span
         className={`flex h-11 w-11 items-center justify-center rounded-xl text-xl ${ICON_BG[feature.accent]}`}

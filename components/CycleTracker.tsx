@@ -179,7 +179,7 @@ export default function CycleTracker() {
           {sorted.map((l) => (
             <div
               key={l.start}
-              className="flex items-center justify-between rounded-lg bg-white px-3 py-2 text-sm ring-1 ring-rose-soft"
+              className="flex items-center justify-between rounded-lg bg-surface px-3 py-2 text-sm ring-1 ring-rose-soft"
             >
               <span className="text-rose-deep">
                 📅 {l.start}
@@ -216,16 +216,16 @@ export default function CycleTracker() {
         <div className="space-y-3 rounded-2xl bg-rose-soft/40 p-4">
           {analysis.avg_cycle_length && (
             <div className="flex flex-wrap gap-2 text-sm">
-              <span className="rounded-full bg-white px-3 py-1 font-medium text-rose-deep">
+              <span className="rounded-full bg-surface px-3 py-1 font-medium text-rose-deep">
                 {t("tracker.avgCycle")}: {analysis.avg_cycle_length} {t("tracker.days")}
               </span>
               {analysis.regular !== null && (
-                <span className="rounded-full bg-white px-3 py-1 font-medium text-rose-deep">
+                <span className="rounded-full bg-surface px-3 py-1 font-medium text-rose-deep">
                   {analysis.regular ? t("tracker.regular") : t("tracker.irregular")}
                 </span>
               )}
               {analysis.predicted_next_start && (
-                <span className="rounded-full bg-white px-3 py-1 font-medium text-rose-deep">
+                <span className="rounded-full bg-surface px-3 py-1 font-medium text-rose-deep">
                   {t("tracker.nextEst")}: {analysis.predicted_next_start}
                 </span>
               )}

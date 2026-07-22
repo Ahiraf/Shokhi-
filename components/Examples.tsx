@@ -41,7 +41,7 @@ export default function Examples({
         <button
           key={e.label_en}
           onClick={() => onPick(lang === "en" ? e.text_en : e.text_bn)}
-          className="rounded-full bg-white/80 px-4 py-1.5 text-sm font-medium text-rose-deep ring-1 ring-rose-soft backdrop-blur transition hover:bg-rose-soft"
+          className="rounded-full bg-surface/80 px-4 py-1.5 text-sm font-medium text-rose-deep ring-1 ring-rose-soft backdrop-blur transition hover:bg-rose-soft"
         >
           {lang === "en" ? e.label_en : e.label_bn}
         </button>

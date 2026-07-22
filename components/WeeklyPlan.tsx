@@ -31,7 +31,7 @@ export default function WeeklyPlan() {
 
   if (!days.length) {
     return (
-      <section className="rounded-2xl bg-white/80 p-5 ring-1 ring-rose-soft">
+      <section className="rounded-2xl bg-surface/80 p-5 ring-1 ring-rose-soft">
         <h2 className="font-display text-xl font-bold text-plum">{t("wellness.weekTitle")}</h2>
         <p className="mt-2 text-sm leading-relaxed text-plum/60">
           {t("wellness.tipNoData")}{" "}
@@ -58,7 +58,7 @@ export default function WeeklyPlan() {
   const phase = (id: string) => w.phases.find((p) => p.id === id);
 
   return (
-    <section className="rounded-2xl bg-white/80 p-5 ring-1 ring-rose-soft">
+    <section className="rounded-2xl bg-surface/80 p-5 ring-1 ring-rose-soft">
       <h2 className="font-display text-xl font-bold text-plum">{t("wellness.weekTitle")}</h2>
       <p className="mt-1 text-sm text-plum/55">{t("wellness.weekSub")}</p>
       <div className="mt-4 space-y-2">
@@ -74,7 +74,7 @@ export default function WeeklyPlan() {
             >
               <span className="w-11 shrink-0 font-semibold text-plum/70">{dayLabel(offset)}</span>
               {p && (
-                <span className="rounded-full bg-white px-2 py-0.5 text-xs font-medium text-rose-deep ring-1 ring-rose-soft">
+                <span className="rounded-full bg-surface px-2 py-0.5 text-xs font-medium text-rose-deep ring-1 ring-rose-soft">
                   {pick(p, "label")}
                 </span>
               )}

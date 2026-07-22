@@ -64,12 +64,12 @@ export default function Composer({
         disabled={voiceBusy}
         title={t("composer.voiceTitle")}
         className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl shadow-soft transition
-          ${recording ? "animate-pulse bg-red-500 text-white" : "bg-white text-rose ring-1 ring-rose-soft hover:bg-rose-mist"}`}
+          ${recording ? "animate-pulse bg-red-500 text-white" : "bg-surface text-rose ring-1 ring-rose-soft hover:bg-rose-mist"}`}
       >
         {voiceBusy ? "…" : recording ? "⏹️" : "🎙️"}
       </button>
 
-      <div className="flex flex-1 items-end gap-2 rounded-3xl bg-white p-1.5 shadow-soft ring-1 ring-rose-soft focus-within:ring-2 focus-within:ring-rose/40">
+      <div className="flex flex-1 items-end gap-2 rounded-3xl bg-surface p-1.5 shadow-soft ring-1 ring-rose-soft focus-within:ring-2 focus-within:ring-rose/40">
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}

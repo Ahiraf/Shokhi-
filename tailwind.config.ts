@@ -2,28 +2,41 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
+        // Palette is driven by CSS channel variables (see app/globals.css) so a single
+        // `.dark` block can retheme the whole app without touching component classes.
+        // rgb(var(--x) / <alpha-value>) keeps Tailwind's opacity modifiers (e.g. /70) working.
         // Soft plum-brown ink (text/headings) — gentle, not harsh black.
         plum: {
-          DEFAULT: "#54454c",
-          deep: "#3e323a",
-          soft: "#8d7f86",
+          DEFAULT: "rgb(var(--c-plum) / <alpha-value>)",
+          deep: "rgb(var(--c-plum-deep) / <alpha-value>)",
+          soft: "rgb(var(--c-plum-soft) / <alpha-value>)",
         },
         // Primary — a dusty, low-saturation rose (mauve), calm not candy-pink.
         rose: {
-          DEFAULT: "#c17a8e",
-          deep: "#9c5c72",
-          soft: "#f3e7ec",
-          mist: "#fbf4f6",
+          DEFAULT: "rgb(var(--c-rose) / <alpha-value>)",
+          deep: "rgb(var(--c-rose-deep) / <alpha-value>)",
+          soft: "rgb(var(--c-rose-soft) / <alpha-value>)",
+          mist: "rgb(var(--c-rose-mist) / <alpha-value>)",
         },
         // Secondary accent — muted sage (health / calm), used sparingly.
-        sage: { DEFAULT: "#8aae95", deep: "#5f8a6d", soft: "#e9f0ea" },
-        apricot: { DEFAULT: "#e6c28a", soft: "#f6ecd9" },
-        cream: "#faf6f1",
-        blush: "#f6ebef",
-        gold: "#c98a2b",
+        sage: {
+          DEFAULT: "rgb(var(--c-sage) / <alpha-value>)",
+          deep: "rgb(var(--c-sage-deep) / <alpha-value>)",
+          soft: "rgb(var(--c-sage-soft) / <alpha-value>)",
+        },
+        apricot: {
+          DEFAULT: "rgb(var(--c-apricot) / <alpha-value>)",
+          soft: "rgb(var(--c-apricot-soft) / <alpha-value>)",
+        },
+        cream: "rgb(var(--c-cream) / <alpha-value>)",
+        blush: "rgb(var(--c-blush) / <alpha-value>)",
+        gold: "rgb(var(--c-gold) / <alpha-value>)",
+        // Card / raised surface — was literal `white`; a variable so cards darken too.
+        surface: "rgb(var(--c-surface) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["var(--font-hind)", "system-ui", "sans-serif"],

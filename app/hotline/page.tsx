@@ -45,7 +45,7 @@ export default function HotlinePage() {
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         {STEPS.map((s) => (
-          <div key={s.title_en} className="rounded-2xl bg-white/80 p-5 text-center ring-1 ring-rose-soft">
+          <div key={s.title_en} className="rounded-2xl bg-surface/80 p-5 text-center ring-1 ring-rose-soft">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blush text-2xl">
               {s.icon}
             </div>
@@ -63,7 +63,7 @@ export default function HotlinePage() {
         <p className="text-sm leading-relaxed text-plum/75">{t("hotline.techNote")}</p>
       </div>
 
-      <div className="mt-8 rounded-2xl bg-white/80 px-5 py-4 text-center ring-1 ring-rose-soft">
+      <div className="mt-8 rounded-2xl bg-surface/80 px-5 py-4 text-center ring-1 ring-rose-soft">
         <p className="text-sm font-semibold text-rose-deep">{t("hotline.needEmergency")}</p>
         <p className="mt-1 text-sm text-plum/70">{t("hotline.emergencyLine")}</p>
       </div>

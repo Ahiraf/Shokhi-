@@ -6,15 +6,40 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { NAV } from "@/lib/nav";
 import { useLang } from "./LanguageProvider";
+import { useTheme } from "./ThemeProvider";
 
 /** Sticky top navigation shared across every page, with a mobile menu. */
 export default function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const { t, lang, toggle } = useLang();
+  const { theme, toggle: toggleTheme } = useTheme();
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  const themeLabel = t(theme === "dark" ? "nav.lightMode" : "nav.darkMode");
+  const themeButton = (
+    <button
+      onClick={toggleTheme}
+      className="flex h-9 w-9 items-center justify-center rounded-full bg-surface text-plum ring-1 ring-rose-soft transition hover:bg-blush"
+      aria-label={themeLabel}
+      title={themeLabel}
+    >
+      {theme === "dark" ? (
+        // sun — currently dark, tap for light
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+        </svg>
+      ) : (
+        // crescent half-moon — currently light, tap for dark
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+        </svg>
+      )}
+    </button>
+  );
 
   const langButton = (extra: string) => (
     <button
@@ -32,7 +57,7 @@ export default function Nav() {
       href="/profile"
       onClick={() => setOpen(false)}
       className={`flex h-9 w-9 items-center justify-center rounded-full ring-1 ring-rose-soft transition ${
-        isActive("/profile") ? "bg-rose text-white" : "bg-white text-plum hover:bg-blush"
+        isActive("/profile") ? "bg-rose text-white" : "bg-surface text-plum hover:bg-blush"
       }`}
       aria-label={t("nav.profile")}
       title={t("nav.profile")}
@@ -78,12 +103,14 @@ export default function Nav() {
             </li>
           ))}
           <li className="ml-1">{profileButton}</li>
+          <li>{themeButton}</li>
           <li>{langButton("")}</li>
         </ul>
 
-        {/* mobile: profile + language toggle + menu button */}
+        {/* mobile: profile + theme + language toggle + menu button */}
         <div className="flex items-center gap-2 md:hidden">
           {profileButton}
+          {themeButton}
           {langButton("")}
           <button
             onClick={() => setOpen((o) => !o)}
@@ -109,7 +136,7 @@ export default function Nav() {
                 className={`block rounded-xl px-3 py-2.5 text-sm font-semibold transition ${
                   isActive(n.href)
                     ? "bg-rose text-white"
-                    : "bg-white/70 text-plum/70 ring-1 ring-rose-soft"
+                    : "bg-surface/70 text-plum/70 ring-1 ring-rose-soft"
                 }`}
               >
                 {t(n.key)}

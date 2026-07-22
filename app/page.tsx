@@ -48,7 +48,7 @@ export default function Home() {
       <section className="mx-auto max-w-5xl px-5 pt-10 pb-4 sm:pt-16">
         <div className="grid items-center gap-8 sm:grid-cols-2">
           <div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-plum/60 ring-1 ring-rose-soft">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-surface/70 px-3 py-1 text-xs font-semibold text-plum/60 ring-1 ring-rose-soft">
               {t("home.badge")}
             </span>
             <h1 className="mt-4 whitespace-pre-line font-display text-4xl font-bold leading-tight text-plum sm:text-5xl">
@@ -66,7 +66,7 @@ export default function Home() {
               </Link>
               <Link
                 href="/guides"
-                className="rounded-full bg-white px-6 py-3 font-semibold text-plum ring-1 ring-rose-soft transition hover:bg-blush"
+                className="rounded-full bg-surface px-6 py-3 font-semibold text-plum ring-1 ring-rose-soft transition hover:bg-blush"
               >
                 {t("home.ctaGuides")}
               </Link>
@@ -103,7 +103,7 @@ export default function Home() {
             {CONDITIONS.map((c) => (
               <span
                 key={c.en}
-                className="rounded-full bg-white/12 px-3.5 py-1.5 text-sm font-medium text-white/90"
+                className="rounded-full bg-surface/12 px-3.5 py-1.5 text-sm font-medium text-white/90"
               >
                 {lang === "en" ? c.en : c.bn}
               </span>
@@ -119,7 +119,7 @@ export default function Home() {
         </h2>
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           {STEPS.map((s) => (
-            <div key={s.n_en} className="rounded-2xl bg-white/80 p-6 text-center ring-1 ring-rose-soft">
+            <div key={s.n_en} className="rounded-2xl bg-surface/80 p-6 text-center ring-1 ring-rose-soft">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blush text-2xl">
                 {s.icon}
               </div>

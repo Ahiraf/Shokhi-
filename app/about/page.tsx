@@ -71,7 +71,7 @@ export default function AboutPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-4 rounded-xl bg-white/70 px-3 py-2 text-sm font-semibold text-red-700">
+        <p className="mt-4 rounded-xl bg-surface/70 px-3 py-2 text-sm font-semibold text-red-700">
           {t("about.emergencyLine")}
         </p>
       </section>
@@ -81,7 +81,7 @@ export default function AboutPage() {
         <h2 className="font-display text-xl font-bold text-plum">{t("about.safeTitle")}</h2>
         <div className="mt-4 space-y-3">
           {SAFE_CARDS.map((x) => (
-            <div key={x.t_en} className="rounded-2xl bg-white/80 px-4 py-3.5 ring-1 ring-rose-soft">
+            <div key={x.t_en} className="rounded-2xl bg-surface/80 px-4 py-3.5 ring-1 ring-rose-soft">
               <p className="text-sm font-bold text-plum">{lang === "en" ? x.t_en : x.t_bn}</p>
               <p className="mt-1 text-sm leading-relaxed text-plum/65">{lang === "en" ? x.d_en : x.d_bn}</p>
             </div>

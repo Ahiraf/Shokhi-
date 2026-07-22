@@ -4,6 +4,57 @@
 
 :root {
   color-scheme: light;
+
+  /* --- palette (space-separated RGB channels; consumed via rgb(var(--x) / a) in Tailwind) --- */
+  --c-plum: 84 69 76;
+  --c-plum-deep: 62 50 58;
+  --c-plum-soft: 141 127 134;
+  --c-rose: 193 122 142;
+  --c-rose-deep: 156 92 114;
+  --c-rose-soft: 243 231 236;
+  --c-rose-mist: 251 244 246;
+  --c-sage: 138 174 149;
+  --c-sage-deep: 95 138 109;
+  --c-sage-soft: 233 240 234;
+  --c-apricot: 230 194 138;
+  --c-apricot-soft: 246 236 217;
+  --c-cream: 250 246 241;
+  --c-blush: 246 235 239;
+  --c-gold: 201 138 43;
+  --c-surface: 255 255 255;
+
+  /* body ambient wash */
+  --bg-1: #f6e6ec;
+  --bg-2: #eaf1ea;
+  --bg-base: #faf6f1;
+  --scrollbar: #f0c3d8;
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* ink → light; soft/background tokens → dark; accents kept vivid enough to read on dark */
+  --c-plum: 236 228 232;
+  --c-plum-deep: 250 245 248;
+  --c-plum-soft: 176 162 172;
+  --c-rose: 212 146 166;
+  --c-rose-deep: 226 172 190;
+  --c-rose-soft: 58 45 53;
+  --c-rose-mist: 42 33 40;
+  --c-sage: 150 186 161;
+  --c-sage-deep: 170 202 180;
+  --c-sage-soft: 40 50 44;
+  --c-apricot: 224 190 140;
+  --c-apricot-soft: 56 48 37;
+  --c-cream: 30 26 30;
+  --c-blush: 44 36 43;
+  --c-gold: 216 172 92;
+  --c-surface: 46 40 47;
+
+  --bg-1: #2a2130;
+  --bg-2: #202a24;
+  --bg-base: #1b171c;
+  --scrollbar: #5b4a55;
 }
 
 html {
@@ -13,9 +64,9 @@ html {
 body {
   /* calm warm oat with the faintest blush + sage wash — low saturation, restful */
   background:
-    radial-gradient(900px 520px at 12% -10%, #f6e6ec 0%, transparent 55%),
-    radial-gradient(760px 520px at 100% 2%, #eaf1ea 0%, transparent 50%),
-    #faf6f1;
+    radial-gradient(900px 520px at 12% -10%, var(--bg-1) 0%, transparent 55%),
+    radial-gradient(760px 520px at 100% 2%, var(--bg-2) 0%, transparent 50%),
+    var(--bg-base);
   background-attachment: fixed;
   min-height: 100vh;
   overflow-x: hidden;
@@ -41,7 +92,7 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #f0c3d8;
+  background: var(--scrollbar);
   border-radius: 8px;
 }
 

@@ -29,7 +29,7 @@ export default function Guides({ onPick }: { onPick: (id: string) => void }) {
           key={g.id}
           onClick={() => onPick(g.id)}
           title={(lang === "en" ? g.summary_en || g.summary_bn : g.summary_bn) ?? ""}
-          className="rounded-full bg-white/80 px-4 py-1.5 text-sm font-medium text-rose-deep ring-1 ring-rose-soft backdrop-blur transition hover:bg-rose-soft"
+          className="rounded-full bg-surface/80 px-4 py-1.5 text-sm font-medium text-rose-deep ring-1 ring-rose-soft backdrop-blur transition hover:bg-rose-soft"
         >
           {g.icon} {lang === "en" ? g.title_en || g.title_bn : g.title_bn}
         </button>

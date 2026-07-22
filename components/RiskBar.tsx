@@ -8,7 +8,7 @@ export default function RiskBar({ signal }: { signal: RiskSignal }) {
   const pct = Math.round(signal.probability * 100);
   const name = lang === "en" ? signal.name_en || signal.name_bn : signal.name_bn;
   return (
-    <div className="mt-3 rounded-xl bg-white/70 p-3 ring-1 ring-rose-soft">
+    <div className="mt-3 rounded-xl bg-surface/70 p-3 ring-1 ring-rose-soft">
       <div className="mb-1.5 flex items-center justify-between text-sm">
         <span className="font-medium text-rose-deep">
           {t("message.riskHint")} — {name}

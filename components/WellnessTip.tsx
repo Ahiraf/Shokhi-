@@ -57,7 +57,7 @@ export default function WellnessTip() {
       )}
 
       {cond && (
-        <p className="mt-2.5 rounded-xl bg-white/70 px-3 py-2 text-sm leading-relaxed text-plum/75">
+        <p className="mt-2.5 rounded-xl bg-surface/70 px-3 py-2 text-sm leading-relaxed text-plum/75">
           <b>{pick(cond, "label")}:</b> {pick(cond, "move")}
         </p>
       )}

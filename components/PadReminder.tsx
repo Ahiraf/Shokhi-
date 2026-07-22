@@ -79,7 +79,7 @@ export default function PadReminder() {
   const minLeft = Math.max(0, Math.floor((remaining % 3_600_000) / 60_000));
 
   return (
-    <div className="mt-4 rounded-2xl bg-white/70 p-4 ring-1 ring-rose-soft">
+    <div className="mt-4 rounded-2xl bg-surface/70 p-4 ring-1 ring-rose-soft">
       <h2 className="text-base font-bold text-rose-deep">{t("pad.title")}</h2>
       <p className="mt-1 text-sm text-rose-deep/70">{t("pad.intro")}</p>
 
@@ -120,7 +120,7 @@ export default function PadReminder() {
               <button
                 key={h}
                 onClick={() => start(h)}
-                className="flex-1 rounded-full bg-white py-1.5 text-sm font-medium text-rose-deep ring-1 ring-rose-soft"
+                className="flex-1 rounded-full bg-surface py-1.5 text-sm font-medium text-rose-deep ring-1 ring-rose-soft"
               >
                 {t("pad.again")} {num(h)} {t("pad.againHours")}
               </button>

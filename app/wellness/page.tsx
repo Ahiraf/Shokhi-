@@ -39,7 +39,7 @@ export default function WellnessPage() {
             <h2 className="font-display text-xl font-bold text-plum">{t("wellness.byPhase")}</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               {w.phases.map((p) => (
-                <div key={p.id} className="rounded-2xl bg-white/80 p-5 ring-1 ring-rose-soft">
+                <div key={p.id} className="rounded-2xl bg-surface/80 p-5 ring-1 ring-rose-soft">
                   <p className="font-display text-base font-bold text-plum">{pick(p, "label")}</p>
                   <p className="text-xs text-plum/45">{pick(p, "days")}</p>
                   <p className="mt-3 text-sm leading-relaxed text-plum/80">
@@ -66,7 +66,7 @@ export default function WellnessPage() {
                   <p className="mt-2 text-sm leading-relaxed text-plum/80">
                     <span className="font-semibold text-sage-deep">{t("wellness.food")}</span> — {pick(c, "food")}
                   </p>
-                  <p className="mt-3 rounded-xl bg-white/70 px-3 py-2 text-xs leading-relaxed text-plum/60">
+                  <p className="mt-3 rounded-xl bg-surface/70 px-3 py-2 text-xs leading-relaxed text-plum/60">
                     🩺 {pick(c, "note")}
                   </p>
                 </div>
@@ -79,7 +79,7 @@ export default function WellnessPage() {
             <h2 className="font-display text-xl font-bold text-plum">{t("wellness.movesTitle")}</h2>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {w.moves.map((m) => (
-                <div key={m.id} className="flex gap-3 rounded-2xl bg-white/80 p-4 ring-1 ring-rose-soft">
+                <div key={m.id} className="flex gap-3 rounded-2xl bg-surface/80 p-4 ring-1 ring-rose-soft">
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sage-soft text-2xl">
                     {m.icon}
                   </span>

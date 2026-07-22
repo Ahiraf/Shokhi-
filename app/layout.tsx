@@ -4,6 +4,7 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import LanguageProvider from "@/components/LanguageProvider";
+import ThemeProvider, { THEME_INIT_SCRIPT } from "@/components/ThemeProvider";
 
 // Body — humanist Bangla text face.
 const hind = Hind_Siliguri({
@@ -49,13 +50,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="bn" className={`${hind.variable} ${baloo.variable}`}>
+    <html lang="bn" className={`${hind.variable} ${baloo.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="flex min-h-screen flex-col font-sans text-plum antialiased">
-        <LanguageProvider>
-          <Nav />
-          <div className="flex-1">{children}</div>
-          <Footer />
-        </LanguageProvider>
+        <ThemeProvider>
+          <LanguageProvider>
+            <Nav />
+            <div className="flex-1">{children}</div>
+            <Footer />
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

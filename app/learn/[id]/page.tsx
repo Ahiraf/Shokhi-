@@ -67,7 +67,7 @@ export default function ConditionDetailPage() {
                 {(pickField<string[]>(lang, cond as unknown as Record<string, unknown>, "self_care") ?? []).map((s, i) => (
                   <li
                     key={i}
-                    className="flex gap-2.5 rounded-xl bg-white/80 px-4 py-2.5 text-sm text-plum/80 ring-1 ring-rose-soft"
+                    className="flex gap-2.5 rounded-xl bg-surface/80 px-4 py-2.5 text-sm text-plum/80 ring-1 ring-rose-soft"
                   >
                     <span className="text-rose">•</span>
                     {s}

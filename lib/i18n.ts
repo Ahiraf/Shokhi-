@@ -25,7 +25,9 @@ export const STRINGS = {
   "nav.about": { bn: "সম্পর্কে", en: "About" },
   "nav.profile": { bn: "আমার প্রোফাইল", en: "My Profile" },
   "nav.menu": { bn: "মেনু", en: "Menu" },
-  "nav.langLabel": { bn: "EN", en: "বাং" }, // shows the language you can switch TO
+  "nav.langLabel": { bn: "English", en: "বাংলা" }, // shows the language you can switch TO
+  "nav.darkMode": { bn: "ডার্ক মোড", en: "Dark mode" },
+  "nav.lightMode": { bn: "লাইট মোড", en: "Light mode" },
 
   // --- footer --------------------------------------------------------------
   "footer.tagline": {

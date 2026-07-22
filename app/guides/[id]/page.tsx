@@ -51,7 +51,7 @@ export default function GuideDetailPage() {
             {(pickField<string[]>(lang, guide as unknown as Record<string, unknown>, "points") ?? []).map((p, i) => (
               <li
                 key={i}
-                className="flex gap-3 rounded-2xl bg-white/80 px-4 py-3 ring-1 ring-rose-soft"
+                className="flex gap-3 rounded-2xl bg-surface/80 px-4 py-3 ring-1 ring-rose-soft"
               >
                 <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-rose-soft text-xs font-bold text-rose-deep">
                   {i + 1}

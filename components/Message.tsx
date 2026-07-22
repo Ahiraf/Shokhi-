@@ -30,7 +30,7 @@ export default function Message({ item }: { item: ChatItem }) {
       <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full ring-1 ring-rose-soft">
         <LogoMark size={36} />
       </span>
-      <div className="max-w-[85%] rounded-3xl rounded-tl-lg bg-white px-4 py-3 shadow-soft ring-1 ring-rose-soft">
+      <div className="max-w-[85%] rounded-3xl rounded-tl-lg bg-surface px-4 py-3 shadow-soft ring-1 ring-rose-soft">
         {t && (
           <div className="mb-2">
             <UrgencyPill

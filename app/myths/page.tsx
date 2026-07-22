@@ -36,7 +36,7 @@ export default function MythsPage() {
       <PageIntro icon="💡" title={t("myths.title")} sub={t("myths.sub")} variant="myths" side="left" size={140} />
 
       {/* ask about a belief */}
-      <div className="mt-8 rounded-2xl bg-white/80 p-4 ring-1 ring-rose-soft">
+      <div className="mt-8 rounded-2xl bg-surface/80 p-4 ring-1 ring-rose-soft">
         <p className="text-sm font-semibold text-plum">{t("myths.askPrompt")}</p>
         <div className="mt-2 flex items-end gap-2">
           <textarea
@@ -70,7 +70,7 @@ export default function MythsPage() {
       {/* common myths */}
       <div className="mt-8 space-y-4">
         {myths.map((m, i) => (
-          <div key={i} className="rounded-2xl bg-white/80 p-4 ring-1 ring-rose-soft">
+          <div key={i} className="rounded-2xl bg-surface/80 p-4 ring-1 ring-rose-soft">
             <p className="text-sm font-semibold text-plum/50 line-through decoration-red-300">
               ❌ {lang === "en" ? m.myth_en || m.myth_bn : m.myth_bn}
             </p>
