@@ -11,4 +11,5 @@ export const NAV: { href: string; key: StringKey }[] = [
   { href: "/myths", key: "nav.myths" },
   { href: "/wellness", key: "nav.wellness" },
   { href: "/hotline", key: "nav.hotline" },
+  { href: "/faq", key: "nav.faq" },
 ];

@@ -22,6 +22,7 @@ export const STRINGS = {
   "nav.myths": { bn: "ভুল ধারণা", en: "Myths" },
   "nav.wellness": { bn: "সুস্থতা", en: "Wellness" },
   "nav.hotline": { bn: "হটলাইন", en: "Hotline" },
+  "nav.faq": { bn: "প্রশ্নোত্তর", en: "FAQ" },
   "nav.about": { bn: "সম্পর্কে", en: "About" },
   "nav.profile": { bn: "আমার প্রোফাইল", en: "My Profile" },
   "nav.menu": { bn: "মেনু", en: "Menu" },
@@ -383,6 +384,18 @@ export const STRINGS = {
     en: "A gentle day-by-day movement + food focus, tuned to your cycle.",
   },
   "wellness.today": { bn: "আজ", en: "Today" },
+
+  // --- faq -----------------------------------------------------------------
+  "faq.title": { bn: "সচরাচর জিজ্ঞাসা", en: "Frequently asked questions" },
+  "faq.sub": {
+    bn: "সখী কী, কীভাবে কাজ করে, কতটা নিরাপদ ও গোপনীয় — সবচেয়ে বেশি জিজ্ঞাসিত প্রশ্নের সহজ উত্তর।",
+    en: "What Shokhi is, how it works, and how safe and private it is — simple answers to the most common questions.",
+  },
+  "faq.stillTitle": { bn: "উত্তর খুঁজে পাননি?", en: "Didn't find your answer?" },
+  "faq.stillBody": {
+    bn: "আপনার প্রশ্নটি সরাসরি সখীকে বাংলায় জিজ্ঞাসা করুন — লিখে বা কণ্ঠে।",
+    en: "Ask Shokhi your question directly in Bangla — by text or by voice.",
+  },
 } as const;
 
 export type StringKey = keyof typeof STRINGS;
