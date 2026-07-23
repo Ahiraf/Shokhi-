@@ -86,7 +86,7 @@ export default function Composer({
         <button
           onClick={submit}
           disabled={busy || !text.trim()}
-          className="flex h-10 items-center gap-1 rounded-full bg-gradient-to-br from-rose to-rose-deep px-5 font-semibold text-white shadow-lift transition hover:brightness-105 disabled:opacity-40 disabled:shadow-none"
+          className="flex h-10 items-center gap-1 rounded-full bg-gradient-to-br from-rose to-rose-deep px-5 font-semibold text-accentink shadow-lift transition hover:brightness-105 disabled:opacity-40 disabled:shadow-none"
         >
           {busy ? "…" : t("composer.send")}
         </button>

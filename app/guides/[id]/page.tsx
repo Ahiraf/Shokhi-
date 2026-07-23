@@ -74,7 +74,7 @@ export default function GuideDetailPage() {
             <p className="text-sm text-plum/70">{t("guides.moreQuestion")}</p>
             <Link
               href="/chat"
-              className="mt-2 inline-block rounded-full bg-rose px-5 py-2 text-sm font-semibold text-white"
+              className="mt-2 inline-block rounded-full bg-rose px-5 py-2 text-sm font-semibold text-accentink"
             >
               {t("common.askShokhi")}
             </Link>

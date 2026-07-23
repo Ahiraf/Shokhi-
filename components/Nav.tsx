@@ -57,7 +57,7 @@ export default function Nav() {
       href="/profile"
       onClick={() => setOpen(false)}
       className={`flex h-9 w-9 items-center justify-center rounded-full ring-1 ring-rose-soft transition ${
-        isActive("/profile") ? "bg-rose text-white" : "bg-surface text-plum hover:bg-blush"
+        isActive("/profile") ? "bg-rose text-accentink" : "bg-surface text-plum hover:bg-blush"
       }`}
       aria-label={t("nav.profile")}
       title={t("nav.profile")}
@@ -94,7 +94,7 @@ export default function Nav() {
                 href={n.href}
                 className={`rounded-full px-3 py-1.5 text-sm font-semibold transition ${
                   isActive(n.href)
-                    ? "bg-rose text-white"
+                    ? "bg-rose text-accentink"
                     : "text-plum/60 hover:bg-blush hover:text-plum"
                 }`}
               >
@@ -135,7 +135,7 @@ export default function Nav() {
                 onClick={() => setOpen(false)}
                 className={`block rounded-xl px-3 py-2.5 text-sm font-semibold transition ${
                   isActive(n.href)
-                    ? "bg-rose text-white"
+                    ? "bg-rose text-accentink"
                     : "bg-surface/70 text-plum/70 ring-1 ring-rose-soft"
                 }`}
               >

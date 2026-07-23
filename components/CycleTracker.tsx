@@ -136,7 +136,7 @@ export default function CycleTracker() {
                   key={f}
                   onClick={() => setFlow(f)}
                   className={`rounded-full px-3 py-1 ${
-                    flow === f ? "bg-rose-deep text-white" : "bg-rose-soft text-rose-deep"
+                    flow === f ? "bg-rose-deep text-accentink" : "bg-rose-soft text-rose-deep"
                   }`}
                 >
                   {t(FLOW_KEY[f])}
@@ -152,7 +152,7 @@ export default function CycleTracker() {
                   key={p}
                   onClick={() => setPain(p as CycleLog["pain"])}
                   className={`rounded-full px-3 py-1 ${
-                    pain === p ? "bg-rose-deep text-white" : "bg-rose-soft text-rose-deep"
+                    pain === p ? "bg-rose-deep text-accentink" : "bg-rose-soft text-rose-deep"
                   }`}
                 >
                   {t(PAIN_KEY[p])}
@@ -168,7 +168,7 @@ export default function CycleTracker() {
                   key={o.value}
                   onClick={() => setPads(pads === o.value ? 0 : o.value)}
                   className={`rounded-full px-3 py-1 ${
-                    pads === o.value ? "bg-rose-deep text-white" : "bg-rose-soft text-rose-deep"
+                    pads === o.value ? "bg-rose-deep text-accentink" : "bg-rose-soft text-rose-deep"
                   }`}
                 >
                   {lang === "en" ? o.label_en : o.label_bn}
@@ -185,7 +185,7 @@ export default function CycleTracker() {
           <button
             onClick={addLog}
             disabled={!start}
-            className="w-full rounded-full bg-rose-deep py-2.5 font-medium text-white transition hover:bg-rose-deep/90 disabled:opacity-40"
+            className="w-full rounded-full bg-rose-deep py-2.5 font-medium text-accentink transition hover:bg-rose-deep/90 disabled:opacity-40"
           >
             {editing ? t("tracker.save") : t("tracker.add")}
           </button>

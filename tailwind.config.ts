@@ -35,6 +35,9 @@ const config: Config = {
         cream: "rgb(var(--c-cream) / <alpha-value>)",
         blush: "rgb(var(--c-blush) / <alpha-value>)",
         gold: "rgb(var(--c-gold) / <alpha-value>)",
+        // Ink for text sitting on a SOLID rose/sage fill. Flips per mode: white in
+        // light mode, deep-rose in dark mode (where those fills become light).
+        accentink: "rgb(var(--c-accentink) / <alpha-value>)",
         // Card / raised surface — was literal `white`; a variable so cards darken too.
         surface: "rgb(var(--c-surface) / <alpha-value>)",
         // Dark feature banner (always dark in BOTH themes, worn with white text).

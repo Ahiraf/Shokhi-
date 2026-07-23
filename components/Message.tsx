@@ -14,7 +14,7 @@ export default function Message({ item }: { item: ChatItem }) {
   if (isUser) {
     return (
       <div className="flex animate-rise justify-end">
-        <div className="max-w-[80%] rounded-3xl rounded-br-lg bg-gradient-to-br from-rose to-rose-deep px-4 py-2.5 text-white shadow-lift">
+        <div className="max-w-[80%] rounded-3xl rounded-br-lg bg-gradient-to-br from-rose to-rose-deep px-4 py-2.5 text-accentink shadow-lift">
           {item.text}
         </div>
       </div>

@@ -110,7 +110,7 @@ export default function ProfilePage() {
                 }}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
                   stage === o.value
-                    ? "bg-rose text-white"
+                    ? "bg-rose text-accentink"
                     : "bg-surface text-plum/70 ring-1 ring-rose-soft hover:bg-blush"
                 }`}
               >
@@ -130,7 +130,7 @@ export default function ProfilePage() {
                 onClick={() => toggleCondition(o.id)}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
                   conditions.includes(o.id)
-                    ? "bg-sage-deep text-white"
+                    ? "bg-sage-deep text-accentink"
                     : "bg-surface text-plum/70 ring-1 ring-rose-soft hover:bg-blush"
                 }`}
               >
@@ -164,7 +164,7 @@ export default function ProfilePage() {
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={save}
-            className="rounded-full bg-rose px-6 py-2.5 font-semibold text-white shadow-lift transition hover:brightness-105"
+            className="rounded-full bg-rose px-6 py-2.5 font-semibold text-accentink shadow-lift transition hover:brightness-105"
           >
             {saved ? t("profile.saved") : t("profile.save")}
           </button>

@@ -90,7 +90,7 @@ export default function ConditionDetailPage() {
             <p className="text-sm text-plum/70">{t("learn.haveThis")}</p>
             <Link
               href="/chat"
-              className="mt-2 inline-block rounded-full bg-rose px-5 py-2 text-sm font-semibold text-white"
+              className="mt-2 inline-block rounded-full bg-rose px-5 py-2 text-sm font-semibold text-accentink"
             >
               {t("learn.checkWithShokhi")}
             </Link>

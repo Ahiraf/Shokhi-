@@ -60,7 +60,7 @@ export default function Home() {
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/chat"
-                className="rounded-full bg-rose px-6 py-3 font-semibold text-white shadow-lift transition hover:brightness-105"
+                className="rounded-full bg-rose px-6 py-3 font-semibold text-accentink shadow-lift transition hover:brightness-105"
               >
                 {t("home.ctaStart")}
               </Link>
@@ -193,7 +193,7 @@ export default function Home() {
           </div>
           <Link
             href="/hotline"
-            className="shrink-0 rounded-full bg-rose-deep px-6 py-3 font-semibold text-white shadow-lift transition hover:brightness-105"
+            className="shrink-0 rounded-full bg-rose-deep px-6 py-3 font-semibold text-accentink shadow-lift transition hover:brightness-105"
           >
             {t("home.hotlineCta")}
           </Link>

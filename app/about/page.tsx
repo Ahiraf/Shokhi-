@@ -95,7 +95,7 @@ export default function AboutPage() {
         <p className="mt-2 text-sm leading-relaxed text-plum/70">{t("about.missionBody")}</p>
         <Link
           href="/chat"
-          className="mt-4 inline-block rounded-full bg-rose px-5 py-2 text-sm font-semibold text-white"
+          className="mt-4 inline-block rounded-full bg-rose px-5 py-2 text-sm font-semibold text-accentink"
         >
           {t("about.talkToShokhi")}
         </Link>

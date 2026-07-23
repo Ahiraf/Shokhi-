@@ -109,7 +109,7 @@ export default function FaqPage() {
         <p className="mt-2 text-sm leading-relaxed text-plum/70">{t("faq.stillBody")}</p>
         <Link
           href="/chat"
-          className="mt-4 inline-block rounded-full bg-rose px-5 py-2 text-sm font-semibold text-white"
+          className="mt-4 inline-block rounded-full bg-rose px-5 py-2 text-sm font-semibold text-accentink"
         >
           {t("common.askShokhi")}
         </Link>

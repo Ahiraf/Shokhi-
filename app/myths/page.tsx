@@ -55,7 +55,7 @@ export default function MythsPage() {
           <button
             onClick={ask}
             disabled={busy || !belief.trim()}
-            className="rounded-full bg-rose px-5 py-2.5 font-semibold text-white transition disabled:opacity-40"
+            className="rounded-full bg-rose px-5 py-2.5 font-semibold text-accentink transition disabled:opacity-40"
           >
             {busy ? "…" : t("myths.check")}
           </button>
