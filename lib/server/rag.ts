@@ -6,8 +6,8 @@
 // Gemma stays the ONLY LLM that generates the answer.
 //
 // The query is embedded with the SAME embedder the corpus was built with (stored in
-// corpus.json) so the vectors are comparable. If a gemini corpus is served without a
-// key, retrieval falls back to keyword overlap so the feature degrades gracefully.
+// corpus.json) so the vectors are comparable. If a google-embedded corpus is served without
+// a key, retrieval falls back to keyword overlap so the feature degrades gracefully.
 
 import corpusJson from "./rag/corpus.json";
 import { embed, type Embedder } from "./rag-embed";
@@ -38,7 +38,7 @@ function cosine(a: number[], b: number[]): number {
   return dot / (Math.sqrt(na) * Math.sqrt(nb) || 1);
 }
 
-// Keyword-overlap fallback when a gemini corpus is served without a key.
+// Keyword-overlap fallback when a google-embedded corpus is served without a key.
 function keywordScore(query: string, chunk: Chunk): number {
   const q = new Set(query.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter((w) => w.length > 2));
   if (!q.size) return 0;

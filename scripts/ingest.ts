@@ -37,7 +37,7 @@ function parseDoc(raw: string): { meta: Meta; body: string } {
 
 async function main() {
   const embedder = activeEmbedder();
-  console.log(`[ingest] embedder = ${embedder}${embedder === "gemini" ? ` (${EMBED_MODEL})` : " (offline)"}`);
+  console.log(`[ingest] embedder = ${embedder}${embedder === "google" ? ` (${EMBED_MODEL})` : " (offline)"}`);
 
   const files = readdirSync(SOURCES_DIR).filter((f) => f.endsWith(".md"));
   const chunks: any[] = [];
@@ -63,7 +63,7 @@ async function main() {
   }
 
   mkdirSync(dirname(OUT), { recursive: true });
-  writeFileSync(OUT, JSON.stringify({ embedder, model: embedder === "gemini" ? EMBED_MODEL : "mock-lexical-256", dim, chunks }, null, 0));
+  writeFileSync(OUT, JSON.stringify({ embedder, model: embedder === "google" ? EMBED_MODEL : "mock-lexical-256", dim, chunks }, null, 0));
   console.log(`[ingest] wrote ${chunks.length} chunks (dim ${dim}) -> ${OUT}`);
 }
 
