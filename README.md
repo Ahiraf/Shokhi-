@@ -295,6 +295,12 @@ npm run dev                          # open http://localhost:3001
 - **For live Gemma 4**, put a Google AI Studio key in `.env.local` as `GOOGLE_API_KEY`
   (optionally `GOOGLE_API_KEY_2`/`_3` for quota fallback). The server auto-selects Gemma.
 
+Run the **safety tests** (Vitest — verifies emergencies are never downgraded, the ML signal
+never overrides urgency, and RAG degrades gracefully):
+```bash
+npm test                       # 9 tests, no key/network needed
+```
+
 The two risk classifiers are retrained/exported offline (Python, not needed to run the app):
 ```bash
 python3 ml/train_export.py     # → lib/server/risk-models.json

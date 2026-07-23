@@ -130,9 +130,11 @@ with server logic in `lib/server/`:
 - **Web UI** (Next.js) — chat, a symptom **checklist** (so a helper can assist a woman who
   can't type), **voice input**, colored urgency cards, and optional **Bangla
   text-to-speech**.
-- **Pure-TypeScript runtime** — the ML risk classifiers are trained offline and **exported
-  to plain JSON**, so inference runs in TypeScript with **no Python/ML runtime on the
-  server**. UI, API routes, triage, RAG and the ML signal deploy as **one unit on Vercel**.
+- **Pure-TypeScript runtime + tests** — ML risk classifiers are trained offline and
+  **exported to plain JSON**, so inference runs in TypeScript with **no Python/ML runtime on
+  the server**; everything deploys as **one unit on Vercel**. A **Vitest** suite (9 tests)
+  locks the safety guarantees: emergencies are never downgraded, the ML signal never
+  overrides urgency, and RAG degrades gracefully.
 
 ### Retrieval-Augmented Generation (RAG)
 
@@ -141,8 +143,8 @@ the most relevant passages from a small library of **trusted health documents** 
 national guidelines), then **Gemma 4 answers using only those passages** and cites the
 source. Retrieval uses **embeddings** (Google `gemini-embedding-001`) + cosine
 search — both **non-generative**, which the rules permit as support — so **Gemma 4 stays the
-only LLM** that generates anything. The pipeline is **TypeScript** (RAG is an architecture,
-not a Python library), inside the one Next.js app — no extra service. If nothing relevant is
+only LLM**. The pipeline is **TypeScript** (RAG is an architecture, not a Python library)
+inside the one Next.js app. If nothing relevant is
 found it falls back to the knowledge base; **urgency is still decided by rules**, so
 retrieval never affects safety — it only enriches and *cites* answers.
 
@@ -159,11 +161,11 @@ retrieval never affects safety — it only enriches and *cites* answers.
 
 ## Real-world impact & future work
 
-Shokhi targets a large, underserved population with a channel strategy for the people
-existing tools ignore. Next steps: validate a live Gemma 4 and its native Bangla audio,
-deploy publicly, and pilot the **IVR voice hotline** with an NGO for rural reach. By pairing
-Gemma 4's language power with a strict safety layer, Shokhi turns a private, stigmatized
-struggle into a free, judgment-free companion — in every woman's own language.
+Shokhi targets a large, underserved population that existing tools ignore. Next steps:
+validate a live Gemma 4 and its native Bangla audio, deploy publicly, and pilot the **IVR
+voice hotline** with an NGO. By pairing Gemma 4's language with a strict safety layer, Shokhi
+turns a private, stigmatized struggle into a free, judgment-free companion in every woman's
+own language.
 
 ## Sources & acknowledgements
 
