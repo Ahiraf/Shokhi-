@@ -9,27 +9,28 @@
   --c-plum: 84 69 76;
   --c-plum-deep: 62 50 58;
   --c-plum-soft: 141 127 134;
-  --c-rose: 193 122 142;
-  --c-rose-deep: 156 92 114;
-  --c-rose-soft: 243 231 236;
-  --c-rose-mist: 251 244 246;
+  /* dusty-rose ramp (from the reference palette #CE9A9A → #8B4444) */
+  --c-rose: 176 109 109; /* #B06D6D — primary dusty rose */
+  --c-rose-deep: 139 68 68; /* #8B4444 — deepest, for buttons/emphasis */
+  --c-rose-soft: 240 224 224; /* light dusty-rose ring/fill */
+  --c-rose-mist: 250 242 242; /* faintest dusty-rose wash */
   --c-sage: 138 174 149;
   --c-sage-deep: 95 138 109;
   --c-sage-soft: 233 240 234;
   --c-apricot: 230 194 138;
   --c-apricot-soft: 246 236 217;
   --c-cream: 250 246 241;
-  --c-blush: 246 235 239;
+  --c-blush: 244 231 232; /* light dusty-rose fill */
   --c-gold: 201 138 43;
-  --c-surface: 254 251 249; /* barely-warm off-white so cards sit on the cream, not cold pure white */
+  --c-surface: 254 251 250; /* barely-warm off-white so cards sit on the cream, not cold pure white */
   --c-panel: 84 69 76;
   --c-panel-deep: 62 50 58;
 
-  /* body ambient wash — both glows warm (blush + apricot), no green cast */
+  /* body ambient wash — two dusty-rose glows (cool + warm), no green cast */
   --bg-1: #f6e6ec;
-  --bg-2: #f8ebdd;
+  --bg-2: #f3e4e2;
   --bg-base: #faf6f1;
-  --scrollbar: #f0c3d8;
+  --scrollbar: #ddb4b4;
 }
 
 .dark {
@@ -40,17 +41,18 @@
   --c-plum: 240 231 236;
   --c-plum-deep: 251 246 249;
   --c-plum-soft: 183 168 177;
-  --c-rose: 219 155 174;
-  --c-rose-deep: 231 179 196;
-  --c-rose-soft: 66 53 62;
-  --c-rose-mist: 50 41 48;
+  /* dusty-rose ramp, lightened for dark surfaces (warm, less mauve) */
+  --c-rose: 213 149 149;
+  --c-rose-deep: 228 173 173;
+  --c-rose-soft: 67 51 51;
+  --c-rose-mist: 52 40 40;
   --c-sage: 158 192 168;
   --c-sage-deep: 176 206 186;
   --c-sage-soft: 48 58 51;
   --c-apricot: 228 194 144;
   --c-apricot-soft: 64 53 41;
   --c-cream: 35 29 36; /* page bg — warm aubergine charcoal */
-  --c-blush: 52 43 51;
+  --c-blush: 54 42 42;
   --c-gold: 220 176 96;
   --c-surface: 52 43 52; /* cards — clearly above the page bg */
   --c-panel: 66 52 63; /* dark feature banner (also dark in light mode) */
@@ -59,7 +61,7 @@
   --bg-1: #33283a; /* warm plum glow */
   --bg-2: #2c2532; /* subtle warm, no green cast */
   --bg-base: #221c23;
-  --scrollbar: #5f4d59;
+  --scrollbar: #5f4747;
 }
 
 html {
