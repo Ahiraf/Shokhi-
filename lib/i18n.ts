@@ -116,9 +116,14 @@ export const STRINGS = {
   },
   "composer.send": { bn: "পাঠান", en: "Send" },
   "composer.voiceTitle": { bn: "কণ্ঠে বলুন", en: "Speak" },
+  "composer.listening": { bn: "শুনছি… বলুন", en: "Listening… speak now" },
   "composer.voiceUnavailable": {
     bn: "লাইভ Gemma 4 (SHOKHI_BACKEND=gemini) ছাড়া কণ্ঠ বোঝা যাবে না। এখন লিখে দেখুন।",
     en: "Voice needs the live Gemma 4 backend (SHOKHI_BACKEND=gemini). Please type for now.",
+  },
+  "composer.voiceNoSupport": {
+    bn: "এই ব্রাউজারে কণ্ঠ শনাক্ত করা যাচ্ছে না — অনুগ্রহ করে Chrome ব্যবহার করুন বা লিখে জানান।",
+    en: "Voice input isn't supported in this browser — please use Chrome, or type your message.",
   },
   "composer.micFailed": { bn: "মাইক্রোফোন চালু করা গেল না।", en: "Couldn't start the microphone." },
 
