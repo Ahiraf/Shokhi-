@@ -77,6 +77,52 @@ export default function Home() {
             <div className="animate-float">
               <Mascot3D variant="hero" size={260} priority />
             </div>
+
+            {/* floating accent cards drifting beside the mascot (decorative) */}
+            <div
+              className="animate-float pointer-events-none absolute right-0 top-2 hidden items-center gap-1.5 rounded-full bg-surface/95 px-3 py-1.5 text-xs font-semibold text-plum shadow-lift ring-1 ring-rose-soft backdrop-blur sm:flex"
+              style={{ animationDelay: "-2s", animationDuration: "7s" }}
+            >
+              🔔 {lang === "en" ? "Next period · in 3 days" : "পরবর্তী মাসিক · ৩ দিন"}
+            </div>
+
+            <div
+              className="animate-float pointer-events-none absolute -left-2 top-1/3 hidden max-w-[10rem] items-start gap-1.5 rounded-2xl bg-surface/95 px-3 py-2 text-xs leading-snug text-plum/80 shadow-lift ring-1 ring-rose-soft backdrop-blur sm:flex"
+              style={{ animationDelay: "-4s", animationDuration: "8s" }}
+            >
+              🌸{" "}
+              <span>
+                <span className="font-bold text-rose">সখী</span>{" "}
+                {lang === "en" ? "— you're doing great 🤍" : "— আপনি ভালো করছেন 🤍"}
+              </span>
+            </div>
+
+            <div
+              className="animate-float pointer-events-none absolute bottom-2 right-1 hidden items-center gap-2 rounded-2xl bg-surface/95 px-3 py-2 shadow-lift ring-1 ring-rose-soft backdrop-blur sm:flex"
+              style={{ animationDelay: "-1s", animationDuration: "6.5s" }}
+            >
+              <span className="text-base">🩸</span>
+              <span className="text-xs font-semibold text-plum">
+                {lang === "en" ? "Cycle · day 14" : "চক্র · দিন ১৪"}
+                <span className="mt-1 block h-1.5 w-16 overflow-hidden rounded-full bg-rose-soft">
+                  <span className="block h-full w-1/2 rounded-full bg-rose" />
+                </span>
+              </span>
+            </div>
+
+            {/* tiny sparkle line accents */}
+            <span
+              className="animate-float pointer-events-none absolute left-6 top-6 hidden text-lg text-rose/50 sm:block"
+              style={{ animationDelay: "-3s", animationDuration: "5.5s" }}
+            >
+              ✦
+            </span>
+            <span
+              className="animate-float pointer-events-none absolute bottom-10 left-2 hidden text-sm text-gold/60 sm:block"
+              style={{ animationDelay: "-5s", animationDuration: "6s" }}
+            >
+              ✧
+            </span>
           </div>
         </div>
       </section>
