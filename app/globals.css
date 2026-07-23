@@ -21,13 +21,13 @@
   --c-cream: 250 246 241;
   --c-blush: 246 235 239;
   --c-gold: 201 138 43;
-  --c-surface: 255 255 255;
+  --c-surface: 254 251 249; /* barely-warm off-white so cards sit on the cream, not cold pure white */
   --c-panel: 84 69 76;
   --c-panel-deep: 62 50 58;
 
-  /* body ambient wash */
+  /* body ambient wash — both glows warm (blush + apricot), no green cast */
   --bg-1: #f6e6ec;
-  --bg-2: #eaf1ea;
+  --bg-2: #f8ebdd;
   --bg-base: #faf6f1;
   --scrollbar: #f0c3d8;
 }

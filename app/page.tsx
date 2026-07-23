@@ -140,14 +140,14 @@ export default function Home() {
 
       {/* hotline CTA */}
       <section className="mx-auto max-w-5xl px-5 pb-4">
-        <div className="flex flex-col items-center gap-4 rounded-3xl bg-sage-soft px-6 py-8 text-center sm:flex-row sm:justify-between sm:text-left">
+        <div className="flex flex-col items-center gap-4 rounded-3xl bg-gradient-to-br from-blush to-apricot-soft px-6 py-8 text-center ring-1 ring-rose-soft sm:flex-row sm:justify-between sm:text-left">
           <div>
             <h2 className="font-display text-xl font-bold text-plum">{t("home.hotlineTitle")}</h2>
             <p className="mt-1 max-w-md text-sm text-plum/65">{t("home.hotlineDesc")}</p>
           </div>
           <Link
             href="/hotline"
-            className="shrink-0 rounded-full bg-sage-deep px-6 py-3 font-semibold text-white transition hover:brightness-105"
+            className="shrink-0 rounded-full bg-gold px-6 py-3 font-semibold text-white shadow-lift transition hover:brightness-105"
           >
             {t("home.hotlineCta")}
           </Link>
