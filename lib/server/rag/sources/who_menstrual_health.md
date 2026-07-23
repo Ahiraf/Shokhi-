@@ -1,15 +1,16 @@
 ---
-title: Menstrual health and hygiene
-source: WHO / UNICEF (sample seed — replace with the licensed source text before submission)
-url: https://www.who.int/news/item/22-06-2022-who-statement-on-menstrual-health-and-rights
+title: Menstrual health
+source: WHO — Menstrual health (fact sheet)
+url: https://www.who.int/news-room/fact-sheets/detail/menstrual-health
+license: © WHO, CC BY-NC-SA 3.0 IGO
 lang: en
 ---
 
-## Menstruation is normal and healthy
-Menstruation (মাসিক) is a normal, healthy part of life for most women and girls. It is not dirty, shameful, or an illness. Girls and women can bathe, cook, pray, study, and work normally during their period.
+## Menstruation is normal
+Menstruation is a natural monthly cycle, usually lasting 21 to 35 days. The lining of the uterus thickens, an egg is released around the middle of the cycle, and if pregnancy does not occur the lining is shed as menstrual blood. Most people menstruate without significant disruption to daily life; mild cramping, bloating and mood changes are common.
 
-## Keeping clean during menstruation
-Use a clean absorbent material — a sanitary pad or a clean cloth — and change it regularly, about every 4 to 8 hours, more often on heavy days. Wash the genital area with clean water; harsh soaps or douching inside are not needed. Wash hands before and after changing. Used materials should be wrapped and disposed of safely, or cloths washed with soap, dried in sunlight, and reused.
+## Common problems
+More than two-thirds of people who menstruate experience menstrual pain, which can usually be eased with pain relief or heat. Nearly half experience heavy bleeding, which can lead to iron-deficiency anaemia. Symptoms that are unpredictable, severe or that disrupt daily life may point to conditions such as endometriosis, polycystic ovary syndrome (PCOS), fibroids or a bleeding disorder.
 
-## When to seek help
-See a health worker if periods are extremely heavy (soaking a pad or cloth every hour), last much longer than usual, come with severe pain that stops daily life, or if there is a bad-smelling discharge, itching, or fever.
+## Hygiene and when to seek care
+People who menstruate need clean water, private sanitation and clean absorbent materials (pads, cloth or reusable options), with safe disposal or washing. See a health worker for severe pain, very heavy bleeding, irregular cycles, or mood changes that disrupt work or school — these deserve a proper check.

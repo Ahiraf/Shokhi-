@@ -231,9 +231,36 @@ npm run ingest     # reads lib/server/rag/sources/*.md → chunks → embeds →
 ```
 
 With `GOOGLE_API_KEY` set it embeds with `text-embedding-004`; with no key it uses a small
-offline embedder so a fresh clone still works. The three seed documents in
-`lib/server/rag/sources/` are **samples** — replace them with your properly sourced,
-**publicly-licensed** Bangla women's-health documents (with real URLs) before submission.
+offline embedder so a fresh clone still works.
+
+### 📚 Data sources in the RAG corpus (references for judging)
+
+The retrieval corpus (`lib/server/rag/sources/`) is built **only from public, official,
+appropriately-licensed health sources**, each stored in-repo with its title, URL and licence
+in the file's frontmatter. Current documents:
+
+| Topic | Source | Link | Licence |
+|---|---|---|---|
+| Menstrual health | WHO — Menstrual health (fact sheet) | https://www.who.int/news-room/fact-sheets/detail/menstrual-health | CC BY-NC-SA 3.0 IGO |
+| PCOS | WHO — Polycystic ovary syndrome (fact sheet) | https://www.who.int/news-room/fact-sheets/detail/polycystic-ovary-syndrome | CC BY-NC-SA 3.0 IGO |
+| Endometriosis | WHO — Endometriosis (fact sheet) | https://www.who.int/news-room/fact-sheets/detail/endometriosis | CC BY-NC-SA 3.0 IGO |
+| Menopause | NHS — Menopause and perimenopause | https://www.nhs.uk/conditions/menopause/ | Crown / NHS, OGL v3.0 |
+| Contraceptive safety | WHO — Medical eligibility criteria for contraceptive use, 6th ed. (2025) | https://www.who.int/publications/b/81082 | CC BY-NC-SA 3.0 IGO |
+| Postpregnancy family planning | WHO — Scaling up postpregnancy family planning: practical guide (2025) | https://www.who.int/publications/i/item/9789240111073 | CC BY-NC-SA 3.0 IGO |
+| HIV services | WHO — Consolidated HIV guidelines: service delivery (2026) | https://www.who.int/publications/i/item/9789240124233 | CC BY-NC-SA 3.0 IGO |
+
+**Authoritative source hubs** used / recommended for expanding the corpus:
+
+- **WHO** — [fact sheets](https://www.who.int/news-room/fact-sheets) · [publications](https://www.who.int/publications) · [sexual & reproductive health](https://www.who.int/health-topics/sexual-and-reproductive-health-and-rights)
+- **Bangladesh DGHS / MOHFW / DGFP** — [DGHS publications](https://old.dghs.gov.bd/index.php/en/publications) · [DGHS guidelines](https://old.dghs.gov.bd/index.php/en/mis-docs/important-documents/category/গাইডলাইন) · [MOHFW](https://mohfw.gov.bd) · [DGFP archive](http://archive.dgfp.gov.bd)
+- **icddr,b** — [maternal & neonatal health research](https://www.icddrb.org/research/research-themes/maternal-and-neonatal-health)
+- **NHS / NHS inform / HSE** — [NHS Women's health](https://www.nhs.uk/womens-health/) · [NHS conditions A–Z](https://www.nhs.uk/conditions/) · [NHS inform women's health](https://www.nhsinform.scot/healthy-living/womens-health/) · [HSE women's health A–Z](https://www2.hse.ie/conditions/womens-health-a-z/)
+
+> WHO material is reused under **CC BY-NC-SA 3.0 IGO** (non-commercial, with attribution);
+> NHS material under the **Open Government Licence v3.0**. Answers are summarised for a
+> low-literacy audience and always cite the source; they are general information, not a
+> diagnosis. Add more documents by dropping a `.md` (with `title/source/url/license`
+> frontmatter) into `lib/server/rag/sources/` and re-running `npm run ingest`.
 
 ## 🚀 Quick start
 
