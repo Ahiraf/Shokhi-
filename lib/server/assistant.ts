@@ -4,7 +4,30 @@
 import { triage as runTriage, knowledge, type Profile } from "./triage";
 import { riskSignals } from "./risk";
 import { getBackend, type Backend } from "./gemma";
+import { retrieve, type Retrieved } from "./rag";
 import type { Lang } from "./prompts";
+
+/** Dedup retrieved chunks down to unique {source, url} citations. */
+function citations(hits: Retrieved[]): { source: string; url: string }[] {
+  const seen = new Set<string>();
+  const out: { source: string; url: string }[] = [];
+  for (const h of hits) {
+    const key = h.url || h.source;
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    out.push({ source: h.source, url: h.url });
+  }
+  return out;
+}
+
+/** A markdown "Sources" footer appended to a grounded answer. */
+function sourcesFooter(hits: Retrieved[], lang: Lang): string {
+  const cites = citations(hits);
+  if (!cites.length) return "";
+  const label = lang === "en" ? "📚 Sources" : "📚 সূত্র";
+  const links = cites.map((c) => (c.url ? `[${c.source}](${c.url})` : c.source)).join(" · ");
+  return `\n\n**${label}:** ${links}`;
+}
 
 export class Assistant {
   profile: Profile;
@@ -70,10 +93,35 @@ export class Assistant {
 
   async explainGuide(topic: string, lang: Lang = "bn"): Promise<any | null> {
     const g = this.findGuide(topic);
-    if (!g) return null;
+
+    // RAG: retrieve trusted passages for this topic (uses the guide's title/summary to
+    // improve recall). If anything is found, Gemma answers grounded ONLY in that context
+    // and we cite the sources. Otherwise we fall back to the static knowledge-base guide.
+    const query = [topic, g?.title_en, g?.title_bn, g?.summary_en].filter(Boolean).join(" ");
+    const hits = await retrieve(query, 4);
+    if (!g && !hits.length) return null;
+
+    const guideMeta = g
+      ? { id: g.id, icon: g.icon ?? "🌸", title_bn: g.title_bn ?? "", title_en: g.title_en ?? "" }
+      : { id: "topic", icon: "🌸", title_bn: topic, title_en: topic };
+
+    if (hits.length) {
+      const context = hits.map((h, i) => `[${i + 1}] (${h.source})\n${h.text}`).join("\n\n");
+      const answer = await this.backend.answerGrounded(topic, context, lang);
+      return {
+        guide: guideMeta,
+        guidance: answer + sourcesFooter(hits, lang),
+        grounded: true,
+        sources: citations(hits),
+      };
+    }
+
+    // no retrieval hits — fall back to the hand-written guide render
     return {
-      guide: { id: g.id, icon: g.icon ?? "🌸", title_bn: g.title_bn ?? "", title_en: g.title_en ?? "" },
+      guide: guideMeta,
       guidance: await this.backend.explainGuide(g, topic, lang),
+      grounded: false,
+      sources: [],
     };
   }
 

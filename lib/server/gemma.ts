@@ -15,6 +15,8 @@ export interface Backend {
   explainTriage(triage: any, lang: Lang): Promise<string>;
   bustMyth(belief: string, fact: string, lang: Lang): Promise<string>;
   explainGuide(guide: any, question: string, lang: Lang): Promise<string>;
+  /** RAG: answer a question grounded ONLY in the retrieved context passages. */
+  answerGrounded(question: string, context: string, lang: Lang): Promise<string>;
   supportsAudio(): boolean;
   transcribeAudio(bytes: Buffer, mime: string): Promise<string>;
 }
@@ -183,6 +185,18 @@ class MockBackend implements Backend {
     return renderGuide(guide, lang);
   }
 
+  // Offline grounded answer: no LLM, so return the retrieved context wrapped in a
+  // caring frame. The GeminiBackend replaces this with a real Gemma-written answer.
+  async answerGrounded(_question: string, context: string, lang: Lang): Promise<string> {
+    const intro = lang === "en"
+      ? "Here is what trusted health sources say about this:"
+      : "নির্ভরযোগ্য স্বাস্থ্য-সূত্র অনুযায়ী এই বিষয়ে যা জানা যায়:";
+    const outro = lang === "en"
+      ? "\n\nThis is general information — please check with a doctor or health worker for what is right for you."
+      : "\n\nএটি সাধারণ তথ্য — আপনার জন্য সঠিকটি জানতে একজন ডাক্তার বা স্বাস্থ্যকর্মীর পরামর্শ নিন।";
+    return `${intro}\n\n${context}${outro}`;
+  }
+
   supportsAudio() { return false; }
   async transcribeAudio(): Promise<string> { throw new Error("Mock backend has no audio."); }
 }
@@ -290,6 +304,10 @@ class GeminiBackend implements Backend {
   }
   explainGuide(guide: any, question: string, lang: Lang) {
     return this.generate(P.withLanguage(P.GUIDE_SYSTEM, lang), P.guideUser(JSON.stringify(guide), question), 0.4);
+  }
+  answerGrounded(question: string, context: string, lang: Lang) {
+    // Low temperature: stay faithful to the retrieved context (RAG).
+    return this.generate(P.withLanguage(P.GROUNDED_SYSTEM, lang), P.groundedUser(context, question), 0.2);
   }
 
   supportsAudio() { return true; }
