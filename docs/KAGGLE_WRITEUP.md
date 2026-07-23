@@ -58,13 +58,13 @@ Shokhi runs on a **"one Gemma brain, a safety rail underneath"** architecture:
 
 ```
 Bangla text / voice
-      │  extract_symptoms()  ── Gemma 4 turns messy free-form Bangla into structured facts
+      │  extractSymptoms()  ── Gemma 4 turns messy free-form Bangla into structured facts
       ▼
 Symptom profile (JSON)
       │
-      ▼  triage.py  ── DETERMINISTIC rules decide urgency + red flags (never the LLM)
+      ▼  triage.ts  ── DETERMINISTIC rules decide urgency + red flags (never the LLM)
 Safety-checked result (JSON)
-      │  explain_triage() / bust_myth()  ── Gemma 4 speaks back with warmth, at the
+      │  explainTriage() / bustMyth()  ── Gemma 4 speaks back with warmth, at the
       ▼                                     right literacy level
 Bangla guidance (text + optional voice)
 ```
@@ -78,14 +78,14 @@ static content and Probahini's scripts.
 and red flags (e.g. "possible pregnancy + severe pain → emergency") are computed by a
 deterministic engine, so Gemma **can never under-triage an emergency because of a
 hallucination**. This is the responsible pattern for health AI: *LLM for language,
-deterministic logic for safety.* Gemma is still core — it is the only reason a woman can
-speak naturally and be understood — but it is wrapped in a guardrail.
+deterministic logic for safety.* Gemma stays core (natural language), wrapped in a guardrail.
 
-The **voice path also runs through Gemma 4**: its native audio (E2B/E4B) transcribes
-spoken Bangla directly, so even speech input uses Gemma — no separate speech-to-text
-model. Supporting, non-generative tools (allowed by the rules) assist Gemma: a curated
-knowledge base of red flags/conditions/myths, and Bangla text-to-speech so guidance can
-be **heard**. **Gemma 4 is the only LLM in the system.**
+**Voice is supported** for women who cannot type: the browser's on-device speech
+recognition captures spoken Bangla (a non-generative, rules-allowed tool),
+and the backend can also transcribe with **Gemma 4's native audio**. Other supporting,
+non-generative tools assist Gemma — a curated knowledge base of red flags/conditions/myths,
+embeddings + a vector store for RAG, two exported ML risk classifiers, and Bangla
+text-to-speech so guidance can be **heard**. **Gemma 4 is the only LLM in the system.**
 
 ## System architecture: one brain, many front doors
 
@@ -98,15 +98,15 @@ core* serves multiple channels:
 | Health worker / NGO field staff | Same web app, checklist mode | Built |
 | **Rural, low-literacy woman** | **IVR voice hotline** — dial, speak Bangla, hear guidance; no smartphone, no reading | Roadmap, same backend |
 
-**Platform choice:** a **web app**, not a native mobile app. Native apps require a
-smartphone and app store — exactly what excludes rural women (Ananya's mistake). The web
-app runs in any browser with nothing to install, supports voice, and is trivial to host
-for a live demo. The production path to the phone-only user is a **voice IVR hotline**,
-which this decoupled backend is built to power.
+**Platform choice:** a **web app**, not a native mobile app — native apps need a smartphone
+and app store, exactly what excludes rural women. The web app runs in any browser, supports
+voice, and hosts trivially for a demo; the path to phone-only users is a **voice IVR
+hotline** this decoupled backend can power.
 
 ## Technical implementation
 
-Lightweight, dependency-minimal, and fully testable:
+Shokhi is a **single Next.js app** (TypeScript) — UI and backend (API routes) together,
+with server logic in `lib/server/`:
 
 - **Triage engine** — deterministic safety logic (zero LLM/network): maps symptoms to
   urgency, fires red flags, suspects conditions (PCOS, endometriosis, PMS), and asks
@@ -114,11 +114,11 @@ Lightweight, dependency-minimal, and fully testable:
   downgrades** one.
 - **Gemma backend** — a `GemmaBackend` interface with a deterministic **Mock** (offline
   demo/tests) and a hosted **Gemma 4** implementation (JSON-mode output, defensive parsing).
-- **`src/prompts.py`** — carefully-scoped Gemma prompts for the three jobs, instructed to
-  extract only stated facts, never diagnose, and never override the computed urgency.
-- **`src/assistant.py`** — the orchestrator tying conversation → symptoms → triage →
-  guidance, holding state across turns.
-- **`data/knowledge.json`** — the clinical knowledge base (red flags, conditions with
+- **`lib/server/prompts.ts`** — carefully-scoped Gemma prompts (extract, explain, myth,
+  RAG-grounded), instructed to extract only stated facts, never diagnose, never override urgency.
+- **`lib/server/assistant.ts`** — the orchestrator tying conversation → symptoms → triage →
+  guidance (and RAG), holding state across turns.
+- **`lib/server/knowledge.json`** — the clinical knowledge base (red flags, conditions with
   bilingual self-care, myths, 22-field symptom schema).
 - **Supporting ML risk models** — two lightweight, *non-generative* classifiers that add a
   risk signal to triage, trained on real public **self-report** datasets: **PCOS** (Kaggle,
@@ -130,9 +130,9 @@ Lightweight, dependency-minimal, and fully testable:
 - **Web UI** (Next.js) — chat, a symptom **checklist** (so a helper can assist a woman who
   can't type), **voice input**, colored urgency cards, and optional **Bangla
   text-to-speech**.
-- **Tests:** 13 triage + 10 orchestrator + 5 risk-model = **28 passing**, focused on the
-  safety layer (emergencies must never be downgraded; the ML signal never overrides
-  urgency; PCOS/endo suspicion fires correctly).
+- **Pure-TypeScript runtime** — the ML risk classifiers are trained offline and **exported
+  to plain JSON**, so inference runs in TypeScript with **no Python/ML runtime on the
+  server**. UI, API routes, triage, RAG and the ML signal deploy as **one unit on Vercel**.
 
 ### Retrieval-Augmented Generation (RAG)
 
