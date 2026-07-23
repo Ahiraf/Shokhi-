@@ -1,7 +1,7 @@
 // Build the RAG corpus: read lib/server/rag/sources/*.md, chunk each document, embed
 // every chunk, and write lib/server/rag/corpus.json.  Run with:  npm run ingest
 //
-// Embedder is chosen automatically: Google text-embedding-004 if GOOGLE_API_KEY is set,
+// Embedder is chosen automatically: Google gemini-embedding-001 if GOOGLE_API_KEY is set,
 // otherwise the offline mock embedder (so a fresh clone works with no key). Re-run this
 // (with the key set) and commit corpus.json to get real semantic retrieval on Vercel.
 //
@@ -10,7 +10,12 @@
 import { readFileSync, writeFileSync, readdirSync, mkdirSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import { loadEnvConfig } from "@next/env";
 import { embed, chunkText, activeEmbedder, EMBED_MODEL } from "../lib/server/rag-embed";
+
+// Load .env.local (the same file the app uses) so GOOGLE_API_KEY is picked up
+// automatically — no need to pass it inline on the command.
+loadEnvConfig(process.cwd());
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SOURCES_DIR = join(__dirname, "../lib/server/rag/sources");

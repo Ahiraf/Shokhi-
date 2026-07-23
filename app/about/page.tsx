@@ -100,6 +100,18 @@ export default function AboutPage() {
           {t("about.talkToShokhi")}
         </Link>
       </section>
+
+      {/* information sources / attribution */}
+      <section className="mt-8">
+        <h2 className="font-display text-lg font-bold text-plum">
+          {lang === "en" ? "📚 Where the information comes from" : "📚 তথ্য কোথা থেকে আসে"}
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-plum/70">
+          {lang === "en"
+            ? "Shokhi's guidance draws on trusted, public health sources — the World Health Organization (WHO), the NHS, and Bangladesh's DGHS/DGFP and icddr,b — and every answer shows its source. WHO material is used under CC BY-NC-SA 3.0 IGO and NHS material under the Open Government Licence; the summaries are adaptations, not official versions, and WHO is not responsible for them. This is general information, not a diagnosis."
+            : "সখীর পরামর্শ নির্ভরযোগ্য, সর্বজনীন স্বাস্থ্য-সূত্রের উপর ভিত্তি করে — বিশ্ব স্বাস্থ্য সংস্থা (WHO), NHS, এবং বাংলাদেশের DGHS/DGFP ও icddr,b — এবং প্রতিটি উত্তরে সূত্র দেখানো হয়। WHO-এর তথ্য CC BY-NC-SA 3.0 IGO এবং NHS-এর তথ্য Open Government Licence অনুযায়ী ব্যবহৃত; সারসংক্ষেপগুলো রূপান্তর, দাপ্তরিক সংস্করণ নয়, এবং এর জন্য WHO দায়ী নয়। এটি সাধারণ তথ্য, নিশ্চিত রোগ নির্ণয় নয়।"}
+        </p>
+      </section>
     </main>
   );
 }

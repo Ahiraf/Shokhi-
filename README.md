@@ -204,7 +204,7 @@ simple Bangla answer **and shows which source it came from**.
 **How it works here (three steps):**
 
 1. **Retrieve** — the question is turned into a list of numbers (an *embedding*) with
-   Google `text-embedding-004`, and compared (cosine similarity) against the pre-embedded
+   Google `gemini-embedding-001`, and compared (cosine similarity) against the pre-embedded
    passages in `lib/server/rag/corpus.json`. The closest few win.
 2. **Augment** — those passages become the *context* inside the prompt.
 3. **Generate** — **Gemma 4** writes the final answer from that context, and the app appends
@@ -230,7 +230,7 @@ generates answers** — no other language model is used anywhere.
 npm run ingest     # reads lib/server/rag/sources/*.md → chunks → embeds → corpus.json
 ```
 
-With `GOOGLE_API_KEY` set it embeds with `text-embedding-004`; with no key it uses a small
+With `GOOGLE_API_KEY` set it embeds with `gemini-embedding-001`; with no key it uses a small
 offline embedder so a fresh clone still works.
 
 ### 📚 Data sources in the RAG corpus (references for judging)
@@ -250,6 +250,8 @@ in the file's frontmatter. Current documents:
 | HIV services | WHO — Consolidated HIV guidelines: service delivery (2026) | https://www.who.int/publications/i/item/9789240124233 | CC BY-NC-SA 3.0 IGO |
 | Antenatal care (Bangladesh) | DGHS/DGFP national ANC schedule + WHO ANC recommendations | https://old.dghs.gov.bd/index.php/en/publications | Govt of Bangladesh (public) + WHO CC BY-NC-SA 3.0 IGO |
 | Family planning (Bangladesh) | DGFP — Directorate General of Family Planning | https://dgfp.gov.bd | Govt of Bangladesh (public) |
+| Menstrual regulation & post-abortion care (Bangladesh) | DGFP / DGHS | https://dgfp.gov.bd | Govt of Bangladesh (public) |
+| Maternal & newborn health (Bangladesh) | icddr,b — Maternal & neonatal health research | https://www.icddrb.org/research/research-themes/maternal-and-neonatal-health/impact | © icddr,b (cited) |
 
 **Authoritative source hubs** used / recommended for expanding the corpus:
 
@@ -258,11 +260,24 @@ in the file's frontmatter. Current documents:
 - **icddr,b** — [maternal & neonatal health research](https://www.icddrb.org/research/research-themes/maternal-and-neonatal-health)
 - **NHS / NHS inform / HSE** — [NHS Women's health](https://www.nhs.uk/womens-health/) · [NHS conditions A–Z](https://www.nhs.uk/conditions/) · [NHS inform women's health](https://www.nhsinform.scot/healthy-living/womens-health/) · [HSE women's health A–Z](https://www2.hse.ie/conditions/womens-health-a-z/)
 
-> WHO material is reused under **CC BY-NC-SA 3.0 IGO** (non-commercial, with attribution);
-> NHS material under the **Open Government Licence v3.0**. Answers are summarised for a
-> low-literacy audience and always cite the source; they are general information, not a
-> diagnosis. Add more documents by dropping a `.md` (with `title/source/url/license`
-> frontmatter) into `lib/server/rag/sources/` and re-running `npm run ingest`.
+#### Attribution & licences (courtesy)
+
+Full source credits and licence details are in **[ATTRIBUTION.md](ATTRIBUTION.md)**. In short:
+
+- **WHO** content is reused under **CC BY-NC-SA 3.0 IGO** (attribution, non-commercial,
+  share-alike). Shokhi's summaries are **adaptations**, carrying WHO's required disclaimer:
+  > *This is an adaptation of an original work by WHO. This adaptation was not created by WHO.
+  > WHO is not responsible for the content or accuracy of this adaptation.*
+- **NHS** content is reused under the **Open Government Licence v3.0**:
+  > *Contains information from NHS England, licensed under the current version of the Open
+  > Government Licence.*
+- **Bangladesh DGHS/DGFP** and **icddr,b** material is **summarised with attribution** for
+  educational, non-commercial use.
+
+Shokhi is **free and non-commercial**; no source endorses it and no logos are used. Every
+RAG answer is summarised for a low-literacy audience and **cites its source**; it is general
+information, not a diagnosis. Add documents by dropping a `.md` (with `title/source/url/
+license` frontmatter) into `lib/server/rag/sources/` and re-running `npm run ingest`.
 
 ## 🚀 Quick start
 

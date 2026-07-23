@@ -2,14 +2,15 @@
 // imports the built corpus.json) so the ingest script can use them before the corpus
 // exists. All TypeScript — no Python.
 //
-//   * "gemini" -> Google `text-embedding-004` (same GOOGLE_API_KEY as Gemma; embeddings
+//   * "gemini" -> Google `gemini-embedding-001` (same GOOGLE_API_KEY as Gemma; embeddings
 //                 are non-generative, so this is a rules-allowed supporting technique).
 //   * "mock"   -> deterministic lexical hashing, so retrieval works offline with no key.
 
 export type Embedder = "gemini" | "mock";
 
 const EMBED_DIM = 256;
-export const EMBED_MODEL = "text-embedding-004";
+export const EMBED_MODEL = "gemini-embedding-001";
+const EMBED_OUTPUT_DIM = 768; // keep vectors compact; cosine handles normalization
 
 // FNV-1a hash -> bucket index.
 function bucket(s: string): number {
@@ -53,13 +54,17 @@ export function activeEmbedder(): Embedder {
   return embedKey() ? "gemini" : "mock";
 }
 
-/** Embed with Google's text-embedding-004 (non-generative). Throws if no key. */
+/** Embed with Google's gemini-embedding-001 (non-generative). Throws if no key. */
 export async function geminiEmbed(text: string): Promise<number[]> {
   const key = embedKey();
   if (!key) throw new Error("No GOOGLE_API_KEY for embeddings.");
   const { GoogleGenAI } = await import("@google/genai");
   const ai = new GoogleGenAI({ apiKey: key });
-  const resp: any = await ai.models.embedContent({ model: EMBED_MODEL, contents: text });
+  const resp: any = await ai.models.embedContent({
+    model: EMBED_MODEL,
+    contents: text,
+    config: { outputDimensionality: EMBED_OUTPUT_DIM },
+  });
   const values: number[] | undefined = resp?.embeddings?.[0]?.values ?? resp?.embedding?.values;
   if (!values?.length) throw new Error("Empty embedding response.");
   return values;

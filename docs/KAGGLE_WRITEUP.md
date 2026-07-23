@@ -108,15 +108,12 @@ which this decoupled backend is built to power.
 
 Lightweight, dependency-minimal, and fully testable:
 
-- **`src/triage.py`** — deterministic triage/safety engine (zero LLM, zero network). Maps
-  symptom flags to urgency, fires clinical red flags, suspects conditions (PCOS,
-  endometriosis, PMS, cramps), and surfaces screening questions for unknown critical
-  fields. **Never fires an emergency on a missing field** (safe default), and **never
-  downgrades** an emergency.
-- **`src/gemma_backend.py`** — a `GemmaBackend` interface with two implementations: a
-  deterministic **MockGemmaBackend** (offline demo + tests, no model needed) and a fully
-  wired **OllamaBackend** that calls a local **Gemma 4** via Ollama's `/api/chat` with
-  JSON-mode output and defensive parsing.
+- **Triage engine** — deterministic safety logic (zero LLM/network): maps symptoms to
+  urgency, fires red flags, suspects conditions (PCOS, endometriosis, PMS), and asks
+  screening questions. **Never fires an emergency on a missing field**, and **never
+  downgrades** one.
+- **Gemma backend** — a `GemmaBackend` interface with a deterministic **Mock** (offline
+  demo/tests) and a hosted **Gemma 4** implementation (JSON-mode output, defensive parsing).
 - **`src/prompts.py`** — carefully-scoped Gemma prompts for the three jobs, instructed to
   extract only stated facts, never diagnose, and never override the computed urgency.
 - **`src/assistant.py`** — the orchestrator tying conversation → symptoms → triage →
@@ -142,12 +139,12 @@ Lightweight, dependency-minimal, and fully testable:
 For open questions about a topic, Shokhi does not answer from memory. It first **retrieves**
 the most relevant passages from a small library of **trusted health documents** (WHO,
 national guidelines), then **Gemma 4 answers using only those passages** and cites the
-source — *like a friend who checks a trusted book before speaking, instead of guessing.* Retrieval uses **embeddings** (Google `text-embedding-004`) + cosine
+source. Retrieval uses **embeddings** (Google `gemini-embedding-001`) + cosine
 search — both **non-generative**, which the rules permit as support — so **Gemma 4 stays the
 only LLM** that generates anything. The pipeline is **TypeScript** (RAG is an architecture,
 not a Python library), inside the one Next.js app — no extra service. If nothing relevant is
-retrieved it falls back to the curated knowledge base, and **urgency is still decided by
-rules** — retrieval never affects safety, only enriches and *cites* the information.
+found it falls back to the knowledge base; **urgency is still decided by rules**, so
+retrieval never affects safety — it only enriches and *cites* answers.
 
 ## Technical challenges & how we addressed them
 
@@ -162,11 +159,18 @@ rules** — retrieval never affects safety, only enriches and *cites* the inform
 
 ## Real-world impact & future work
 
-Shokhi targets a documented, large, underserved population with a channel strategy built
-for the people existing tools ignore. Next steps: pull a live Gemma 4 in Ollama and
-validate the backend and Gemma 4's native Bangla audio; deploy the web app publicly; and
-pilot the **IVR voice hotline** with an NGO for rural reach. By pairing Gemma 4's language
-power with a strict safety layer, Shokhi turns a private, stigmatized struggle into a
-free, judgment-free, always-available companion — in every woman's own language.
+Shokhi targets a large, underserved population with a channel strategy for the people
+existing tools ignore. Next steps: validate a live Gemma 4 and its native Bangla audio,
+deploy publicly, and pilot the **IVR voice hotline** with an NGO for rural reach. By pairing
+Gemma 4's language power with a strict safety layer, Shokhi turns a private, stigmatized
+struggle into a free, judgment-free companion — in every woman's own language.
+
+## Sources & acknowledgements
+
+The RAG corpus uses only reliable, public, licensed sources, cited in every answer: **WHO**
+fact sheets/guidelines under **CC BY-NC-SA 3.0 IGO** (adapted with WHO's required disclaimer),
+**NHS** under the **Open Government Licence**, and **Bangladesh DGHS/DGFP** and **icddr,b**
+summarised with attribution. Full credits in `ATTRIBUTION.md`. Shokhi is free and
+non-commercial.
 
 *Repository & demo attached. Gemma 4 is the only LLM used.*
