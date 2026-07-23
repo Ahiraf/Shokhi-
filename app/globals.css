@@ -119,6 +119,48 @@ body {
   animation: sway 13s ease-in-out infinite;
 }
 
+/* LARGE scale — soft blurred glow orbs drift in the empty gutters, giving the
+   page depth behind the fine line-art. */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(14px, -18px); }
+}
+.decor-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(64px);
+  opacity: 0.55;
+  animation: drift 18s ease-in-out infinite;
+}
+.dark .decor-orb {
+  opacity: 0.4;
+  filter: blur(72px);
+}
+
+/* MID scale — sparse filled petals sprinkled between the sprigs. */
+.botanical-decor .petal {
+  position: absolute;
+  color: rgb(var(--c-rose));
+  opacity: 0.14;
+}
+.dark .botanical-decor .petal {
+  color: rgb(var(--c-rose-deep));
+  opacity: 0.2;
+}
+
+/* MICRO scale — a faint film-grain / paper texture so the empty fields never
+   read as flat. SVG fractal noise, kept very low so it never touches legibility. */
+.decor-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.dark .decor-grain {
+  opacity: 0.08;
+}
+
 /* Concentric soft rings used as a backdrop behind the hero mascot so the wide
    hero row reads as intentional rather than empty. */
 .hero-rings::before,
