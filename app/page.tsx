@@ -73,7 +73,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="order-first flex justify-center sm:order-none">
+          <div className="hero-rings relative order-first flex justify-center sm:order-none">
             <div className="animate-float">
               <Mascot3D variant="hero" size={260} priority />
             </div>

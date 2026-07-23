@@ -77,6 +77,61 @@ body {
   overflow-x: hidden;
 }
 
+/* Botanical line-art decor (see components/BotanicalDecor). Delicate single-line
+   jasmine/vine motifs drift in the wide empty gutters the centered max-w layout
+   leaves behind. Kept faint and behind all content; a slow sway makes them feel
+   alive without pulling focus from the text. */
+.botanical-decor {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.botanical-decor svg {
+  position: absolute;
+  color: rgb(var(--c-rose));
+  opacity: 0.16;
+}
+.dark .botanical-decor svg {
+  opacity: 0.12;
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50% { transform: rotate(2.5deg); }
+}
+.botanical-decor .sway {
+  transform-origin: top center;
+  animation: sway 9s ease-in-out infinite;
+}
+.botanical-decor .sway-slow {
+  transform-origin: bottom center;
+  animation: sway 13s ease-in-out infinite;
+}
+
+/* Concentric soft rings used as a backdrop behind the hero mascot so the wide
+   hero row reads as intentional rather than empty. */
+.hero-rings::before,
+.hero-rings::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  border-radius: 9999px;
+  border: 1px solid rgb(var(--c-rose) / 0.18);
+  pointer-events: none;
+}
+.hero-rings::before {
+  width: 340px;
+  height: 340px;
+}
+.hero-rings::after {
+  width: 480px;
+  height: 480px;
+  border-color: rgb(var(--c-rose) / 0.10);
+}
+
 /* gentle fade-in for new messages */
 @keyframes rise {
   from {

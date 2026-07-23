@@ -3,6 +3,7 @@ import { Hind_Siliguri, Baloo_Da_2 } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import BotanicalDecor from "@/components/BotanicalDecor";
 import LanguageProvider from "@/components/LanguageProvider";
 import ThemeProvider, { THEME_INIT_SCRIPT } from "@/components/ThemeProvider";
 
@@ -57,6 +58,7 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col font-sans text-plum antialiased">
         <ThemeProvider>
           <LanguageProvider>
+            <BotanicalDecor />
             <Nav />
             <div className="flex-1">{children}</div>
             <Footer />
