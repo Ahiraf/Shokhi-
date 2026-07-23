@@ -106,7 +106,7 @@ which this decoupled backend is built to power.
 
 ## Technical implementation
 
-Lightweight, dependency-minimal Python, so it runs anywhere and is fully testable:
+Lightweight, dependency-minimal, and fully testable:
 
 - **`src/triage.py`** — deterministic triage/safety engine (zero LLM, zero network). Maps
   symptom flags to urgency, fires clinical red flags, suspects conditions (PCOS,
@@ -123,23 +123,31 @@ Lightweight, dependency-minimal Python, so it runs anywhere and is fully testabl
   guidance, holding state across turns.
 - **`data/knowledge.json`** — the clinical knowledge base (red flags, conditions with
   bilingual self-care, myths, 22-field symptom schema).
-- **Supporting ML risk models** (`train_risk_models.py`, `risk_model.py`) — two
-  lightweight, *non-generative* classifiers that add a risk signal to the triage engine,
-  trained on real public **self-report** datasets: **PCOS** (Kaggle, 541 records — test
-  AUC **0.84**) and **endometriosis** (Scientific Reports 2023, 886 records — test AUC
-  **0.93**). Crucially, they use only features a woman can state in conversation (cycle
-  regularity, weight gain, excess hair, acne, period pain, pain during sex, pelvic pain,
-  infertility), *not* lab values — so the same symptoms Gemma extracts drive the score.
-  These are allowed "traditional ML that supports, not replaces" Gemma 4: the signal
-  **never overrides** the deterministic urgency, and Gemma 4 stays the primary AI. The
-  layer is optional and degrades gracefully if the models are absent.
-- **`web/`** — the Bangla web UI (Next.js, backed by the FastAPI service in `api/`):
-  chat, a symptom **checklist** (so a health worker can help a woman who can't type),
-  **voice input**, colored urgency cards, and optional **Bangla text-to-speech** to hear
-  the guidance aloud.
+- **Supporting ML risk models** — two lightweight, *non-generative* classifiers that add a
+  risk signal to triage, trained on real public **self-report** datasets: **PCOS** (Kaggle,
+  541 records — test AUC **0.84**) and **endometriosis** (Scientific Reports 2023, 886
+  records — test AUC **0.93**). They use only features a woman can state in conversation
+  (cycle regularity, excess hair, acne, period pain, etc.), *not* lab values. Allowed
+  "traditional ML that supports, not replaces" Gemma 4: the signal **never overrides**
+  urgency, and degrades gracefully if absent.
+- **Web UI** (Next.js) — chat, a symptom **checklist** (so a helper can assist a woman who
+  can't type), **voice input**, colored urgency cards, and optional **Bangla
+  text-to-speech**.
 - **Tests:** 13 triage + 10 orchestrator + 5 risk-model = **28 passing**, focused on the
   safety layer (emergencies must never be downgraded; the ML signal never overrides
   urgency; PCOS/endo suspicion fires correctly).
+
+### Retrieval-Augmented Generation (RAG)
+
+For open questions about a topic, Shokhi does not answer from memory. It first **retrieves**
+the most relevant passages from a small library of **trusted health documents** (WHO,
+national guidelines), then **Gemma 4 answers using only those passages** and cites the
+source — *like a friend who checks a trusted book before speaking, instead of guessing.* Retrieval uses **embeddings** (Google `text-embedding-004`) + cosine
+search — both **non-generative**, which the rules permit as support — so **Gemma 4 stays the
+only LLM** that generates anything. The pipeline is **TypeScript** (RAG is an architecture,
+not a Python library), inside the one Next.js app — no extra service. If nothing relevant is
+retrieved it falls back to the curated knowledge base, and **urgency is still decided by
+rules** — retrieval never affects safety, only enriches and *cites* the information.
 
 ## Technical challenges & how we addressed them
 
@@ -147,10 +155,10 @@ Lightweight, dependency-minimal Python, so it runs anywhere and is fully testabl
   deterministic engine owns that, so a hallucination can never miss an emergency.
 - **Messy, code-mixed Bangla:** Gemma handles free-form input; JSON-mode + a defensive
   parser tolerate the prose/code-fences models sometimes add.
-- **Reaching non-readers:** voice input + Bangla TTS + a checklist mode, and a decoupled
-  backend that a phone IVR hotline can reuse unchanged.
+- **Reaching non-readers:** voice input, Bangla TTS, and a checklist mode; a decoupled
+  backend a phone IVR hotline can reuse.
 - **Avoiding harm:** conditions are surfaced only as "worth discussing with a doctor,"
-  always alongside the free government health hotline (16263) and 999.
+  always alongside the free hotline (16263) and 999.
 
 ## Real-world impact & future work
 

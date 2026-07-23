@@ -186,6 +186,55 @@ The layer is **fully optional**: if the JSON is absent the signal simply turns o
 app runs unchanged. *Dataset licenses: verify on source before redistribution; used here
 for research/education.*
 
+## 🔎 RAG — grounded, cited answers (in simple words)
+
+**The problem it solves.** Without RAG, Shokhi could only answer from the notes we wrote
+by hand. If a question fell outside those notes, the model might answer from its own memory
+— which can be wrong, and can't point to a source.
+
+**What RAG does.** RAG stands for **Retrieval-Augmented Generation**. In plain words: before
+Shokhi answers, it first **looks the topic up in a small library of trusted health
+documents** (WHO, national health guidelines), pulls out the few most relevant paragraphs,
+and hands them to **Gemma** saying *"answer using only this."* Gemma then writes a warm,
+simple Bangla answer **and shows which source it came from**.
+
+> Like a friend who quickly checks a trusted book before speaking — instead of guessing
+> from memory. More accurate, wider coverage, and every answer is traceable.
+
+**How it works here (three steps):**
+
+1. **Retrieve** — the question is turned into a list of numbers (an *embedding*) with
+   Google `text-embedding-004`, and compared (cosine similarity) against the pre-embedded
+   passages in `lib/server/rag/corpus.json`. The closest few win.
+2. **Augment** — those passages become the *context* inside the prompt.
+3. **Generate** — **Gemma 4** writes the final answer from that context, and the app appends
+   a **📚 Sources** line with links.
+
+It's wired into the **topic / guide explanations** (the Guides page and the chat's
+"learn about a topic" chips). If nothing relevant is retrieved, it **falls back** to the
+hand-written knowledge base. **Urgency is still decided by rules** (`triage.ts`), never by
+retrieval — so RAG makes the *information* richer without ever affecting safety.
+
+**Is this "really" RAG even though it's TypeScript, not Python?** Yes. RAG is an
+*architecture* (retrieve → augment → generate), not a Python library. Every part has a
+TypeScript equivalent, so the whole pipeline runs in this one Next.js app — **no Python, no
+separate service.**
+
+**Rules compliance.** Embeddings and vector search are **non-generative** techniques, which
+the hackathon rules explicitly permit as *support*. **Gemma 4 remains the only LLM that
+generates answers** — no other language model is used anywhere.
+
+**Build / update the corpus** (100% TypeScript):
+
+```bash
+npm run ingest     # reads lib/server/rag/sources/*.md → chunks → embeds → corpus.json
+```
+
+With `GOOGLE_API_KEY` set it embeds with `text-embedding-004`; with no key it uses a small
+offline embedder so a fresh clone still works. The three seed documents in
+`lib/server/rag/sources/` are **samples** — replace them with your properly sourced,
+**publicly-licensed** Bangla women's-health documents (with real URLs) before submission.
+
 ## 🚀 Quick start
 
 Shokhi is a **single Next.js app** at the repo root: the UI and the backend live together
