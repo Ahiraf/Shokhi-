@@ -6,9 +6,10 @@
   color-scheme: light;
 
   /* --- palette (space-separated RGB channels; consumed via rgb(var(--x) / a) in Tailwind) --- */
-  --c-plum: 84 69 76;
-  --c-plum-deep: 62 50 58;
-  --c-plum-soft: 141 127 134;
+  /* ink — warm rose-brown so text belongs to the dusty-rose family (not cool mauve) */
+  --c-plum: 74 56 56; /* #4A3838 body/heading ink */
+  --c-plum-deep: 56 42 43; /* #382A2B strongest headings */
+  --c-plum-soft: 138 116 116; /* #8A7474 muted rose-taupe */
   /* dusty-rose ramp (from the reference palette #CE9A9A → #8B4444) */
   --c-rose: 176 109 109; /* #B06D6D — primary dusty rose */
   --c-rose-deep: 139 68 68; /* #8B4444 — deepest, for buttons/emphasis */
@@ -38,9 +39,10 @@
 
   /* Warm plum-charcoal — on-brand dusty rose identity, lifted off pure black, with
      enough separation between page bg / cards / banners. Ink → light, accents kept vivid. */
-  --c-plum: 240 231 236;
-  --c-plum-deep: 251 246 249;
-  --c-plum-soft: 183 168 177;
+  /* ink — warm off-white with a rose tint (matches the dusty-rose accents) */
+  --c-plum: 242 232 230; /* #F2E8E6 body/heading ink on dark */
+  --c-plum-deep: 252 247 245; /* strongest headings */
+  --c-plum-soft: 187 169 167; /* muted warm rose-taupe */
   /* dusty-rose ramp, lightened for dark surfaces (warm, less mauve) */
   --c-rose: 213 149 149;
   --c-rose-deep: 228 173 173;
