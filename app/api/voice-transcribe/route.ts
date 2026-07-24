@@ -34,7 +34,12 @@ export async function POST(req: Request) {
     }
     return NextResponse.json({ transcript });
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: `Transcription failed: ${message}` }, { status: 503 });
+    // Log the technical detail server-side; show the user a clean message (the composer
+    // falls back to its own localized string too).
+    console.error("[voice-transcribe]", err instanceof Error ? err.message : String(err));
+    return NextResponse.json(
+      { error: "Voice transcription is unavailable right now. Please type your message." },
+      { status: 503 },
+    );
   }
 }

@@ -2,20 +2,32 @@
 // rest of Shokhi uses) — NO OpenAI, so we stay inside the Google/Gemma ecosystem for the
 // hackathon. This is a speech-to-text INPUT step; Gemma still writes every answer.
 //
-// The transcription model is configurable via SHOKHI_STT_MODEL (default gemini-2.5-flash,
-// which reliably transcribes Bangla + English audio). It transcribes verbatim and never
-// translates, so a woman speaking Bangla is captured in Bangla.
+// Gemma itself has NO audio modality (the API returns 400 "Audio input modality is not
+// enabled"), so transcription uses a Gemini model. Not every key/project is granted every
+// Gemini model (some return 403 PERMISSION_DENIED / 404), so we try a LIST of audio-capable
+// models across ALL keys and use the first combination that works. Transcribes verbatim
+// (Bangla/English) without translating.
 
 import { geminiKeys } from "./gemma";
 
-const STT_MODEL = process.env.SHOKHI_STT_MODEL || "gemini-2.5-flash";
+// Candidate audio-capable models, best first. SHOKHI_STT_MODEL (if set) is tried first.
+function sttModels(): string[] {
+  const preferred = process.env.SHOKHI_STT_MODEL;
+  const defaults = [
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
+    "gemini-flash-latest",
+  ];
+  return Array.from(new Set([preferred, ...defaults].filter(Boolean) as string[]));
+}
 
 const PROMPT =
   "Transcribe this audio verbatim in the SAME language actually spoken (Bangla or English). " +
   "Auto-detect the spoken language. Do NOT translate. Output ONLY the exact transcribed words " +
   "and nothing else. If the audio is silent or unintelligible, output an empty string.";
 
-// Whisper/Gemini accept a limited set of audio mimes; normalise the browser's value.
+// Gemini accepts a limited set of audio mimes; normalise the browser's value.
 function normalizeMime(mimeType: string): string {
   const base = (mimeType || "audio/webm").split(";")[0].trim();
   return ["audio/webm", "audio/mp4", "audio/mpeg", "audio/wav", "audio/ogg", "audio/flac"].includes(base)
@@ -24,8 +36,9 @@ function normalizeMime(mimeType: string): string {
 }
 
 /**
- * Transcribe an audio buffer to text with Google, rotating through the available API keys on
- * quota/rate errors (same behaviour as the chat backend). Returns "" for silent/empty audio.
+ * Transcribe an audio buffer to text with Google. Tries every (model × key) combination and
+ * returns the first that succeeds, so a key that lacks one Gemini model still works via another.
+ * Returns "" for silent/empty audio. Throws only if EVERY combination fails.
  */
 export async function transcribeAudio(bytes: ArrayBuffer, mimeType: string): Promise<string> {
   const keys = geminiKeys();
@@ -34,26 +47,25 @@ export async function transcribeAudio(bytes: ArrayBuffer, mimeType: string): Pro
   const data = Buffer.from(bytes).toString("base64");
   const mime = normalizeMime(mimeType);
   const { GoogleGenAI } = await import("@google/genai");
+  const models = sttModels();
 
   let lastErr: unknown;
-  for (let i = 0; i < keys.length; i++) {
-    try {
-      const ai = new GoogleGenAI({ apiKey: keys[i] });
-      const resp: any = await ai.models.generateContent({
-        model: STT_MODEL,
-        contents: [{ text: PROMPT }, { inlineData: { mimeType: mime, data } }],
-        config: { temperature: 0 },
-      });
-      return (resp.text ?? "").trim();
-    } catch (err) {
-      lastErr = err;
-      const msg = String((err as any)?.message ?? err).toLowerCase();
-      const retryable = ["429", "quota", "resource_exhausted", "rate limit", "503", "overloaded", "500"].some((m) =>
-        msg.includes(m),
-      );
-      if (retryable && i < keys.length - 1) continue;
-      throw err;
+  for (const model of models) {
+    for (let i = 0; i < keys.length; i++) {
+      try {
+        const ai = new GoogleGenAI({ apiKey: keys[i] });
+        const resp: any = await ai.models.generateContent({
+          model,
+          contents: [{ text: PROMPT }, { inlineData: { mimeType: mime, data } }],
+          config: { temperature: 0 },
+        });
+        return (resp.text ?? "").trim();
+      } catch (err) {
+        lastErr = err;
+        // Any access / quota / availability error → just try the next key or model.
+        continue;
+      }
     }
   }
-  throw new Error(`Transcription failed: ${lastErr}`);
+  throw new Error(`Transcription unavailable: ${lastErr}`);
 }
