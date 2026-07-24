@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { transcribe } from "@/lib/api";
 import { useLang } from "./LanguageProvider";
 
 // Minimal typing for the Web Speech API (not in the DOM lib types).
@@ -27,14 +26,10 @@ export default function Composer({
   const { t, lang } = useLang();
   const [text, setText] = useState("");
   const [recording, setRecording] = useState(false);
-  const [voiceBusy, setVoiceBusy] = useState(false);
 
   // Web Speech API (primary — runs in the browser, no backend/key needed)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const baseTextRef = useRef("");
-  // MediaRecorder (fallback for browsers without SpeechRecognition, e.g. Firefox)
-  const recRef = useRef<MediaRecorder | null>(null);
-  const chunks = useRef<Blob[]>([]);
 
   function submit() {
     const val = text.trim();
@@ -81,56 +76,25 @@ export default function Composer({
     return true;
   }
 
-  // Fallback: record audio and send to the backend transcription route.
-  async function startRecorderFallback() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const rec = new MediaRecorder(stream);
-      chunks.current = [];
-      rec.ondataavailable = (e) => chunks.current.push(e.data);
-      rec.onstop = async () => {
-        stream.getTracks().forEach((tr) => tr.stop());
-        setVoiceBusy(true);
-        try {
-          const blob = new Blob(chunks.current, { type: "audio/webm" });
-          const transcript = await transcribe(blob);
-          if (transcript) setText((p) => (p.trim() ? p.trim() + " " : "") + transcript);
-        } catch {
-          alert(t("composer.voiceNoSupport"));
-        } finally {
-          setVoiceBusy(false);
-        }
-      };
-      rec.start();
-      recRef.current = rec;
-      setRecording(true);
-    } catch {
-      alert(t("composer.micFailed"));
-    }
-  }
-
-  async function toggleVoice() {
+  function toggleVoice() {
     if (recording) {
       recognitionRef.current?.stop();
-      recRef.current?.stop();
       setRecording(false);
       return;
     }
-    // Prefer the on-device Web Speech API; fall back to record+backend.
-    if (!startSpeech()) await startRecorderFallback();
+    if (!startSpeech()) alert(t("composer.voiceNoSupport"));
   }
 
   return (
     <div className="flex items-end gap-2">
       <button
         onClick={toggleVoice}
-        disabled={voiceBusy}
         title={recording ? t("composer.listening") : t("composer.voiceTitle")}
         aria-label={recording ? t("composer.listening") : t("composer.voiceTitle")}
         className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl shadow-soft transition
           ${recording ? "animate-pulse bg-red-500 text-white" : "bg-surface text-rose ring-1 ring-rose-soft hover:bg-rose-mist"}`}
       >
-        {voiceBusy ? "…" : recording ? "⏹" : "🎙"}
+        {recording ? "⏹" : "🎙"}
       </button>
 
       <div className="flex flex-1 items-end gap-2 rounded-3xl bg-surface p-1.5 shadow-soft ring-1 ring-rose-soft focus-within:ring-2 focus-within:ring-rose/40">

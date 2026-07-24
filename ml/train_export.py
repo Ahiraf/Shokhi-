@@ -4,7 +4,7 @@ export them to plain JSON so the TypeScript backend can run inference with no Py
 runtime. Same self-reportable features as before (no lab values). Support signals only —
 they never change the deterministic triage decision.
 
-Run once (needs the gitignored datasets in api/data/datasets/):
+Run once (needs the gitignored datasets in ml/datasets/):
     python3 ml/train_export.py
 """
 from __future__ import annotations

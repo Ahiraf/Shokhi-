@@ -106,9 +106,10 @@ rules, not the model**, so Gemma can **never under-triage an emergency** because
 hallucination. This is the standard safe pattern for health AI: *LLM for language,
 deterministic logic for safety-critical decisions.*
 
-The **voice path also runs through Gemma 4**: its native audio (E-series, E2B/E4B)
-transcribes spoken Bangla directly — so even speech input uses Gemma, with no separate
-speech-to-text library. Supporting (non-generative, allowed) tools: a knowledge base of
+The **current web voice path uses the browser's Speech Recognition API** to turn spoken
+Bangla into text before sending it through the same Gemma 4 and safety pipeline. This is
+available in supported browsers such as Chrome; the backend does not currently claim native
+Gemma audio transcription. Supporting (non-generative, allowed) tools: a knowledge base of
 red flags / conditions / myths, and the two logistic-regression risk classifiers.
 
 ---
@@ -123,9 +124,10 @@ red flags / conditions / myths, and the two logistic-regression risk classifiers
 
 Because the triage engine and Gemma backend are fully decoupled from the UI, the *same
 core* can power the web app **and** a future phone hotline. The web app already accepts
-**spoken Bangla** (Gemma 4's native audio transcribes it, then the identical triage runs);
-the planned IVR path reuses that exact core behind a Twilio/Exotel phone number so a call
-never dead-ends, always with a spoken fallback to **16263 / 999**.
+**spoken Bangla** (browser speech recognition turns it into text, then the identical triage
+runs); the planned IVR path can reuse that core behind a Twilio/Exotel phone number with a
+separate speech-to-text and text-to-speech adapter, always with a spoken fallback to
+**16263 / 999**.
 
 ---
 
@@ -319,7 +321,7 @@ Shokhi/
 │   │                      #   hotline, about, profile — one route per feature, bilingual
 │   └── api/               # the backend, as Next.js route handlers:
 │                          #   message, myth, guide, guides/[id], knowledge,
-│                          #   cycle/analyze, transcribe, health
+│                          #   cycle/analyze, health
 ├── components/            # Nav, Message, Composer, CycleTracker, Mascot3D, PageIntro …
 ├── lib/
 │   ├── api.ts, i18n.ts    # client-side API calls + Bangla/English strings
@@ -375,7 +377,7 @@ the existing apps cannot reach:
 ### Other planned work
 - **Bangla voice hotline (IVR):** the top priority for reaching phone-only, low-literacy
   women — dial a number, speak Bangla, hear guidance. Same backend, phone front door.
-- **Telephone-quality audio tuning** for Gemma 4's native voice transcription on the IVR path.
+- **IVR speech adapter:** add a verified speech-to-text and text-to-speech service for phone audio.
 - **Grounded knowledge expansion** validated against public research/clinical datasets.
 - **NGO pilot** to measure real referral and awareness outcomes.
 

@@ -35,14 +35,14 @@ const FAQS: { q_bn: string; q_en: string; a_bn: string; a_en: string }[] = [
   {
     q_bn: "সখী ব্যবহার করতে কি টাকা লাগে?",
     q_en: "Does Shokhi cost anything?",
-    a_bn: "না। সখী বিনামূল্যে এবং গোপনীয়। শুধু ইন্টারনেট-সংযুক্ত একটি ব্রাউজার থাকলেই ব্যবহার করা যায়; আলাদা অ্যাপ ইনস্টল করার দরকার নেই।",
-    a_en: "No. Shokhi is free and private. All you need is a browser with an internet connection; there's no separate app to install.",
+    a_bn: "সখী বিনামূল্যে এবং কোনো অ্যাকাউন্ট লাগে না। প্রোফাইল ও ট্র্যাকার এই ফোনেই থাকে, তবে উত্তর তৈরি করতে চ্যাটের লেখা সার্ভারে পাঠানো হয় — তাই নাম, ঠিকানা বা ফোন নম্বর লিখবেন না।",
+    a_en: "Shokhi is free and requires no account. Your profile and tracker stay on this phone, but chat text is sent to the server to generate a reply—so don't include your name, address, or phone number.",
   },
   {
     q_bn: "আমি পড়তে পারি না — তবু কি ব্যবহার করতে পারব?",
     q_en: "I can't read — can I still use it?",
-    a_bn: "হ্যাঁ। লেখার বদলে কণ্ঠে বাংলায় বলতে পারেন, সখী বুঝবে। আর যাঁদের স্মার্টফোন নেই, তাঁদের জন্য ভয়েস হটলাইন — যেকোনো সাধারণ ফোন থেকে কল করে বাংলায় বলুন, পরামর্শ শুনুন।",
-    a_en: "Yes. Instead of typing you can speak in Bangla and Shokhi will understand. And for those without a smartphone there's a voice hotline — call from any ordinary phone, speak in Bangla, and listen to the advice.",
+    a_bn: "সমর্থিত ব্রাউজারে লেখার বদলে কণ্ঠে বাংলায় বলতে পারেন। যাঁদের স্মার্টফোন নেই, তাঁদের জন্য ভয়েস হটলাইন এখনো ভবিষ্যৎ পরিকল্পনা — এই ডেমোতে চালু নয়।",
+    a_en: "In a supported browser, you can speak in Bangla instead of typing. A phone hotline for people without smartphones is still a roadmap feature and is not live in this demo.",
   },
   {
     q_bn: "সখী কোন কোন বিষয়ে সাহায্য করে?",

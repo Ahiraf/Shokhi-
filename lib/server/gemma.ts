@@ -1,7 +1,7 @@
 // Gemma 4 backend abstraction.
 //   * MockBackend   — deterministic, no network (offline / no-key fallback).
 //   * GeminiBackend — hosted Gemma 4 via Google AI Studio (@google/genai), multi-key
-//                     quota fallback + native-audio transcription.
+//                     quota fallback for hosted Gemma 4 text generation.
 // The urgency DECISION is made by triage.ts, never here — Gemma only does the NLP.
 
 import * as P from "./prompts";
@@ -17,8 +17,6 @@ export interface Backend {
   explainGuide(guide: any, question: string, lang: Lang): Promise<string>;
   /** RAG: answer a question grounded ONLY in the retrieved context passages. */
   answerGrounded(question: string, context: string, lang: Lang): Promise<string>;
-  supportsAudio(): boolean;
-  transcribeAudio(bytes: Buffer, mime: string): Promise<string>;
 }
 
 const pickField = (obj: any, base: string, lang: Lang) =>
@@ -129,8 +127,9 @@ class MockBackend implements Backend {
       for (const kw of kws) {
         const idx = low.indexOf(kw.toLowerCase());
         if (idx === -1) continue;
+        const before = low.slice(Math.max(0, idx - 24), idx);
         const tail = low.slice(idx + kw.length, idx + kw.length + 14);
-        out[field] = !NEG.some((n) => tail.includes(n));
+        out[field] = !NEG.some((n) => before.includes(n) || tail.includes(n));
         break;
       }
     }
@@ -197,8 +196,6 @@ class MockBackend implements Backend {
     return `${intro}\n\n${context}${outro}`;
   }
 
-  supportsAudio() { return false; }
-  async transcribeAudio(): Promise<string> { throw new Error("Mock backend has no audio."); }
 }
 
 // --- Gemini backend (hosted Gemma 4) with multi-key quota fallback ------------
@@ -236,7 +233,6 @@ class GeminiBackend implements Backend {
   private keys = geminiKeys();
   private clients: any[] = [];
   private model = process.env.SHOKHI_GEMMA_MODEL || "gemma-4-26b-a4b-it";
-  private audioModel = process.env.SHOKHI_GEMMA_AUDIO_MODEL || "gemma-4-e4b-it";
 
   constructor() {
     if (!this.keys.length) throw new Error("No API key. Set GOOGLE_API_KEY (+ optional _2/_3).");
@@ -310,18 +306,6 @@ class GeminiBackend implements Backend {
     return this.generate(P.withLanguage(P.GROUNDED_SYSTEM, lang), P.groundedUser(context, question), 0.2);
   }
 
-  supportsAudio() { return true; }
-  async transcribeAudio(bytes: Buffer, mime: string): Promise<string> {
-    const resp: any = await this.withFallback((c) =>
-      c.models.generateContent({
-        model: this.audioModel,
-        contents: [{ parts: [
-          { text: P.TRANSCRIBE_INSTRUCTION },
-          { inlineData: { mimeType: mime, data: bytes.toString("base64") } },
-        ] }],
-      }));
-    return (resp.text ?? "").trim();
-  }
 }
 
 // --- Factory: gemini if a key is present (or SHOKHI_BACKEND=gemini), else mock ---

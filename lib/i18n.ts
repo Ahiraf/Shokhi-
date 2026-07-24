@@ -80,25 +80,25 @@ export const STRINGS = {
     bn: "🛡️ জরুরি সিদ্ধান্ত সবসময় নির্দিষ্ট নিয়ম দিয়ে নেওয়া হয়, AI-এর অনুমানে নয় — তাই সখী কখনো কোনো জরুরি অবস্থাকে হালকা করে দেখে না।",
     en: "🛡️ Urgent decisions are always made by fixed rules, never by AI guesswork — so Shokhi never under-plays an emergency.",
   },
-  "home.hotlineTitle": { bn: "☎️ পড়তে পারেন না? ফোন করুন।", en: "☎️ Can't read? Just call." },
+  "home.hotlineTitle": { bn: "☎️ পড়তে পারেন না? ভবিষ্যৎ ভয়েস সহায়তা", en: "☎️ Voice support is planned" },
   "home.hotlineDesc": {
-    bn: "স্মার্টফোন বা লেখাপড়া ছাড়াই — ভয়েস হটলাইনে বাংলায় বলুন, পরামর্শ শুনুন।",
-    en: "No smartphone or reading needed — speak in Bangla on the voice hotline and listen to the advice.",
+    bn: "বর্তমান ডেমোতে সমর্থিত ব্রাউজারে বাংলায় বলুন। সাধারণ ফোনের হটলাইনটি ভবিষ্যৎ পরিকল্পনা।",
+    en: "In this demo, speak Bangla in a supported browser. A phone hotline is planned for later.",
   },
   "home.hotlineCta": { bn: "হটলাইন সম্পর্কে", en: "About the hotline" },
 
   // --- chat ----------------------------------------------------------------
   "chat.introTitle": { bn: "আপনার শরীরের কথা বলুন", en: "Tell me about your body" },
   "chat.introDesc": {
-    bn: "বাংলায় লিখুন বা কণ্ঠে বলুন — আমি বুঝব ও নিরাপদ পরামর্শ দেব। সব কথা গোপন থাকবে, লজ্জার কিছু নেই।",
-    en: "Type or speak in Bangla — I'll understand and give safe guidance. Everything stays private; there's nothing to be shy about.",
+    bn: "বাংলায় লিখুন বা সমর্থিত ব্রাউজারে কণ্ঠে বলুন — আমি বুঝব ও নিরাপদ পরামর্শ দেব। নাম, ঠিকানা বা ফোন নম্বর লিখবেন না।",
+    en: "Type or speak in Bangla in a supported browser — I'll understand and give safe guidance. Don't include your name, address, or phone number.",
   },
   "chat.startWith": { bn: "এভাবে শুরু করতে পারেন", en: "You could start like this" },
   "chat.orLearn": { bn: "অথবা একটি বিষয়ে জানুন", en: "Or learn about a topic" },
   "chat.thinking": { bn: "সখী ভাবছে…", en: "Shokhi is thinking…" },
   "chat.privacyLine": {
-    bn: "🔒 বিনামূল্যে ও গোপনীয় · ☎️ ১৬২৬৩ · 🚨 জরুরি ৯৯৯",
-    en: "🔒 Free & private · ☎️ 16263 · 🚨 Emergency 999",
+    bn: "🔒 কোনো অ্যাকাউন্ট নেই · প্রোফাইল এই ফোনেই · ☎️ ১৬২৬৩ · 🚨 ৯৯৯",
+    en: "🔒 No account · profile stays on this phone · ☎️ 16263 · 🚨 999",
   },
   "chat.errorConnect": {
     bn: "দুঃখিত, সার্ভারের সাথে সংযোগ করা গেল না। ব্যাকএন্ড চালু আছে কিনা দেখুন।",
@@ -281,18 +281,18 @@ export const STRINGS = {
   // --- hotline -------------------------------------------------------------
   "hotline.title": { bn: "ভয়েস হটলাইন", en: "Voice hotline" },
   "hotline.sub": {
-    bn: "যাঁরা পড়তে পারেন না বা যাঁদের স্মার্টফোন নেই — তাঁদের জন্য। ফোন করে বাংলায় বলুন, পরামর্শ শুনুন।",
-    en: "For those who can't read or don't have a smartphone. Call, speak in Bangla, and listen to the advice.",
+    bn: "যাঁরা পড়তে পারেন না বা যাঁদের স্মার্টফোন নেই — তাঁদের জন্য ভবিষ্যৎ পরিকল্পনা।",
+    en: "A planned future feature for people who cannot read or do not have smartphones.",
   },
-  "hotline.anyPhone": { bn: "যেকোনো সাধারণ ফোন থেকে", en: "From any ordinary phone" },
-  "hotline.brand": { bn: "সখী হটলাইন", en: "Shokhi Hotline" },
+  "hotline.anyPhone": { bn: "ভবিষ্যতে: যেকোনো সাধারণ ফোন থেকে", en: "Planned: from any ordinary phone" },
+  "hotline.brand": { bn: "সখী হটলাইন · ভবিষ্যৎ পরিকল্পনা", en: "Shokhi Hotline · Roadmap" },
   "hotline.brandDesc": {
-    bn: "একই সখী, একই নিরাপদ পরামর্শ — এবার শুধু কণ্ঠে। কোনো অ্যাপ নেই, পড়া নেই।",
-    en: "The same Shokhi, the same safe guidance — now just by voice. No app, no reading.",
+    bn: "একই সখী, একই নিরাপদ পরামর্শ — ভবিষ্যতে শুধু কণ্ঠে। কোনো অ্যাপ নেই, পড়া নেই।",
+    en: "The same Shokhi and safe guidance, eventually by voice with no app or reading required.",
   },
   "hotline.techNote": {
-    bn: "🛠️ হটলাইনটি একই ব্যাকএন্ডে তৈরি (Twilio/Exotel সমর্থিত): কল রেকর্ড করে Gemma 4-এর নিজস্ব অডিও দিয়ে বাংলা বোঝা হয়, একই নিয়ম-ভিত্তিক যাচাই চলে, তারপর বাংলায় উত্তর শোনানো হয়। প্রতিটি ধাপে নিরাপদ ফলব্যাক আছে — কল কখনো আটকে যায় না।",
-    en: "🛠️ The hotline runs on the same backend (Twilio/Exotel-ready): the call is recorded, Gemma 4's native audio understands the Bangla, the same rule-based triage runs, then the reply is spoken back in Bangla. Every step has a safe fallback — the call never gets stuck.",
+    bn: "🛠️ এটি এখনো ভবিষ্যৎ পরিকল্পনা। চালু হলে ফোনের ভয়েসকে লেখায় রূপান্তরের একটি নিরাপদ সেবা, একই নিয়ম-ভিত্তিক যাচাই এবং বাংলায় উত্তর শোনানোর ব্যবস্থা লাগবে।",
+    en: "🛠️ This is currently a roadmap feature. A live version will need a safe speech-to-text service, the same rule-based triage, and Bangla audio replies.",
   },
   "hotline.needEmergency": { bn: "🚨 এখনই জরুরি প্রয়োজন?", en: "🚨 Need help right now?" },
   "hotline.emergencyLine": {

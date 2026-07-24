@@ -88,6 +88,3 @@ Do not write a "Sources" list yourself — the app adds citations automatically.
 
 export const groundedUser = (context: string, question: string) =>
   `CONTEXT (retrieved passages):\n${context}\n\nUser's question: ${question || "Tell me about this topic."}\n\nWrite Shokhi's warm, simple answer using only the context above.`;
-
-export const TRANSCRIBE_INSTRUCTION =
-  "Transcribe this audio of a woman describing her health concern. It is most likely in Bangla (it may mix in some English). Return ONLY the transcript text in the original language — no translation, no commentary, no diagnosis.";

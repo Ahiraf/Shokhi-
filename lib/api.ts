@@ -70,15 +70,6 @@ export function analyzeCycle(logs: CycleLog[], lang: "bn" | "en" = "bn"): Promis
   return post<CycleAnalysis>("/api/cycle/analyze", { logs, lang });
 }
 
-export async function transcribe(audio: Blob): Promise<string> {
-  const form = new FormData();
-  form.append("audio", audio, "voice.webm");
-  const res = await fetch(`${BASE}/api/transcribe`, { method: "POST", body: form });
-  if (!res.ok) throw new Error("transcribe failed");
-  const data = (await res.json()) as { transcript: string };
-  return data.transcript;
-}
-
 export async function health(): Promise<{ status: string; backend: string }> {
   const res = await fetch(`${BASE}/api/health`);
   return res.json();

@@ -34,8 +34,7 @@ Two well-known tools exist — and both leave this population behind:
   does not *reason* over a woman's real, messy symptom description, and still needs a
   smartphone plus the ability to read and type.
 
-**The idea of digital menstrual health isn't new — but the implementation that serves the
-phone-only, can't-read, PCOS/endometriosis-affected woman does not exist.** That is Shokhi.
+**Shokhi closes this gap for phone-only, low-literacy women affected by these conditions.**
 
 ## Our solution
 
@@ -49,8 +48,8 @@ by **typing or speaking in Bangla** — and returns warm, safe, personalized gui
    which real service to go to (Gemma 4) — never a firm diagnosis.
 
 Shokhi covers **menstrual health, PCOS, PMS, endometriosis, and common cramps**, and busts
-harmful myths. It adapts across the whole spectrum: an urban teenager gets private,
-judgment-free education; a rural woman gets **voice-first guidance she can hear**.
+harmful myths. An urban teenager gets private education; a rural woman gets **voice-first
+guidance**.
 
 ## How Gemma 4 is integrated (and why it is core)
 
@@ -70,9 +69,8 @@ Bangla guidance (text + optional voice)
 ```
 
 **Gemma 4 does the genuinely hard, generative work** that no rule-tree can: interpreting
-colloquial, code-mixed, real-world Bangla symptom talk, and producing empathetic,
-simple, culturally-aware Bangla responses. This is what separates Shokhi from Ananya's
-static content and Probahini's scripts.
+colloquial, code-mixed Bangla and producing empathetic, simple responses. This separates
+Shokhi from static content and scripted FAQs.
 
 **Crucially, the safety-critical decision is *not* made by the LLM.** The urgency level
 and red flags (e.g. "possible pregnancy + severe pain → emergency") are computed by a
@@ -80,17 +78,17 @@ deterministic engine, so Gemma **can never under-triage an emergency because of 
 hallucination**. This is the responsible pattern for health AI: *LLM for language,
 deterministic logic for safety.* Gemma stays core (natural language), wrapped in a guardrail.
 
-**Voice is supported** for women who cannot type: the browser's on-device speech
-recognition captures spoken Bangla (a non-generative, rules-allowed tool),
-and the backend can also transcribe with **Gemma 4's native audio**. Other supporting,
+**Voice is supported** for women who cannot type: in supported browsers, browser speech
+recognition captures spoken Bangla and sends the resulting text through the same pipeline.
+The backend does not claim native Gemma audio transcription. Other supporting,
 non-generative tools assist Gemma — a curated knowledge base of red flags/conditions/myths,
-embeddings + a vector store for RAG, two exported ML risk classifiers, and Bangla
-text-to-speech so guidance can be **heard**. **Gemma 4 is the only LLM in the system.**
+embeddings + a vector store for RAG, and two exported ML risk classifiers. **Gemma 4 is the
+only LLM in the system.**
 
 ## System architecture: one brain, many front doors
 
-Because the triage engine and Gemma backend are fully decoupled from the UI, the *same
-core* serves multiple channels:
+Because the triage engine and Gemma backend are decoupled from the UI, the *same core* can
+serve multiple channels:
 
 | User | Front door | Status |
 |---|---|---|
@@ -98,10 +96,8 @@ core* serves multiple channels:
 | Health worker / NGO field staff | Same web app, checklist mode | Built |
 | **Rural, low-literacy woman** | **IVR voice hotline** — dial, speak Bangla, hear guidance; no smartphone, no reading | Roadmap, same backend |
 
-**Platform choice:** a **web app**, not a native mobile app — native apps need a smartphone
-and app store, exactly what excludes rural women. The web app runs in any browser, supports
-voice, and hosts trivially for a demo; the path to phone-only users is a **voice IVR
-hotline** this decoupled backend can power.
+**Platform choice:** a **web app**, not a native mobile app. It runs in a browser, supports
+voice, and leaves a clear path to a **voice IVR hotline** for phone-only users.
 
 ## Technical implementation
 
@@ -112,8 +108,9 @@ with server logic in `lib/server/`:
   urgency, fires red flags, suspects conditions (PCOS, endometriosis, PMS), and asks
   screening questions. **Never fires an emergency on a missing field**, and **never
   downgrades** one.
-- **Gemma backend** — a `GemmaBackend` interface with a deterministic **Mock** (offline
-  demo/tests) and a hosted **Gemma 4** implementation (JSON-mode output, defensive parsing).
+- **Gemma backend** — a `Backend` interface with a deterministic **Mock** (offline
+  tests) and a hosted **Gemma 4** implementation. Symptom extraction asks for JSON and uses
+  defensive parsing because model responses can include formatting noise.
 - **`lib/server/prompts.ts`** — carefully-scoped Gemma prompts (extract, explain, myth,
   RAG-grounded), instructed to extract only stated facts, never diagnose, never override urgency.
 - **`lib/server/assistant.ts`** — the orchestrator tying conversation → symptoms → triage →
@@ -128,8 +125,7 @@ with server logic in `lib/server/`:
   "traditional ML that supports, not replaces" Gemma 4: the signal **never overrides**
   urgency, and degrades gracefully if absent.
 - **Web UI** (Next.js) — chat, a symptom **checklist** (so a helper can assist a woman who
-  can't type), **voice input**, colored urgency cards, and optional **Bangla
-  text-to-speech**.
+  can't type), browser voice input, colored urgency cards, and optional **Bangla text-to-speech**.
 - **Pure-TypeScript runtime + tests** — ML risk classifiers are trained offline and
   **exported to plain JSON**, so inference runs in TypeScript with **no Python/ML runtime on
   the server**; everything deploys as **one unit on Vercel**. A **Vitest** suite (9 tests)
@@ -152,8 +148,8 @@ retrieval never affects safety — it only enriches and *cites* answers.
 
 - **Safety vs. LLM freedom:** we refused to let the model decide urgency. A separate
   deterministic engine owns that, so a hallucination can never miss an emergency.
-- **Messy, code-mixed Bangla:** Gemma handles free-form input; JSON-mode + a defensive
-  parser tolerate the prose/code-fences models sometimes add.
+- **Messy, code-mixed Bangla:** Gemma handles free-form input; a defensive JSON parser
+  tolerates prose or code fences that models sometimes add.
 - **Reaching non-readers:** voice input, Bangla TTS, and a checklist mode; a decoupled
   backend a phone IVR hotline can reuse.
 - **Avoiding harm:** conditions are surfaced only as "worth discussing with a doctor,"
@@ -162,8 +158,8 @@ retrieval never affects safety — it only enriches and *cites* answers.
 ## Real-world impact & future work
 
 Shokhi targets a large, underserved population that existing tools ignore. Next steps:
-validate a live Gemma 4 and its native Bangla audio, deploy publicly, and pilot the **IVR
-voice hotline** with an NGO. By pairing Gemma 4's language with a strict safety layer, Shokhi
+measure the live Gemma 4 experience, add a verified IVR speech adapter, and pilot the
+**voice hotline** with an NGO. By pairing Gemma 4's language with a strict safety layer, Shokhi
 turns a private, stigmatized struggle into a free, judgment-free companion in every woman's
 own language.
 
