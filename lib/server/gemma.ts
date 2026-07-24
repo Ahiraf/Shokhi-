@@ -334,7 +334,11 @@ class GeminiBackend implements Backend {
   private async generate(system: string, user: string, temperature = 0.3): Promise<string> {
     const prompt = `${system}\n\n${user}`;
     const resp: any = await this.withFallback((c) =>
-      c.models.generateContent({ model: this.model, contents: prompt, config: { temperature } }));
+      c.models.generateContent({
+        model: this.model,
+        contents: prompt,
+        config: { temperature, maxOutputTokens: 500, thinkingConfig: { thinkingLevel: "minimal" } },
+      }));
     return (resp.text ?? "").trim();
   }
 
@@ -342,7 +346,11 @@ class GeminiBackend implements Backend {
     const prompt = `${system}\n\n${user}`;
     // Open the stream through the same multi-key fallback used for non-streaming calls.
     const stream: any = await this.withFallback((c) =>
-      c.models.generateContentStream({ model: this.model, contents: prompt, config: { temperature } }));
+      c.models.generateContentStream({
+        model: this.model,
+        contents: prompt,
+        config: { temperature, maxOutputTokens: 500, thinkingConfig: { thinkingLevel: "minimal" } },
+      }));
     for await (const chunk of stream) {
       const t = chunk?.text ?? "";
       if (t) yield t;

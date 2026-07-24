@@ -361,6 +361,8 @@ All server-side (set in `.env.local` locally, or Vercel env vars in prod):
 | `GOOGLE_API_KEY_2`, `_3` | — | Optional extra keys (other Google accounts) for automatic quota fallback. |
 | `SHOKHI_GEMMA_MODEL` | `gemma-4-26b-a4b-it` | Gemma 4 model on AI Studio (e.g. `gemma-4-31b-it`). |
 | `SHOKHI_BACKEND` | auto | Force `gemini` or `mock`. Default: `gemini` if a key is present, else `mock`. |
+| `SHOKHI_LLM_EXTRACT` | off | Optional Gemma symptom extraction; leave off for the faster deterministic intake path. |
+| `SHOKHI_SAFETY_NET` | off | Optional second Gemma emergency check; deterministic safety triage always remains enabled. |
 
 ## 🔮 Future plans
 

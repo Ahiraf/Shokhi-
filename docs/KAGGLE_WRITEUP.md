@@ -127,8 +127,8 @@ with server logic in `lib/server/`:
 - **Web UI** (Next.js) — chat, a symptom **checklist** (so a helper can assist a woman who
   can't type), browser voice input, colored urgency cards, and optional **Bangla text-to-speech**.
 - **Pure-TypeScript runtime + tests** — ML risk classifiers are trained offline and
-  **exported to plain JSON**, so inference runs in TypeScript with **no Python/ML runtime on
-  the server**; everything deploys as **one unit on Vercel**. A **Vitest** suite (9 tests)
+**exported to plain JSON**, so inference runs in TypeScript with **no Python/ML runtime on
+the server**; everything deploys as **one unit on Vercel**. A **Vitest** suite (37 tests)
   locks the safety guarantees: emergencies are never downgraded, the ML signal never
   overrides urgency, and RAG degrades gracefully.
 

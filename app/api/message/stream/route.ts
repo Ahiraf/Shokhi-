@@ -12,6 +12,7 @@ import {
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
+export const dynamic = "force-dynamic";
 
 // Server-Sent-Events chat: the deterministic triage + safety verdict is sent up-front as a
 // single `meta` event, then the warm guidance streams token-by-token as `delta` events, so the
@@ -76,6 +77,7 @@ export async function POST(req: Request) {
       "Content-Type": "text/event-stream; charset=utf-8",
       "Cache-Control": "no-cache, no-transform",
       Connection: "keep-alive",
+      "X-Accel-Buffering": "no",
     },
   });
 }

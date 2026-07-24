@@ -35,7 +35,7 @@ export function sendMessage(
 /**
  * Streaming chat over Server-Sent Events. Calls `onMeta` once with the triage/profile
  * payload, then `onDelta` for each guidance chunk. Resolves with the assembled full text.
- * Throws on transport failure so the caller can fall back to sendMessage().
+ * Throws on transport failure before the stream starts so the caller can fall back to sendMessage().
  */
 export async function sendMessageStream(
   message: string,
@@ -55,6 +55,8 @@ export async function sendMessageStream(
   const decoder = new TextDecoder();
   let buffer = "";
   let full = "";
+  let sawMeta = false;
+  let sawDone = false;
 
   const handleEvent = (block: string) => {
     const lines = block.split("\n");
@@ -62,8 +64,9 @@ export async function sendMessageStream(
     const dataLine = lines.find((l) => l.startsWith("data:"))?.slice(5).trim();
     if (!event || dataLine === undefined) return;
     const data = JSON.parse(dataLine);
-    if (event === "meta") handlers.onMeta?.(data);
+    if (event === "meta") { sawMeta = true; handlers.onMeta?.(data); }
     else if (event === "delta") { full += data; handlers.onDelta?.(data as string); }
+    else if (event === "done") sawDone = true;
     else if (event === "error") throw new Error(data.detail || "stream error");
   };
 
@@ -78,6 +81,9 @@ export async function sendMessageStream(
       if (block.trim()) handleEvent(block);
     }
   }
+  buffer += decoder.decode();
+  if (buffer.trim()) handleEvent(buffer.trim());
+  if (!sawMeta || !sawDone) throw new Error("stream ended before completion");
   return full;
 }
 

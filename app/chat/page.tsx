@@ -34,6 +34,7 @@ export default function ChatPage() {
 
   async function handleSend(text: string) {
     setBusy(true);
+    let streamStarted = false;
     setChat((c) => [...c, { role: "user", text }]);
     setHistory((h) => [...h, text]);
     try {
@@ -42,6 +43,7 @@ export default function ChatPage() {
       setChat((c) => [...c, { role: "assistant", text: "" }]);
       await sendMessageStream(text, profile, history, lang, {
         onMeta: (m) => {
+          streamStarted = true;
           setProfile(m.profile);
           setChat((c) => {
             const next = [...c];
@@ -50,6 +52,7 @@ export default function ChatPage() {
           });
         },
         onDelta: (chunk) => {
+          streamStarted = true;
           setChat((c) => {
             const next = [...c];
             const last = next[next.length - 1];
@@ -60,6 +63,14 @@ export default function ChatPage() {
       });
     } catch {
       // Streaming unavailable (proxy buffering, older client) — fall back to one-shot call.
+      if (streamStarted) {
+        setChat((c) => {
+          const next = [...c];
+          next[next.length - 1] = { role: "assistant", text: t("chat.errorConnect") };
+          return next;
+        });
+        return;
+      }
       try {
         const res = await sendMessage(text, profile, history, lang);
         setProfile(res.profile);

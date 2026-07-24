@@ -126,6 +126,8 @@ export const STRINGS = {
     en: "Voice input isn't supported in this browser — please use Chrome, or type your message.",
   },
   "composer.micFailed": { bn: "মাইক্রোফোন চালু করা গেল না।", en: "Couldn't start the microphone." },
+  "composer.micNotFound": { bn: "কোনো মাইক্রোফোন পাওয়া যায়নি।", en: "No microphone was found. Check your device settings or type instead." },
+  "composer.voiceNoSpeech": { bn: "কোনো কথা শোনা যায়নি। আবার চেষ্টা করুন।", en: "I didn't hear anything. Please try again." },
   "composer.micDenied": {
     bn: "মাইক্রোফোনের অনুমতি বন্ধ আছে। ব্রাউজারের ঠিকানার পাশে 🔒/🎙 আইকনে গিয়ে মাইক্রোফোন 'Allow' করুন, নইলে লিখে জানান।",
     en: "Microphone permission is blocked. Click the 🔒/🎙 icon by the address bar and Allow the microphone — or just type your message.",
