@@ -5,7 +5,6 @@ import Link from "next/link";
 import { getWellness } from "@/lib/api";
 import type { Wellness, WellnessMove } from "@/lib/types";
 import { useLang } from "./LanguageProvider";
-import { EmojiIcon } from "./Icon";
 import { weeklyPhases } from "@/lib/wellness";
 
 // during menstrual/luteal phases, keep the suggested move gentle
@@ -79,7 +78,9 @@ export default function WeeklyPlan() {
                   {pick(p, "label")}
                 </span>
               )}
-              <span className="flex items-center gap-1.5 text-plum/80"><EmojiIcon glyph={m.icon} size={15} /> {pick(m, "name")}</span>
+              {/* workout moves keep their emoji here — clearer than a line icon for showing an
+                  exercise to low-literacy users (per Ahiraf's request, this page only) */}
+              <span className="text-plum/80">{m.icon} {pick(m, "name")}</span>
               {p && <span className="text-plum/45">· {pick(p, "focus")}</span>}
             </div>
           );
