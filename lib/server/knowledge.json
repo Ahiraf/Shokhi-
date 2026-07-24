@@ -773,6 +773,18 @@
         "name_bn": "সিঁড়ি ওঠা-নামা", "name_en": "Stair climbing",
         "how_bn": "কয়েকবার সিঁড়ি ধীরে ধীরে ওঠা-নামা করুন — হৃৎস্পন্দন বাড়ানোর সহজ ও ঘরোয়া উপায়।",
         "how_en": "Walk up and down the stairs a few times — a simple way at home to raise your heart rate."
+      },
+      {
+        "id": "skipping", "icon": "🪢",
+        "name_bn": "দড়ি লাফ", "name_en": "Skipping rope",
+        "how_bn": "দড়ি নিয়ে ৫–১০ মিনিট লাফান — অল্প জায়গায় দারুণ কার্ডিও। মাসিকের সময় বা খুব দুর্বল/রক্তস্বল্পতা থাকলে এড়িয়ে চলুন।",
+        "how_en": "Jump rope for 5–10 minutes — great cardio in a small space. Skip it during your period, or if you feel very weak or anaemic."
+      },
+      {
+        "id": "cycling", "icon": "🚴‍♀️",
+        "name_bn": "সাইকেল চালানো", "name_en": "Cycling",
+        "how_bn": "সাইকেল থাকলে চালান, অথবা চিত হয়ে শুয়ে পা দিয়ে সাইকেল-চালানোর মতো নাড়ুন — পায়ের জোর বাড়ে ও হৃৎস্পন্দন বাড়ে।",
+        "how_en": "Ride a bicycle if you have one, or lie on your back and pedal your legs in the air — builds leg strength and raises your heart rate."
       }
     ],
     "disclaimer_bn": "এটি শক্তিশালী ও ভারসাম্যপূর্ণ থাকার সাধারণ পরামর্শ — কোনো ডায়েট বা ওজন কমানোর পরিকল্পনা নয়, চিকিৎসাও নয়। আপনি গর্ভবতী, খুব দুর্বল/রক্তস্বল্পতাগ্রস্ত হলে বা কোনো রোগ থাকলে চলাফেরা মৃদু রাখুন এবং ডাক্তারের পরামর্শ নিন।",
