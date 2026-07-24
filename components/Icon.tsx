@@ -66,7 +66,7 @@ const EMOJI_ICON: Record<string, IconName> = {
   "🌙": "moon", "👤": "user", "❓": "help", "❔": "help", "❗": "alert",
   "🆘": "alert", "⚠️": "alert", "👂": "ear", "🛠️": "tool", "🔒": "lock",
   "🩺": "health", "🥗": "apple", "🍎": "apple", "🧼": "sparkle", "🧺": "basket",
-  "🩹": "health", "🔄": "refresh", "✅": "check", "🔍": "search",
+  "🩹": "health", "🔄": "refresh", "✅": "check", "🔍": "search", "🫂": "heart",
   // wellness movements
   "🚶‍♀️": "activity", "🚶": "activity", "🤸‍♀️": "activity", "🤸": "activity",
   "🦵": "activity", "🧘‍♀️": "heart", "🧘": "heart", "🌬️": "leaf", "🌬": "leaf",

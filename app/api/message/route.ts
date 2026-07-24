@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Assistant, applySafetyNet, safetyNetEnabled } from "@/lib/server/assistant";
+import { detectCrisis, crisisResponse } from "@/lib/server/crisis";
 import { enforceRateLimit } from "@/lib/server/rate-limit";
 import {
   errorJson,
@@ -23,6 +24,20 @@ export async function POST(req: Request) {
   if (!message) return errorJson("Message is required.", 400);
   try {
     const lang = readLanguage(body.lang);
+
+    // Crisis safeguard runs FIRST and deterministically — a self-harm message must never be
+    // brushed off or delayed by the normal triage/LLM path.
+    if (detectCrisis(message)) {
+      return NextResponse.json({
+        profile: readProfile(body.profile),
+        triage: null,
+        guidance: crisisResponse(lang),
+        next_question: null,
+        is_emergency: true,
+        backend: "crisis",
+      });
+    }
+
     const a = new Assistant(readProfile(body.profile), readHistory(body.history));
 
     // Run the (independent) LLM safety net CONCURRENTLY with symptom extraction so it adds

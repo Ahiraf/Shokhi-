@@ -81,7 +81,7 @@ export default function WeeklyPlan() {
               )}
               {/* workout POSE visual (falls back to the emoji until a pose image is added) */}
               <span className="flex items-center gap-1.5 text-plum/80">
-                <MoveVisual id={m.id} icon={m.icon} size={18} /> {pick(m, "name")}
+                <MoveVisual id={m.id} icon={m.icon} size={24} /> {pick(m, "name")}
               </span>
               {p && <span className="text-plum/45">· {pick(p, "focus")}</span>}
             </div>

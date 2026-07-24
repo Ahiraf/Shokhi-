@@ -1,4 +1,5 @@
 import { Assistant, applySafetyNet, safetyNetEnabled } from "@/lib/server/assistant";
+import { detectCrisis, crisisResponse } from "@/lib/server/crisis";
 import { enforceRateLimit } from "@/lib/server/rate-limit";
 import {
   errorJson,
@@ -39,6 +40,15 @@ export async function POST(req: Request) {
       // Open the stream immediately so the client shows a live reply and proxies don't buffer.
       controller.enqueue(encoder.encode(": open\n\n"));
       try {
+        // Crisis safeguard first — a self-harm message gets a compassionate reply + helpline
+        // instantly, deterministically, without the triage/LLM path.
+        if (detectCrisis(message)) {
+          send("meta", { profile: readProfile(body.profile), triage: null, next_question: null, is_emergency: true, backend: "crisis" });
+          send("delta", crisisResponse(lang));
+          send("done", {});
+          return;
+        }
+
         const a = new Assistant(readProfile(body.profile), readHistory(body.history));
 
         // Safety net runs CONCURRENTLY with extraction (both only need the raw message), so it

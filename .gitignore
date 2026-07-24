@@ -27,3 +27,4 @@ venv/
 .vscode/
 .puku/
 *.log
+_incoming/

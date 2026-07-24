@@ -82,8 +82,8 @@ export default function WellnessPage() {
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {w.moves.map((m) => (
                 <div key={m.id} className="flex gap-3 rounded-2xl bg-surface/80 p-4 ring-1 ring-rose-soft">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-sage-soft text-2xl">
-                    <MoveVisual id={m.id} icon={m.icon} size={40} />
+                  <span className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-sage-soft text-3xl">
+                    <MoveVisual id={m.id} icon={m.icon} size={60} />
                   </span>
                   <div className="flex-1">
                     <div className="flex items-start justify-between gap-2">

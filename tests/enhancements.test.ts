@@ -7,6 +7,7 @@ import { describe, it, expect } from "vitest";
 import { retrieve, corpusInfo } from "../lib/server/rag";
 import { applySafetyNet } from "../lib/server/assistant";
 import { getBackend } from "../lib/server/gemma";
+import { detectCrisis, crisisResponse } from "../lib/server/crisis";
 
 describe("#5 escalate-only LLM safety net", () => {
   it("ESCALATES an 'info' result to emergency when the classifier flags one", () => {
@@ -39,6 +40,22 @@ describe("#5 escalate-only LLM safety net", () => {
     expect(hit.emergency).toBe(true);
     const benign = await backend.safetyCheck("আমি জানতে চাই মাসিক কী");
     expect(benign.emergency).toBe(false);
+  });
+});
+
+describe("crisis (self-harm) safeguard", () => {
+  it("detects self-harm intent in Bangla and English", () => {
+    expect(detectCrisis("আমি আর বাঁচতে চাই না")).toBe(true);
+    expect(detectCrisis("I want to die")).toBe(true);
+    expect(detectCrisis("I don't want to live anymore")).toBe(true);
+  });
+  it("does not false-fire on ordinary messages", () => {
+    expect(detectCrisis("আমার মাসিক অনিয়মিত")).toBe(false);
+    expect(detectCrisis("I have cramps and a headache")).toBe(false);
+  });
+  it("the crisis reply carries a helpline number", () => {
+    expect(crisisResponse("en")).toMatch(/119911|999/);
+    expect(crisisResponse("bn")).toMatch(/১১৯৯১১|৯৯৯/);
   });
 });
 
