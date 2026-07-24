@@ -264,7 +264,7 @@ class MockBackend implements Backend {
 }
 
 // --- Gemini backend (hosted Gemma 4) with multi-key quota fallback ------------
-function geminiKeys(): string[] {
+export function geminiKeys(): string[] {
   const cands = [
     process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY,
     process.env.GOOGLE_API_KEY_2 || process.env.GEMINI_API_KEY_2,

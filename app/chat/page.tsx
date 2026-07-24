@@ -19,7 +19,7 @@ export default function ChatPage() {
   const [history, setHistory] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [name, setName] = useState("");
-  const endRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // seed the symptom profile + greeting from the saved local profile (if any)
   useEffect(() => {
@@ -28,8 +28,11 @@ export default function ChatPage() {
     if (saved.name) setName(saved.name);
   }, []);
 
+  // Auto-scroll the MESSAGE PANEL only (not the whole window) so sending a message never
+  // jumps the page down — the header + composer stay fixed like a normal chatbot.
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = scrollRef.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
   }, [chat, busy]);
 
   async function handleSend(text: string) {
@@ -111,9 +114,9 @@ export default function ChatPage() {
   const started = chat.length > 0;
 
   return (
-    <main className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-2xl flex-col px-5">
+    <main className="mx-auto max-w-2xl px-5">
       {!started && (
-        <section className="flex flex-1 flex-col items-center justify-center py-10 text-center">
+        <section className="flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center py-10 text-center">
           {/* Sitting pose cropped to head→seat with a soft bottom fade, so she appears
               seated on the heading (the full figure's dangling legs looked awkward). */}
           <div
@@ -155,12 +158,31 @@ export default function ChatPage() {
       )}
 
       {started && (
-        <>
-          {/* bottom-aligned so a short exchange sits just above the composer (visible),
-              instead of pinning to the top and leaving a big empty gap below */}
-          <section className="flex flex-1 flex-col justify-end space-y-4 py-6">
+        // Fixed-height chat panel: header + scrollable messages + composer. Nothing here
+        // scrolls the window, so the view stays put on the conversation.
+        <div className="flex h-[calc(100vh-8rem)] flex-col">
+          {/* header — the Shokhi mascot stays visible the whole conversation */}
+          <header className="flex items-center gap-3 border-b border-rose-soft/60 py-3">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-rose-mist ring-1 ring-rose-soft">
+              <Mascot3D variant="chat" size={44} />
+            </span>
+            <div className="min-w-0">
+              <p className="font-display text-[15px] font-bold leading-tight text-plum">
+                {t("chat.headerTitle")}
+              </p>
+              <p className="truncate text-xs text-plum/55">
+                {name ? t("chat.greeting").replace("{name}", name) + " 🌸" : t("chat.headerSubtitle")}
+              </p>
+            </div>
+            <span className="ml-auto flex items-center gap-1.5 text-xs font-medium text-rose/70">
+              <span className="h-2 w-2 rounded-full bg-emerald-400" /> {t("chat.online")}
+            </span>
+          </header>
+
+          {/* messages — this panel scrolls internally */}
+          <section ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto py-5">
             {chat.map((item, i) =>
-              // don't render the empty assistant placeholder while streaming — the "thinking"
+              // hide the empty assistant placeholder while streaming — the "thinking"
               // indicator below covers that wait; the bubble appears once the first token lands
               item.role === "assistant" && item.text === "" ? null : <Message key={i} item={item} />
             )}
@@ -172,17 +194,17 @@ export default function ChatPage() {
                 <span className="animate-pulse">{t("chat.thinking")}</span>
               </div>
             )}
-            <div ref={endRef} />
           </section>
 
-          <div className="sticky bottom-0 -mx-5 bg-gradient-to-t from-cream via-cream/95 to-transparent px-5 pb-5 pt-3">
+          {/* composer pinned at the bottom of the panel */}
+          <div className="border-t border-rose-soft/60 bg-cream/80 pb-4 pt-3">
             <div className="mb-3">
               <Examples onPick={handleSend} />
             </div>
             <Composer onSend={handleSend} busy={busy} />
             <p className="mt-2.5 text-center text-xs text-plum/45">{t("chat.privacyLine")}</p>
           </div>
-        </>
+        </div>
       )}
     </main>
   );

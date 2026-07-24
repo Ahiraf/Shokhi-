@@ -96,6 +96,12 @@ export const STRINGS = {
   "chat.startWith": { bn: "এভাবে শুরু করতে পারেন", en: "You could start like this" },
   "chat.orLearn": { bn: "অথবা একটি বিষয়ে জানুন", en: "Or learn about a topic" },
   "chat.thinking": { bn: "সখী ভাবছে…", en: "Shokhi is thinking…" },
+  "chat.headerTitle": { bn: "সখী · Shokhi", en: "সখী · Shokhi" },
+  "chat.headerSubtitle": {
+    bn: "আপনার বিশ্বস্ত স্বাস্থ্য-সঙ্গী",
+    en: "Your trusted health companion",
+  },
+  "chat.online": { bn: "অনলাইন", en: "Online" },
   "chat.privacyLine": {
     bn: "🔒 কোনো অ্যাকাউন্ট নেই · প্রোফাইল এই ফোনেই · ☎️ ১৬২৬৩ · 🚨 ৯৯৯",
     en: "🔒 No account · profile stays on this phone · ☎️ 16263 · 🚨 999",
@@ -117,9 +123,10 @@ export const STRINGS = {
   "composer.send": { bn: "পাঠান", en: "Send" },
   "composer.voiceTitle": { bn: "কণ্ঠে বলুন", en: "Speak" },
   "composer.listening": { bn: "শুনছি… বলুন", en: "Listening… speak now" },
-  "composer.voiceUnavailable": {
-    bn: "লাইভ Gemma 4 (SHOKHI_BACKEND=gemini) ছাড়া কণ্ঠ বোঝা যাবে না। এখন লিখে দেখুন।",
-    en: "Voice needs the live Gemma 4 backend (SHOKHI_BACKEND=gemini). Please type for now.",
+  "composer.transcribing": { bn: "লেখায় রূপান্তর হচ্ছে…", en: "Transcribing…" },
+  "composer.transcribeFailed": {
+    bn: "কণ্ঠ লেখায় রূপান্তর করা গেল না। আবার চেষ্টা করুন বা লিখে জানান।",
+    en: "Couldn't transcribe your voice. Please try again or type your message.",
   },
   "composer.voiceNoSupport": {
     bn: "এই ব্রাউজারে কণ্ঠ শনাক্ত করা যাচ্ছে না — অনুগ্রহ করে Chrome ব্যবহার করুন বা লিখে জানান।",
@@ -131,14 +138,6 @@ export const STRINGS = {
   "composer.micDenied": {
     bn: "মাইক্রোফোনের অনুমতি বন্ধ আছে। ব্রাউজারের ঠিকানার পাশে 🔒/🎙 আইকনে গিয়ে মাইক্রোফোন 'Allow' করুন, নইলে লিখে জানান।",
     en: "Microphone permission is blocked. Click the 🔒/🎙 icon by the address bar and Allow the microphone — or just type your message.",
-  },
-  "composer.voicePrivacyNote": {
-    bn: "🔒 কণ্ঠ শনাক্ত করতে আপনার ব্রাউজার অডিও একটি বাইরের সেবায় (যেমন Chrome-এ Google) পাঠাতে পারে। স্বাস্থ্য-সংক্রান্ত কথা বলার আগে খেয়াল রাখুন। চাইলে টাইপ করেও জানাতে পারেন।",
-    en: "🔒 Voice input may send your audio to a third-party service (e.g. Google in Chrome) to transcribe it. Keep this in mind before speaking about health. You can always type instead.",
-  },
-  "composer.voicePrivacyConsent": {
-    bn: "কণ্ঠে বলতে চাইলে আপনার ব্রাউজার অডিও একটি বাইরের সেবায় (যেমন Chrome-এ Google) পাঠিয়ে লেখায় রূপান্তর করে — এই অডিও Shokhi সংরক্ষণ করে না। রাজি থাকলে ‘OK’ চাপুন।",
-    en: "To use voice, your browser sends the audio to a third-party service (e.g. Google in Chrome) to convert it to text — Shokhi does not store this audio. Press ‘OK’ to allow.",
   },
 
   // --- message / triage ----------------------------------------------------
