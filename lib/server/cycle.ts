@@ -57,6 +57,7 @@ function parseDate(s?: string): number | null {
   const d = new Date(s.trim().slice(0, 10));
   return Number.isNaN(d.getTime()) ? null : Math.floor(d.getTime() / 86_400_000);
 }
+const iso = (days: number) => new Date(days * 86_400_000).toISOString().slice(0, 10);
 const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
 
 export function analyze(logs: Log[], lang: Lang = "bn", todayDays?: number): any {
@@ -74,6 +75,12 @@ export function analyze(logs: Log[], lang: Lang = "bn", todayDays?: number): any
     regular: null,
     predicted_next_start: null,
     days_until_next: null,
+    // richer fields for the calendar + all-time trend UI (all deterministic, on-device):
+    period_days: [] as string[], // every logged bleeding day (ISO)
+    episode_starts: [] as string[], // start date of each period episode (ISO)
+    last_period_start: null as string | null,
+    cycle_day: null as number | null, // 1-based day of the current cycle
+    cycles: [] as { start: string; length: number }[], // completed cycles (start-to-start)
     insights_bn: [] as string[],
     suggested_symptoms: {} as Record<string, boolean>,
     disclaimer_bn: m.disclaimer,
@@ -97,6 +104,12 @@ export function analyze(logs: Log[], lang: Lang = "bn", todayDays?: number): any
   }
   const episodeStarts = episodes.map((e) => e[0]);
 
+  // expose dates for the calendar + trend UI
+  result.period_days = starts.map(iso);
+  result.episode_starts = episodeStarts.map(iso);
+  result.last_period_start = iso(episodeStarts[episodeStarts.length - 1]);
+  result.cycle_day = today - episodeStarts[episodeStarts.length - 1] + 1;
+
   // Period duration = span of days within an episode (only when >1 day was logged);
   // also honour explicit start/end pairs if ever provided.
   const durations: number[] = [];
@@ -112,7 +125,11 @@ export function analyze(logs: Log[], lang: Lang = "bn", todayDays?: number): any
   const lengths: number[] = [];
   for (let i = 1; i < episodeStarts.length; i++) {
     const d = episodeStarts[i] - episodeStarts[i - 1];
-    if (d > 0) lengths.push(d);
+    if (d > 0) {
+      lengths.push(d);
+      // the cycle "belongs" to the earlier period start it began from
+      result.cycles.push({ start: iso(episodeStarts[i - 1]), length: d });
+    }
   }
 
   if (lengths.length === 0) {

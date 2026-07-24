@@ -120,6 +120,11 @@ export interface CycleAnalysis {
   regular: boolean | null;
   predicted_next_start: string | null;
   days_until_next: number | null;
+  period_days?: string[];
+  episode_starts?: string[];
+  last_period_start?: string | null;
+  cycle_day?: number | null;
+  cycles?: { start: string; length: number }[];
   insights_bn: string[];
   suggested_symptoms: Record<string, boolean>;
   disclaimer_bn: string;
