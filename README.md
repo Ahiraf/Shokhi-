@@ -106,11 +106,30 @@ rules, not the model**, so Gemma can **never under-triage an emergency** because
 hallucination. This is the standard safe pattern for health AI: *LLM for language,
 deterministic logic for safety-critical decisions.*
 
-The **current web voice path uses the browser's Speech Recognition API** to turn spoken
-Bangla into text before sending it through the same Gemma 4 and safety pipeline. This is
-available in supported browsers such as Chrome; the backend does not currently claim native
-Gemma audio transcription. Supporting (non-generative, allowed) tools: a knowledge base of
-red flags / conditions / myths, and the two logistic-regression risk classifiers.
+### 🎙️ Voice input (speech-to-text) — why it uses Gemini, not Gemma
+
+A woman can **speak** her symptoms instead of typing. The browser records her audio
+(`MediaRecorder`) and posts it to `/api/voice-transcribe`, which transcribes it **verbatim**
+(Bangla or English, no translation) and drops the text into the chat box — from there it runs
+through the **exact same Gemma 4 + deterministic-triage pipeline** as typed input.
+
+**Gemma cannot do this step — and that's expected.** Gemma is a **text (and vision) model with
+no audio input modality**; the API rejects audio outright:
+
+```
+POST …:generateContent  (model: gemma-4-26b-a4b-it, audio attached)
+→ 400 INVALID_ARGUMENT: "Audio input modality is not enabled for this model"
+```
+
+So transcription uses **Google's own `gemini-2.5-flash`** (multimodal, accepts audio), via the
+**same `GOOGLE_API_KEY` and multi-key fallback** as the rest of the app — configurable with
+`SHOKHI_STT_MODEL`. This deliberately stays inside the **Google** ecosystem (**no OpenAI /
+Whisper**, no extra key). It is a **non-generative input step** — speech → text — and **Gemma
+remains the only model that generates any answer.** It works reliably in Brave, Safari and
+Chrome, unlike the browser's built-in Web Speech API.
+
+Other supporting (non-generative, allowed) tools: the RAG corpus + embeddings, a knowledge
+base of red flags / conditions / myths, and the two logistic-regression risk classifiers.
 
 ---
 
@@ -124,10 +143,11 @@ red flags / conditions / myths, and the two logistic-regression risk classifiers
 
 Because the triage engine and Gemma backend are fully decoupled from the UI, the *same
 core* can power the web app **and** a future phone hotline. The web app already accepts
-**spoken Bangla** (browser speech recognition turns it into text, then the identical triage
-runs); the planned IVR path can reuse that core behind a Twilio/Exotel phone number with a
-separate speech-to-text and text-to-speech adapter, always with a spoken fallback to
-**16263 / 999**.
+**spoken Bangla** (recorded audio is transcribed server-side by Google — see
+[Voice input](#️-voice-input-speech-to-text--why-it-uses-gemini-not-gemma) — then the
+identical triage runs); the planned IVR path can reuse that core behind a Twilio/Exotel phone
+number with a separate speech-to-text and text-to-speech adapter, always with a spoken
+fallback to **16263 / 999**.
 
 ---
 
