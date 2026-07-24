@@ -5,6 +5,7 @@ import Mascot3D from "@/components/Mascot3D";
 import FeatureCard from "@/components/FeatureCard";
 import { FEATURES } from "@/lib/features";
 import { useLang } from "@/components/LanguageProvider";
+import Icon, { type IconName } from "@/components/Icon";
 
 const CONDITIONS: { bn: string; en: string }[] = [
   { bn: "মাসিক", en: "Periods" },
@@ -19,21 +20,21 @@ const CONDITIONS: { bn: string; en: string }[] = [
   { bn: "সংক্রমণ", en: "Infections" },
 ];
 
-const STEPS: { n_bn: string; n_en: string; icon: string; title_bn: string; title_en: string; desc_bn: string; desc_en: string }[] = [
+const STEPS: { n_bn: string; n_en: string; icon: IconName; title_bn: string; title_en: string; desc_bn: string; desc_en: string }[] = [
   {
-    n_bn: "১", n_en: "1", icon: "🗣️",
+    n_bn: "১", n_en: "1", icon: "mic",
     title_bn: "আপনি বলুন", title_en: "You speak",
     desc_bn: "বাংলায় লিখুন বা কণ্ঠে বলুন কেমন লাগছে।",
     desc_en: "Type or speak, in Bangla, how you feel.",
   },
   {
-    n_bn: "২", n_en: "2", icon: "🛡️",
+    n_bn: "২", n_en: "2", icon: "shield",
     title_bn: "নিরাপদে যাচাই", title_en: "Safe check",
     desc_bn: "নিয়ম-ভিত্তিক ইঞ্জিন বিপদচিহ্ন যাচাই করে — কখনো ভুল করে না।",
     desc_en: "A rule-based engine checks for danger signs — it never slips.",
   },
   {
-    n_bn: "৩", n_en: "3", icon: "🌸",
+    n_bn: "৩", n_en: "3", icon: "flower",
     title_bn: "উষ্ণ পরামর্শ", title_en: "Warm guidance",
     desc_bn: "সহজ বাংলায় বোঝানো হয়, সবসময় ডাক্তারের পরামর্শসহ।",
     desc_en: "Explained in simple language, always with a doctor's advice.",
@@ -166,8 +167,8 @@ export default function Home() {
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           {STEPS.map((s) => (
             <div key={s.n_en} className="rounded-2xl bg-surface/80 p-6 text-center ring-1 ring-rose-soft">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blush text-2xl">
-                {s.icon}
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blush text-rose-deep">
+                <Icon name={s.icon} size={24} />
               </div>
               <h3 className="mt-3 font-display text-lg font-bold text-plum">
                 <span className="text-rose">{lang === "en" ? s.n_en : s.n_bn}.</span>{" "}

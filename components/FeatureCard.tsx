@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { Feature, Accent } from "@/lib/features";
 import { useLang } from "./LanguageProvider";
+import Icon from "./Icon";
 
 const ICON_BG: Record<Accent, string> = {
   rose: "bg-rose-soft text-rose-deep",
@@ -19,9 +20,9 @@ export default function FeatureCard({ feature }: { feature: Feature }) {
       className="group flex flex-col rounded-2xl bg-surface/80 p-5 ring-1 ring-rose-soft transition hover:-translate-y-0.5 hover:shadow-card"
     >
       <span
-        className={`flex h-11 w-11 items-center justify-center rounded-xl text-xl ${ICON_BG[feature.accent]}`}
+        className={`flex h-11 w-11 items-center justify-center rounded-xl ${ICON_BG[feature.accent]}`}
       >
-        {feature.icon}
+        <Icon name={feature.icon} size={22} />
       </span>
       <h3 className="mt-3 font-display text-base font-bold text-plum">
         {lang === "en" ? feature.title_en : feature.title_bn}

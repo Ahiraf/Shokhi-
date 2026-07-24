@@ -1,9 +1,11 @@
 // The feature set shown on the landing page — each links to its own route.
+import type { IconName } from "@/components/Icon";
+
 export type Accent = "rose" | "sage" | "apricot";
 
 export interface Feature {
   href: string;
-  icon: string;
+  icon: IconName;
   title_bn: string;
   title_en: string;
   desc_bn: string;
@@ -14,7 +16,7 @@ export interface Feature {
 export const FEATURES: Feature[] = [
   {
     href: "/chat",
-    icon: "💬",
+    icon: "chat",
     title_bn: "লক্ষণ পরামর্শ",
     title_en: "Symptom advice",
     desc_bn: "বাংলায় উপসর্গ বলুন — Gemma বুঝে নিরাপদ পরামর্শ দেবে।",
@@ -23,7 +25,7 @@ export const FEATURES: Feature[] = [
   },
   {
     href: "/tracker",
-    icon: "🩸",
+    icon: "drop",
     title_bn: "মাসিক ট্র্যাকার",
     title_en: "Period tracker",
     desc_bn: "পিরিয়ড, ব্যথা ও প্যাড লিখুন — চক্র নিয়মিত কিনা জানুন।",
@@ -32,7 +34,7 @@ export const FEATURES: Feature[] = [
   },
   {
     href: "/tracker",
-    icon: "⏰",
+    icon: "clock",
     title_bn: "প্যাড রিমাইন্ডার",
     title_en: "Pad reminder",
     desc_bn: "প্রতি ৪–৬ ঘণ্টায় প্যাড বদলানোর মৃদু মনে করানো।",
@@ -41,7 +43,7 @@ export const FEATURES: Feature[] = [
   },
   {
     href: "/guides",
-    icon: "📚",
+    icon: "book",
     title_bn: "স্বাস্থ্য গাইড",
     title_en: "Health guides",
     desc_bn: "জন্মনিয়ন্ত্রণ, পুষ্টি, মেনোপজ ও আরও অনেক বিষয়ে সহজ পরামর্শ।",
@@ -50,7 +52,7 @@ export const FEATURES: Feature[] = [
   },
   {
     href: "/learn",
-    icon: "🧠",
+    icon: "learn",
     title_bn: "রোগ সম্পর্কে জানুন",
     title_en: "Learn about conditions",
     desc_bn: "পিসিওএস, এন্ডোমেট্রিওসিস, ইউটিআই — সহজ ভাষায় ব্যাখ্যা।",
@@ -59,7 +61,7 @@ export const FEATURES: Feature[] = [
   },
   {
     href: "/myths",
-    icon: "💡",
+    icon: "bulb",
     title_bn: "ভুল ধারণা ভাঙুন",
     title_en: "Bust the myths",
     desc_bn: "মাসিক ও নারীস্বাস্থ্য নিয়ে প্রচলিত ভুল তথ্যের সঠিক জবাব।",
@@ -68,7 +70,7 @@ export const FEATURES: Feature[] = [
   },
   {
     href: "/wellness",
-    icon: "🌿",
+    icon: "leaf",
     title_bn: "সুস্থতা",
     title_en: "Wellness",
     desc_bn: "হরমোন ভারসাম্যে চলাফেরা ও খাবার — চক্র ও অবস্থা অনুযায়ী।",
@@ -77,7 +79,7 @@ export const FEATURES: Feature[] = [
   },
   {
     href: "/hotline",
-    icon: "☎️",
+    icon: "phone",
     title_bn: "ভয়েস হটলাইন",
     title_en: "Voice hotline",
     desc_bn: "ফোন করে বাংলায় বলুন, পরামর্শ শুনুন — পড়তে হবে না।",
@@ -86,7 +88,7 @@ export const FEATURES: Feature[] = [
   },
   {
     href: "/about",
-    icon: "🛡️",
+    icon: "shield",
     title_bn: "নিরাপত্তা ও তথ্য",
     title_en: "Safety & info",
     desc_bn: "জরুরি নম্বর, বিপদচিহ্ন এবং সখী সম্পর্কে জানুন।",

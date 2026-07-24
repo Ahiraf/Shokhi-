@@ -7,6 +7,7 @@ import { useLang } from "./LanguageProvider";
 import type { StringKey } from "@/lib/i18n";
 import CycleCalendar from "./CycleCalendar";
 import CycleTrends from "./CycleTrends";
+import Icon from "./Icon";
 
 const STORE_KEY = "shokhi_cycle_logs";
 const BN = "০১২৩৪৫৬৭৮৯";
@@ -191,15 +192,15 @@ export default function CycleTracker() {
       {/* ---- quick actions ---- */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <button onClick={() => quickLog(todayIso)} className="flex flex-col items-center gap-1.5 rounded-2xl bg-rose-deep p-3 text-accentink shadow-soft transition hover:brightness-105">
-          <span className="text-2xl">🩸</span>
+          <Icon name="drop" size={24} />
           <span className="text-xs font-semibold">{t("tracker.logToday")}</span>
         </button>
         <button onClick={() => { resetForm(); setShowForm(true); setStart(todayIso); }} className="flex flex-col items-center gap-1.5 rounded-2xl bg-surface p-3 text-rose-deep ring-1 ring-rose-soft transition hover:bg-rose-mist">
-          <span className="text-2xl">📝</span>
+          <Icon name="note" size={24} />
           <span className="text-xs font-semibold">{t("tracker.logSymptoms")}</span>
         </button>
         <button onClick={() => { resetForm(); setShowForm(true); }} className="col-span-2 flex flex-col items-center gap-1.5 rounded-2xl bg-surface p-3 text-rose-deep ring-1 ring-rose-soft transition hover:bg-rose-mist sm:col-span-1">
-          <span className="text-2xl">📅</span>
+          <Icon name="calendar" size={24} />
           <span className="text-xs font-semibold">{t("tracker.addDate")}</span>
         </button>
       </div>
@@ -282,7 +283,7 @@ export default function CycleTracker() {
       {insights.hasData && (
         <div className="rounded-2xl border border-rose-soft p-4">
           <button onClick={() => setShowTrends((v) => !v)} className="flex w-full items-center justify-between text-sm font-bold text-rose-deep">
-            <span>📈 {t("tracker.trendsTitle")}</span>
+            <span className="flex items-center gap-2"><Icon name="activity" size={18} /> {t("tracker.trendsTitle")}</span>
             <span className="text-rose-deep/50">{showTrends ? "▲" : "▼"}</span>
           </button>
           {showTrends && (
@@ -305,8 +306,8 @@ export default function CycleTracker() {
                 {typeof l.pain === "number" && ` · ${t(PAIN_KEY[l.pain])}`}
               </span>
               <div className="flex shrink-0 items-center gap-1">
-                <button onClick={() => openEdit(l.start)} title={t("tracker.edit")} aria-label={t("tracker.edit")} className="rounded-lg px-2 py-1.5 text-rose-deep/70 transition hover:bg-rose-soft hover:text-rose-deep">✎</button>
-                <button onClick={() => removeLog(l.start)} title={t("tracker.delete")} aria-label={t("tracker.delete")} className="rounded-lg px-2 py-1.5 text-rose-deep/70 transition hover:bg-red-100 hover:text-red-600">🗑</button>
+                <button onClick={() => openEdit(l.start)} title={t("tracker.edit")} aria-label={t("tracker.edit")} className="rounded-lg p-1.5 text-rose-deep/70 transition hover:bg-rose-soft hover:text-rose-deep"><Icon name="edit" size={16} /></button>
+                <button onClick={() => removeLog(l.start)} title={t("tracker.delete")} aria-label={t("tracker.delete")} className="rounded-lg p-1.5 text-rose-deep/70 transition hover:bg-red-100 hover:text-red-600"><Icon name="trash" size={16} /></button>
               </div>
             </div>
           ))}
@@ -323,11 +324,11 @@ export default function CycleTracker() {
 
       {/* ---- backup ---- */}
       <div className="rounded-2xl border border-dashed border-rose-soft p-4">
-        <p className="text-sm font-semibold text-rose-deep">💾 {t("tracker.backupTitle")}</p>
+        <p className="flex items-center gap-2 text-sm font-semibold text-rose-deep"><Icon name="save" size={18} /> {t("tracker.backupTitle")}</p>
         <p className="mt-1 text-xs text-rose-deep/60">{t("tracker.backupNote")}</p>
         <div className="mt-3 flex gap-2">
-          <button onClick={exportData} disabled={!logs.length} className="rounded-full bg-rose-soft px-4 py-2 text-sm font-medium text-rose-deep transition hover:bg-rose-soft/70 disabled:opacity-40">⬇ {t("tracker.export")}</button>
-          <button onClick={() => fileRef.current?.click()} className="rounded-full bg-rose-soft px-4 py-2 text-sm font-medium text-rose-deep transition hover:bg-rose-soft/70">⬆ {t("tracker.import")}</button>
+          <button onClick={exportData} disabled={!logs.length} className="flex items-center gap-1.5 rounded-full bg-rose-soft px-4 py-2 text-sm font-medium text-rose-deep transition hover:bg-rose-soft/70 disabled:opacity-40"><Icon name="download" size={16} /> {t("tracker.export")}</button>
+          <button onClick={() => fileRef.current?.click()} className="flex items-center gap-1.5 rounded-full bg-rose-soft px-4 py-2 text-sm font-medium text-rose-deep transition hover:bg-rose-soft/70"><Icon name="upload" size={16} /> {t("tracker.import")}</button>
           <input ref={fileRef} type="file" accept="application/json" onChange={importData} className="hidden" />
         </div>
       </div>
