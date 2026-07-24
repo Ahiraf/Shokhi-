@@ -7,7 +7,7 @@ import { useLang } from "./LanguageProvider";
 import type { StringKey } from "@/lib/i18n";
 import CycleCalendar from "./CycleCalendar";
 import CycleTrends from "./CycleTrends";
-import Icon from "./Icon";
+import Icon, { EmojiIcon } from "./Icon";
 
 const STORE_KEY = "shokhi_cycle_logs";
 const BN = "০১২৩৪৫৬৭৮৯";
@@ -225,7 +225,7 @@ export default function CycleTracker() {
 
       {/* ---- add / edit form (collapsible) ---- */}
       {showForm && (
-        <div className="space-y-3 rounded-2xl border border-rose-soft p-4">
+        <div className="space-y-3 rounded-2xl border border-rose-soft bg-surface p-4">
           <label className="block text-sm font-medium text-rose-deep/80">
             {t("tracker.startDate")}
             <input type="date" value={start} max={todayIso} onChange={(e) => setStart(e.target.value)}
@@ -271,7 +271,7 @@ export default function CycleTracker() {
 
       {/* ---- cycle history (dot rows) ---- */}
       {(analysis.cycles?.length ?? 0) > 0 && (
-        <div className="space-y-3 rounded-2xl border border-rose-soft p-4">
+        <div className="space-y-3 rounded-2xl border border-rose-soft bg-surface p-4">
           <p className="text-sm font-bold text-rose-deep">{t("tracker.historyTitle")}</p>
           {[...(analysis.cycles ?? [])].reverse().map((c) => (
             <CycleRow key={c.start} start={c.start} length={c.length} periodLen={analysis.avg_period_length ?? 5} num={num} />
@@ -281,7 +281,7 @@ export default function CycleTracker() {
 
       {/* ---- trends (all-time) ---- */}
       {insights.hasData && (
-        <div className="rounded-2xl border border-rose-soft p-4">
+        <div className="rounded-2xl border border-rose-soft bg-surface p-4">
           <button onClick={() => setShowTrends((v) => !v)} className="flex w-full items-center justify-between text-sm font-bold text-rose-deep">
             <span className="flex items-center gap-2"><Icon name="activity" size={18} /> {t("tracker.trendsTitle")}</span>
             <span className="text-rose-deep/50">{showTrends ? "▲" : "▼"}</span>
@@ -323,7 +323,7 @@ export default function CycleTracker() {
       )}
 
       {/* ---- backup ---- */}
-      <div className="rounded-2xl border border-dashed border-rose-soft p-4">
+      <div className="rounded-2xl border border-dashed border-rose-soft bg-surface/70 p-4">
         <p className="flex items-center gap-2 text-sm font-semibold text-rose-deep"><Icon name="save" size={18} /> {t("tracker.backupTitle")}</p>
         <p className="mt-1 text-xs text-rose-deep/60">{t("tracker.backupNote")}</p>
         <div className="mt-3 flex gap-2">
@@ -347,7 +347,7 @@ export default function CycleTracker() {
 function Chip({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
     <div className="flex shrink-0 items-center gap-2 rounded-2xl bg-rose-soft/60 px-3 py-2">
-      <span className="text-lg">{icon}</span>
+      <span className="text-rose-deep"><EmojiIcon glyph={icon} size={18} /></span>
       <div className="leading-tight">
         <p className="text-[10px] text-rose-deep/60">{label}</p>
         <p className="whitespace-nowrap text-sm font-semibold text-rose-deep">{value}</p>

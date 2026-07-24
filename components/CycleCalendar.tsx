@@ -50,7 +50,7 @@ export default function CycleCalendar({
   const dows = lang === "en" ? DOW_EN : DOW_BN;
 
   return (
-    <div className="rounded-2xl border border-rose-soft p-3 sm:p-4">
+    <div className="rounded-2xl border border-rose-soft bg-surface p-3 sm:p-4">
       <div className="mb-3 flex items-center justify-between">
         <button onClick={() => shift(-1)} aria-label="prev" className="flex h-8 w-8 items-center justify-center rounded-full text-rose-deep hover:bg-rose-soft">‹</button>
         <p className="text-sm font-bold text-rose-deep">{months[view.m]} {num(view.y)}</p>

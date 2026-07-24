@@ -3,6 +3,7 @@
 import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 import Mascot3D from "@/components/Mascot3D";
+import { EmojiIcon } from "@/components/Icon";
 import { useLang } from "@/components/LanguageProvider";
 
 const STEPS: { icon: string; title_bn: string; title_en: string; desc_bn: string; desc_en: string }[] = [
@@ -46,8 +47,8 @@ export default function HotlinePage() {
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         {STEPS.map((s) => (
           <div key={s.title_en} className="rounded-2xl bg-surface/80 p-5 text-center ring-1 ring-rose-soft">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blush text-2xl">
-              {s.icon}
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blush text-rose-deep">
+              <EmojiIcon glyph={s.icon} size={24} />
             </div>
             <h3 className="mt-3 font-display text-base font-bold text-plum">
               {lang === "en" ? s.title_en : s.title_bn}

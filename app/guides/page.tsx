@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getGuides } from "@/lib/api";
 import type { GuideCard } from "@/lib/types";
 import PageIntro from "@/components/PageIntro";
+import { EmojiIcon } from "@/components/Icon";
 import { useLang } from "@/components/LanguageProvider";
 
 export default function GuidesPage() {
@@ -31,8 +32,8 @@ export default function GuidesPage() {
             href={`/guides/${g.id}`}
             className="group flex flex-col rounded-2xl bg-surface/80 p-5 ring-1 ring-rose-soft transition hover:-translate-y-0.5 hover:shadow-card"
           >
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blush text-xl">
-              {g.icon}
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blush text-rose-deep">
+              <EmojiIcon glyph={g.icon} size={22} />
             </span>
             <h2 className="mt-3 font-display text-base font-bold text-plum">
               {lang === "en" ? g.title_en || g.title_bn : g.title_bn}

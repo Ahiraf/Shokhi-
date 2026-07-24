@@ -36,28 +36,28 @@ export const STRINGS = {
     en: "A women's health companion in Bangla — from periods, PCOS and pregnancy to menopause. Powered by Gemma 4.",
   },
   "footer.pages": { bn: "পাতা", en: "Pages" },
-  "footer.emergencyNumbers": { bn: "🚨 জরুরি নম্বর", en: "🚨 Emergency numbers" },
+"footer.emergencyNumbers": { bn:"জরুরি নম্বর", en:"Emergency numbers"},
   "footer.nationalEmergency": { bn: "জাতীয় জরুরি সেবা", en: "National emergency" },
   "footer.healthHotline": { bn: "স্বাস্থ্য বাতায়ন", en: "Health hotline" },
   "footer.disclaimer": {
-    bn: "ℹ️ সখী একজন স্বাস্থ্য-সহায়ক, ডাক্তার নয়। এটি প্রাথমিক ধারণা ও নিরাপদ পরামর্শ দেয়; নিশ্চিত রোগ নির্ণয় ও চিকিৎসার জন্য অবশ্যই একজন চিকিৎসকের পরামর্শ নিন।",
-    en: "ℹ️ Shokhi is a health companion, not a doctor. It gives an initial sense and safe guidance; always see a qualified doctor for diagnosis and treatment.",
+ bn:"সখী একজন স্বাস্থ্য-সহায়ক, ডাক্তার নয়। এটি প্রাথমিক ধারণা ও নিরাপদ পরামর্শ দেয়; নিশ্চিত রোগ নির্ণয় ও চিকিৎসার জন্য অবশ্যই একজন চিকিৎসকের পরামর্শ নিন।",
+ en:"Shokhi is a health companion, not a doctor. It gives an initial sense and safe guidance; always see a qualified doctor for diagnosis and treatment.",
   },
 
   // --- common --------------------------------------------------------------
-  "common.read": { bn: "পড়ুন →", en: "Read →" },
-  "common.open": { bn: "খুলুন →", en: "Open →" },
-  "common.details": { bn: "বিস্তারিত →", en: "Details →" },
+"common.read": { bn:"পড়ুন", en:"Read"},
+"common.open": { bn:"খুলুন", en:"Open"},
+"common.details": { bn:"বিস্তারিত", en:"Details"},
   "common.loading": { bn: "লোড হচ্ছে…", en: "Loading…" },
   "common.askShokhi": { bn: "সখীকে জিজ্ঞাসা করুন", en: "Ask Shokhi" },
-  "common.seeDoctorHeading": { bn: "🩺 কখন ডাক্তার দেখাবেন", en: "🩺 When to see a doctor" },
+"common.seeDoctorHeading": { bn:"কখন ডাক্তার দেখাবেন", en:"When to see a doctor"},
   "common.generalInfoNote": {
-    bn: "ℹ️ এটি সাধারণ তথ্য, নিশ্চিত চিকিৎসা নয় — প্রয়োজনে ডাক্তার বা স্বাস্থ্যকর্মীর পরামর্শ নিন।",
-    en: "ℹ️ This is general information, not a diagnosis — see a doctor or health worker if needed.",
+ bn:"এটি সাধারণ তথ্য, নিশ্চিত চিকিৎসা নয় — প্রয়োজনে ডাক্তার বা স্বাস্থ্যকর্মীর পরামর্শ নিন।",
+ en:"This is general information, not a diagnosis — see a doctor or health worker if needed.",
   },
 
   // --- home ----------------------------------------------------------------
-  "home.badge": { bn: "🌸 Gemma 4 · বাংলা · গোপনীয়", en: "🌸 Gemma 4 · Bangla · Private" },
+"home.badge": { bn:"Gemma 4 · বাংলা · গোপনীয়", en:"Gemma 4 · Bangla · Private"},
   "home.heroTitle": { bn: "নারীর বিশ্বস্ত\nস্বাস্থ্য বন্ধু", en: "A trusted health\nfriend for women" },
   "home.heroDesc": {
     bn: "মাসিক, পিসিওএস, গর্ভকাল থেকে মেনোপজ — শহরের কিশোরী থেকে গ্রামের নারী, সবার জন্য। বাংলায় বলুন, সখী বুঝবে ও নিরাপদ পরামর্শ দেবে।",
@@ -77,10 +77,10 @@ export const STRINGS = {
   },
   "home.howTitle": { bn: "কীভাবে কাজ করে", en: "How it works" },
   "home.safetyNote": {
-    bn: "🛡️ জরুরি সিদ্ধান্ত সবসময় নির্দিষ্ট নিয়ম দিয়ে নেওয়া হয়, AI-এর অনুমানে নয় — তাই সখী কখনো কোনো জরুরি অবস্থাকে হালকা করে দেখে না।",
-    en: "🛡️ Urgent decisions are always made by fixed rules, never by AI guesswork — so Shokhi never under-plays an emergency.",
+ bn:"জরুরি সিদ্ধান্ত সবসময় নির্দিষ্ট নিয়ম দিয়ে নেওয়া হয়, AI-এর অনুমানে নয় — তাই সখী কখনো কোনো জরুরি অবস্থাকে হালকা করে দেখে না।",
+ en:"Urgent decisions are always made by fixed rules, never by AI guesswork — so Shokhi never under-plays an emergency.",
   },
-  "home.hotlineTitle": { bn: "☎️ পড়তে পারেন না? ভবিষ্যৎ ভয়েস সহায়তা", en: "☎️ Voice support is planned" },
+"home.hotlineTitle": { bn:"পড়তে পারেন না? ভবিষ্যৎ ভয়েস সহায়তা", en:"Voice support is planned"},
   "home.hotlineDesc": {
     bn: "বর্তমান ডেমোতে সমর্থিত ব্রাউজারে বাংলায় বলুন। সাধারণ ফোনের হটলাইনটি ভবিষ্যৎ পরিকল্পনা।",
     en: "In this demo, speak Bangla in a supported browser. A phone hotline is planned for later.",
@@ -103,8 +103,8 @@ export const STRINGS = {
   },
   "chat.online": { bn: "অনলাইন", en: "Online" },
   "chat.privacyLine": {
-    bn: "🔒 কোনো অ্যাকাউন্ট নেই · প্রোফাইল এই ফোনেই · ☎️ ১৬২৬৩ · 🚨 ৯৯৯",
-    en: "🔒 No account · profile stays on this phone · ☎️ 16263 · 🚨 999",
+ bn:"কোনো অ্যাকাউন্ট নেই · প্রোফাইল এই ফোনেই · ১৬২৬৩ · ৯৯৯",
+ en:"No account · profile stays on this phone · 16263 · 999",
   },
   "chat.errorConnect": {
     bn: "দুঃখিত, সার্ভারের সাথে সংযোগ করা গেল না। ব্যাকএন্ড চালু আছে কিনা দেখুন।",
@@ -136,12 +136,12 @@ export const STRINGS = {
   "composer.micNotFound": { bn: "কোনো মাইক্রোফোন পাওয়া যায়নি।", en: "No microphone was found. Check your device settings or type instead." },
   "composer.voiceNoSpeech": { bn: "কোনো কথা শোনা যায়নি। আবার চেষ্টা করুন।", en: "I didn't hear anything. Please try again." },
   "composer.micDenied": {
-    bn: "মাইক্রোফোনের অনুমতি বন্ধ আছে। ব্রাউজারের ঠিকানার পাশে 🔒/🎙 আইকনে গিয়ে মাইক্রোফোন 'Allow' করুন, নইলে লিখে জানান।",
-    en: "Microphone permission is blocked. Click the 🔒/🎙 icon by the address bar and Allow the microphone — or just type your message.",
+ bn:"মাইক্রোফোনের অনুমতি বন্ধ আছে। ব্রাউজারের ঠিকানার পাশে / আইকনে গিয়ে মাইক্রোফোন 'Allow' করুন, নইলে লিখে জানান।",
+ en:"Microphone permission is blocked. Click the / icon by the address bar and Allow the microphone — or just type your message.",
   },
 
   // --- message / triage ----------------------------------------------------
-  "message.riskHint": { bn: "📊 সহায়ক ইঙ্গিত", en: "📊 Supporting signal" },
+"message.riskHint": { bn:"সহায়ক ইঙ্গিত", en:"Supporting signal"},
   "message.riskFooter": {
     bn: "নিশ্চিত রোগ নয়, ডাক্তার দেখান।",
     en: "Not a diagnosis — please see a doctor.",
@@ -157,7 +157,7 @@ export const STRINGS = {
     bn: "গাইড আনা গেল না। ব্যাকএন্ড চালু আছে কিনা দেখুন।",
     en: "Couldn't load guides. Check that the backend is running.",
   },
-  "guides.backAll": { bn: "← সব গাইড", en: "← All guides" },
+"guides.backAll": { bn:"সব গাইড", en:"All guides"},
   "guides.notFound": { bn: "এই গাইডটি পাওয়া গেল না।", en: "This guide wasn't found." },
   "guides.moreQuestion": {
     bn: "এই বিষয়ে আরও কিছু জানতে চান?",
@@ -171,17 +171,17 @@ export const STRINGS = {
     en: "Common women's-health conditions in plain language — signs, home care, and when to see a doctor.",
   },
   "learn.error": { bn: "তথ্য আনা গেল না।", en: "Couldn't load the information." },
-  "learn.backAll": { bn: "← সব বিষয়", en: "← All topics" },
+"learn.backAll": { bn:"সব বিষয়", en:"All topics"},
   "learn.notFound": { bn: "এই বিষয়টি পাওয়া গেল না।", en: "This topic wasn't found." },
-  "learn.whatYouCanDo": { bn: "🌸 যা করতে পারেন", en: "🌸 What you can do" },
+"learn.whatYouCanDo": { bn:"যা করতে পারেন", en:"What you can do"},
   "learn.haveThis": {
     bn: "আপনার এই উপসর্গ আছে বলে মনে হচ্ছে?",
     en: "Think you might have these symptoms?",
   },
   "learn.checkWithShokhi": { bn: "সখীর সাথে যাচাই করুন", en: "Check with Shokhi" },
   "learn.diagnosisNote": {
-    bn: "ℹ️ এটি সাধারণ তথ্য, নিশ্চিত রোগ নির্ণয় নয় — একজন ডাক্তারের পরামর্শ নিন।",
-    en: "ℹ️ This is general information, not a diagnosis — please consult a doctor.",
+ bn:"এটি সাধারণ তথ্য, নিশ্চিত রোগ নির্ণয় নয় — একজন ডাক্তারের পরামর্শ নিন।",
+ en:"This is general information, not a diagnosis — please consult a doctor.",
   },
   // urgency tags on learn cards
   "urgency.emergency.short": { bn: "জরুরি", en: "Emergency" },
@@ -189,15 +189,15 @@ export const STRINGS = {
   "urgency.self_care.short": { bn: "ঘরোয়া যত্ন", en: "Home care" },
   "urgency.info.short": { bn: "তথ্য", en: "Info" },
   "urgency.emergency.long": {
-    bn: "🚨 জরুরি — এখনই হাসপাতালে যান",
-    en: "🚨 Emergency — go to a hospital now",
+ bn:"জরুরি — এখনই হাসপাতালে যান",
+ en:"Emergency — go to a hospital now",
   },
-  "urgency.see_doctor_soon.long": { bn: "🩺 শীঘ্রই ডাক্তার দেখান", en: "🩺 See a doctor soon" },
+"urgency.see_doctor_soon.long": { bn:"শীঘ্রই ডাক্তার দেখান", en:"See a doctor soon"},
   "urgency.self_care.long": {
-    bn: "🌿 ঘরোয়া যত্ন সাধারণত যথেষ্ট",
-    en: "🌿 Home care is usually enough",
+ bn:"ঘরোয়া যত্ন সাধারণত যথেষ্ট",
+ en:"Home care is usually enough",
   },
-  "urgency.info.long": { bn: "💬 সাধারণ তথ্য", en: "💬 General information" },
+"urgency.info.long": { bn:"সাধারণ তথ্য", en:"General information"},
 
   // --- myths ---------------------------------------------------------------
   "myths.title": { bn: "ভুল ধারণা ভাঙুন", en: "Bust the myths" },
@@ -212,7 +212,7 @@ export const STRINGS = {
   },
   "myths.check": { bn: "যাচাই", en: "Check" },
   "myths.errorReply": { bn: "দুঃখিত, এখন উত্তর আনা গেল না।", en: "Sorry, couldn't get an answer right now." },
-  "myths.truth": { bn: "✅ সত্যি:", en: "✅ Truth:" },
+"myths.truth": { bn:"সত্যি:", en:"Truth:"},
 
   // --- tracker -------------------------------------------------------------
   "tracker.title": { bn: "মাসিক ট্র্যাকার", en: "Period tracker" },
@@ -220,14 +220,14 @@ export const STRINGS = {
     bn: "প্রতিবার মাসিক শুরু হলে তারিখ, রক্তক্ষরণ, ব্যথা ও প্যাডের সংখ্যা লিখুন। কয়েক মাসের তথ্য থেকে সখী বুঝবে চক্র নিয়মিত কিনা এবং কিছু নিয়ে ভাবার আছে কিনা।",
     en: "Each time your period starts, log the date, flow, pain and pad count. From a few months of data, Shokhi can tell whether your cycle is regular and whether anything is worth a second look.",
   },
-  "tracker.cardTitle": { bn: "🩸 মাসিক ট্র্যাকার", en: "🩸 Period tracker" },
+"tracker.cardTitle": { bn:"মাসিক ট্র্যাকার", en:"Period tracker"},
   "tracker.cardIntro": {
     bn: "প্রতিবার মাসিক শুরু হলে তারিখটি লিখুন। সখী আপনার চক্র বুঝে জানাবে এটি নিয়মিত কিনা এবং কিছু নিয়ে ভাবার আছে কিনা।",
     en: "Log the date each time your period starts. Shokhi will read your cycle and tell you if it's regular and if anything is worth thinking about.",
   },
   "tracker.privacy": {
-    bn: "🔒 আপনার তথ্য শুধু এই ফোনেই থাকে, সার্ভারে জমা হয় না।",
-    en: "🔒 Your data stays on this phone only; nothing is stored on a server.",
+ bn:"আপনার তথ্য শুধু এই ফোনেই থাকে, সার্ভারে জমা হয় না।",
+ en:"Your data stays on this phone only; nothing is stored on a server.",
   },
   "tracker.startDate": { bn: "মাসিক শুরুর তারিখ", en: "Period start date" },
   "tracker.dateHint": {
@@ -238,7 +238,7 @@ export const STRINGS = {
   "tracker.pain": { bn: "ব্যথা", en: "Pain" },
   "tracker.padsPerDay": { bn: "দিনে প্যাড", en: "Pads/day" },
   "tracker.add": { bn: "+ যোগ করুন", en: "+ Add" },
-  "tracker.save": { bn: "✔ সংরক্ষণ করুন", en: "✔ Save changes" },
+"tracker.save": { bn:"সংরক্ষণ করুন", en:"Save changes"},
   "tracker.editingHint": { bn: "এই মাসিকটি সম্পাদনা করছেন", en: "Editing this entry" },
   "tracker.cancel": { bn: "বাতিল", en: "Cancel" },
   "tracker.logged": { bn: "লেখা মাসিক", en: "Logged periods" },
@@ -251,17 +251,17 @@ export const STRINGS = {
     bn: "প্যাটার্ন দেখতে অন্তত ২টি তারিখ লিখুন",
     en: "Add at least 2 dates to see a pattern",
   },
-  "tracker.analyze": { bn: "🔍 আমার চক্র বিশ্লেষণ করুন", en: "🔍 Analyse my cycle" },
+"tracker.analyze": { bn:"আমার চক্র বিশ্লেষণ করুন", en:"Analyse my cycle"},
   "tracker.avgCycle": { bn: "গড় চক্র", en: "Avg cycle" },
   "tracker.days": { bn: "দিন", en: "days" },
-  "tracker.regular": { bn: "নিয়মিত ✅", en: "Regular ✅" },
-  "tracker.irregular": { bn: "অনিয়মিত ⚠️", en: "Irregular ⚠️" },
+"tracker.regular": { bn:"নিয়মিত", en:"Regular"},
+"tracker.irregular": { bn:"অনিয়মিত", en:"Irregular"},
   "tracker.nextEst": { bn: "পরবর্তী আনুমানিক", en: "Next (est.)" },
   // dashboard hero
   "tracker.heroEmptyBig": { bn: "শুরু করুন", en: "Let's begin" },
   "tracker.heroEmptySmall": { bn: "নিচে ‘আজ মাসিক লিখুন’ চাপুন বা তারিখ যোগ করুন", en: "Tap ‘Log period (today)’ below, or add a date" },
   "tracker.heroPeriodDay": { bn: "মাসিক · দিন", en: "Period · Day" },
-  "tracker.heroPeriodSmall": { bn: "নিজের যত্ন নিন 🌸", en: "Take gentle care of yourself 🌸" },
+"tracker.heroPeriodSmall": { bn:"নিজের যত্ন নিন", en:"Take gentle care of yourself"},
   "tracker.heroUpcomingPre": { bn: "পরবর্তী মাসিক", en: "Period in" },
   "tracker.heroUpcomingSmall": { bn: "আনুমানিক — আপনার লেখা তথ্যের ভিত্তিতে", en: "An estimate, based on what you've logged" },
   "tracker.heroLate": { bn: "মাসিক দেরি", en: "Period late by" },
@@ -310,7 +310,7 @@ export const STRINGS = {
   "pain.3": { bn: "তীব্র", en: "Severe" },
 
   // --- pad reminder --------------------------------------------------------
-  "pad.title": { bn: "⏰ প্যাড বদলানোর রিমাইন্ডার", en: "⏰ Pad-change reminder" },
+"pad.title": { bn:"প্যাড বদলানোর রিমাইন্ডার", en:"Pad-change reminder"},
   "pad.intro": {
     bn: "প্রতি ৪–৬ ঘণ্টায় প্যাড বদলানো ভালো — এতে র‍্যাশ ও সংক্রমণ এড়ানো যায়।",
     en: "Changing your pad every 4–6 hours is best — it helps avoid rash and infection.",
@@ -320,17 +320,17 @@ export const STRINGS = {
   "pad.hours": { bn: "ঘণ্টা", en: "h" },
   "pad.minutes": { bn: "মিনিট", en: "min" },
   "pad.cancel": { bn: "বাতিল", en: "Cancel" },
-  "pad.timeUp": { bn: "🌸 প্যাড বদলানোর সময় হয়েছে।", en: "🌸 Time to change your pad." },
+"pad.timeUp": { bn:"প্যাড বদলানোর সময় হয়েছে।", en:"Time to change your pad."},
   "pad.again": { bn: "আবার", en: "Again" },
   "pad.againHours": { bn: "ঘণ্টা", en: "h" },
   "pad.notifTitle": { bn: "সখী", en: "Shokhi" },
   "pad.notifBody": {
-    bn: "প্যাড বদলানোর সময় হয়েছে 🌸 পরিষ্কার থাকুন, ভালো থাকুন।",
-    en: "Time to change your pad 🌸 Stay clean, stay well.",
+ bn:"প্যাড বদলানোর সময় হয়েছে পরিষ্কার থাকুন, ভালো থাকুন।",
+ en:"Time to change your pad Stay clean, stay well.",
   },
   "pad.footer": {
-    bn: "🔒 রিমাইন্ডার এই ফোনেই থাকে। অ্যাপ খোলা থাকলে সময় গুনবে; অনুমতি দিলে নোটিফিকেশনও পাবেন।",
-    en: "🔒 The reminder stays on this phone. It counts down while the app is open; allow notifications and you'll be pinged too.",
+ bn:"রিমাইন্ডার এই ফোনেই থাকে। অ্যাপ খোলা থাকলে সময় গুনবে; অনুমতি দিলে নোটিফিকেশনও পাবেন।",
+ en:"The reminder stays on this phone. It counts down while the app is open; allow notifications and you'll be pinged too.",
   },
 
   // --- hotline -------------------------------------------------------------
@@ -346,17 +346,17 @@ export const STRINGS = {
     en: "The same Shokhi and safe guidance, eventually by voice with no app or reading required.",
   },
   "hotline.techNote": {
-    bn: "🛠️ এটি এখনো ভবিষ্যৎ পরিকল্পনা। চালু হলে ফোনের ভয়েসকে লেখায় রূপান্তরের একটি নিরাপদ সেবা, একই নিয়ম-ভিত্তিক যাচাই এবং বাংলায় উত্তর শোনানোর ব্যবস্থা লাগবে।",
-    en: "🛠️ This is currently a roadmap feature. A live version will need a safe speech-to-text service, the same rule-based triage, and Bangla audio replies.",
+ bn:"এটি এখনো ভবিষ্যৎ পরিকল্পনা। চালু হলে ফোনের ভয়েসকে লেখায় রূপান্তরের একটি নিরাপদ সেবা, একই নিয়ম-ভিত্তিক যাচাই এবং বাংলায় উত্তর শোনানোর ব্যবস্থা লাগবে।",
+ en:"This is currently a roadmap feature. A live version will need a safe speech-to-text service, the same rule-based triage, and Bangla audio replies.",
   },
-  "hotline.needEmergency": { bn: "🚨 এখনই জরুরি প্রয়োজন?", en: "🚨 Need help right now?" },
+"hotline.needEmergency": { bn:"এখনই জরুরি প্রয়োজন?", en:"Need help right now?"},
   "hotline.emergencyLine": {
     bn: "জাতীয় জরুরি সেবা ৯৯৯ · স্বাস্থ্য বাতায়ন ১৬২৬৩",
     en: "National emergency 999 · Health hotline 16263",
   },
   "hotline.preferText": {
-    bn: "এখন লিখে পরামর্শ নিতে চান? → পরামর্শে যান",
-    en: "Prefer to type? → Go to the chat",
+ bn:"এখন লিখে পরামর্শ নিতে চান? পরামর্শে যান",
+ en:"Prefer to type? Go to the chat",
   },
 
   // --- about ---------------------------------------------------------------
@@ -365,7 +365,7 @@ export const STRINGS = {
     bn: "সখী কীভাবে কাজ করে, কীভাবে নিরাপদ রাখে, এবং কখন সরাসরি হাসপাতালে যেতে হবে।",
     en: "How Shokhi works, how it keeps you safe, and when to go straight to a hospital.",
   },
-  "about.emergencyTitle": { bn: "🚨 এখনই হাসপাতালে যান যদি", en: "🚨 Go to a hospital now if" },
+"about.emergencyTitle": { bn:"এখনই হাসপাতালে যান যদি", en:"Go to a hospital now if"},
   "about.emergencyLine": {
     bn: "জাতীয় জরুরি সেবা — ৯৯৯ · স্বাস্থ্য বাতায়ন — ১৬২৬৩",
     en: "National emergency — 999 · Health hotline — 16263",
@@ -399,13 +399,13 @@ export const STRINGS = {
     bn: "ট্র্যাকারে অন্তত ২টি মাসিক লিখলে এখানে গড় চক্র দেখা যাবে।",
     en: "Log at least 2 periods in the tracker to see your average cycle here.",
   },
-  "profile.goTracker": { bn: "ট্র্যাকারে যান →", en: "Go to tracker →" },
+"profile.goTracker": { bn:"ট্র্যাকারে যান", en:"Go to tracker"},
   "profile.save": { bn: "সংরক্ষণ করুন", en: "Save" },
-  "profile.saved": { bn: "✓ সংরক্ষিত হয়েছে", en: "✓ Saved" },
+"profile.saved": { bn:"সংরক্ষিত হয়েছে", en:"Saved"},
   "profile.clear": { bn: "প্রোফাইল মুছুন", en: "Clear profile" },
   "profile.privacy": {
-    bn: "🔒 আপনার প্রোফাইল শুধু এই ফোনেই থাকে, সার্ভারে জমা হয় না। যেকোনো সময় মুছে ফেলতে পারেন।",
-    en: "🔒 Your profile stays on this phone only; nothing is stored on a server. You can clear it anytime.",
+ bn:"আপনার প্রোফাইল শুধু এই ফোনেই থাকে, সার্ভারে জমা হয় না। যেকোনো সময় মুছে ফেলতে পারেন।",
+ en:"Your profile stays on this phone only; nothing is stored on a server. You can clear it anytime.",
   },
   "profile.usedInChat": {
     bn: "এই তথ্য পরামর্শের সময় সখীকে দেওয়া হবে, যাতে সে বারবার একই প্রশ্ন না করে।",
@@ -422,13 +422,13 @@ export const STRINGS = {
     en: "Gentle movement and simple Bangladeshi food that support hormonal balance — tuned to your cycle and conditions.",
   },
   "wellness.error": { bn: "তথ্য আনা গেল না।", en: "Couldn't load this." },
-  "wellness.byPhase": { bn: "🩸 মাসিক চক্র অনুযায়ী", en: "🩸 By cycle phase" },
-  "wellness.forConditions": { bn: "🌼 আপনার অবস্থা অনুযায়ী", en: "🌼 For your conditions" },
-  "wellness.movesTitle": { bn: "🤸 সহজ ব্যায়াম (ঘরেই করা যায়)", en: "🤸 Simple moves (do them at home)" },
-  "wellness.move": { bn: "🏃 চলাফেরা", en: "🏃 Movement" },
-  "wellness.food": { bn: "🥗 খাবার", en: "🥗 Food" },
+"wellness.byPhase": { bn:"মাসিক চক্র অনুযায়ী", en:"By cycle phase"},
+"wellness.forConditions": { bn:"আপনার অবস্থা অনুযায়ী", en:"For your conditions"},
+"wellness.movesTitle": { bn:"সহজ ব্যায়াম (ঘরেই করা যায়)", en:"Simple moves (do them at home)"},
+"wellness.move": { bn:"চলাফেরা", en:"Movement"},
+"wellness.food": { bn:"খাবার", en:"Food"},
   // personalized "today's tip" card (on the tracker)
-  "wellness.tipTitle": { bn: "🌿 আজকের পরামর্শ", en: "🌿 Today's tip" },
+"wellness.tipTitle": { bn:"আজকের পরামর্শ", en:"Today's tip"},
   "wellness.tipPhase": {
     bn: "আপনি সম্ভবত এই পর্যায়ে আছেন:",
     en: "You're likely in this phase:",
@@ -437,8 +437,8 @@ export const STRINGS = {
     bn: "মাসিক ট্র্যাকারে তারিখ লিখলে এখানে চক্র অনুযায়ী চলাফেরা ও খাবারের পরামর্শ পাবেন।",
     en: "Log a period in the tracker to get movement & food tips tailored to your cycle here.",
   },
-  "wellness.seeAll": { bn: "সব পরামর্শ দেখুন →", en: "See all tips →" },
-  "wellness.weekTitle": { bn: "📅 এই সপ্তাহে আপনার জন্য", en: "📅 This week for you" },
+"wellness.seeAll": { bn:"সব পরামর্শ দেখুন", en:"See all tips"},
+"wellness.weekTitle": { bn:"এই সপ্তাহে আপনার জন্য", en:"This week for you"},
   "wellness.weekSub": {
     bn: "আপনার চক্র অনুযায়ী প্রতিদিনের হালকা চলাফেরা ও খাবারের দিকনির্দেশ।",
     en: "A gentle day-by-day movement + food focus, tuned to your cycle.",

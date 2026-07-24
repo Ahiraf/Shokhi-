@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLang } from "./LanguageProvider";
+import Icon from "./Icon";
 
 const STORE_KEY = "shokhi_pad_reminder";
 const BN = "০১২৩৪৫৬৭৮৯";
@@ -80,7 +81,7 @@ export default function PadReminder() {
 
   return (
     <div className="mt-4 rounded-2xl bg-surface/70 p-4 ring-1 ring-rose-soft">
-      <h2 className="text-base font-bold text-rose-deep">{t("pad.title")}</h2>
+      <h2 className="flex items-center gap-2 text-base font-bold text-rose-deep"><Icon name="clock" size={18} /> {t("pad.title")}</h2>
       <p className="mt-1 text-sm text-rose-deep/70">{t("pad.intro")}</p>
 
       {!active && !done && (
@@ -99,8 +100,8 @@ export default function PadReminder() {
 
       {active && (
         <div className="mt-3 flex items-center justify-between">
-          <span className="text-sm font-medium text-rose-deep">
-            ⏳ {hrsLeft > 0 ? `${num(hrsLeft)} ${t("pad.hours")} ` : ""}
+          <span className="flex items-center gap-1.5 text-sm font-medium text-rose-deep">
+            <Icon name="clock" size={15} /> {hrsLeft > 0 ? `${num(hrsLeft)} ${t("pad.hours")} ` : ""}
             {num(minLeft)} {t("pad.minutes")} {t("pad.left")}
           </span>
           <button
@@ -114,7 +115,7 @@ export default function PadReminder() {
 
       {done && (
         <div className="mt-3 rounded-xl bg-rose-soft px-3 py-2.5">
-          <p className="text-sm font-semibold text-rose-deep">{t("pad.timeUp")}</p>
+          <p className="flex items-center gap-2 text-sm font-semibold text-rose-deep"><Icon name="flower" size={16} /> {t("pad.timeUp")}</p>
           <div className="mt-2 flex gap-2">
             {[4, 6].map((h) => (
               <button
