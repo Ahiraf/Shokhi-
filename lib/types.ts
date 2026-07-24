@@ -47,6 +47,8 @@ export interface TriageResult {
   emergency_number_bd: string;
   health_hotline_bd: string;
   disclaimer_bn: string;
+  life_stage?: string;
+  safety_net?: { escalated: boolean; reason: string };
 }
 
 export interface MessageResponse {

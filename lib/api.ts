@@ -32,6 +32,55 @@ export function sendMessage(
   return post<MessageResponse>("/api/message", { message, profile, history, lang });
 }
 
+/**
+ * Streaming chat over Server-Sent Events. Calls `onMeta` once with the triage/profile
+ * payload, then `onDelta` for each guidance chunk. Resolves with the assembled full text.
+ * Throws on transport failure so the caller can fall back to sendMessage().
+ */
+export async function sendMessageStream(
+  message: string,
+  profile: Record<string, unknown>,
+  history: string[],
+  lang: "bn" | "en",
+  handlers: { onMeta?: (m: Omit<MessageResponse, "guidance">) => void; onDelta?: (text: string) => void }
+): Promise<string> {
+  const res = await fetch(`${BASE}/api/message/stream`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message, profile, history, lang }),
+  });
+  if (!res.ok || !res.body) throw new Error(`stream failed: ${res.status}`);
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let full = "";
+
+  const handleEvent = (block: string) => {
+    const lines = block.split("\n");
+    const event = lines.find((l) => l.startsWith("event:"))?.slice(6).trim();
+    const dataLine = lines.find((l) => l.startsWith("data:"))?.slice(5).trim();
+    if (!event || dataLine === undefined) return;
+    const data = JSON.parse(dataLine);
+    if (event === "meta") handlers.onMeta?.(data);
+    else if (event === "delta") { full += data; handlers.onDelta?.(data as string); }
+    else if (event === "error") throw new Error(data.detail || "stream error");
+  };
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    let sep: number;
+    while ((sep = buffer.indexOf("\n\n")) !== -1) {
+      const block = buffer.slice(0, sep);
+      buffer = buffer.slice(sep + 2);
+      if (block.trim()) handleEvent(block);
+    }
+  }
+  return full;
+}
+
 export async function getGuides(): Promise<GuideCard[]> {
   const res = await fetch(`${BASE}/api/guides`);
   if (!res.ok) throw new Error("guides failed");

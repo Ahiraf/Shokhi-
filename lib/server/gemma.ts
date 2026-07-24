@@ -9,6 +9,11 @@ import type { Lang } from "./prompts";
 
 type Profile = Record<string, unknown>;
 
+export interface SafetyResult {
+  emergency: boolean;
+  reason: string | null;
+}
+
 export interface Backend {
   name: string;
   extractSymptoms(conversation: string, known: Profile): Promise<Profile>;
@@ -17,6 +22,10 @@ export interface Backend {
   explainGuide(guide: any, question: string, lang: Lang): Promise<string>;
   /** RAG: answer a question grounded ONLY in the retrieved context passages. */
   answerGrounded(question: string, context: string, lang: Lang): Promise<string>;
+  /** Escalate-only safety net: does this message look like an emergency? Never downgrades. */
+  safetyCheck(message: string): Promise<SafetyResult>;
+  /** Streaming variant of explainTriage — yields the guidance in chunks for a live feel. */
+  explainTriageStream(triage: any, lang: Lang): AsyncGenerator<string>;
 }
 
 const pickField = (obj: any, base: string, lang: Lang) =>
@@ -210,6 +219,35 @@ class MockBackend implements Backend {
     return `${intro}\n\n${context}${outro}`;
   }
 
+  // Offline safety net: deterministic keyword scan for clear emergency phrasing. Escalate-only
+  // by construction — it can only return emergency=true, never downgrade the rules engine.
+  async safetyCheck(message: string): Promise<SafetyResult> {
+    const low = message.toLowerCase();
+    const EMERGENCY_PHRASES: [string, string][] = [
+      ["খিঁচুনি", "convulsions"], ["seizure", "convulsions"], ["convulsion", "convulsions"], ["fits", "convulsions"],
+      ["অজ্ঞান", "fainting"], ["faint", "fainting"], ["pass out", "fainting"], ["lost consciousness", "fainting"],
+      ["chest pain", "chest pain"], ["বুকে ব্যথা", "chest pain"],
+      ["can't breathe", "trouble breathing"], ["cannot breathe", "trouble breathing"], ["শ্বাস নিতে", "trouble breathing"],
+      ["নড়ছে না", "reduced fetal movement"], ["baby not moving", "reduced fetal movement"], ["baby hasn't moved", "reduced fetal movement"], ["baby hasnt moved", "reduced fetal movement"],
+      ["প্রচুর রক্ত", "heavy bleeding"], ["অতিরিক্ত রক্ত", "heavy bleeding"], ["soaking", "heavy bleeding"], ["heavy bleeding", "heavy bleeding"],
+    ];
+    for (const [kw, reason] of EMERGENCY_PHRASES) {
+      const idx = low.indexOf(kw.toLowerCase());
+      if (idx === -1) continue;
+      const tail = low.slice(idx + kw.length, idx + kw.length + 14);
+      if (["না ", "নেই", "not ", "no "].some((n) => tail.startsWith(n) || tail.includes(n))) continue;
+      return { emergency: true, reason };
+    }
+    return { emergency: false, reason: null };
+  }
+
+  // Mock "streaming": yield the deterministic guidance in line-sized pieces so the client
+  // stream path works offline. The GeminiBackend streams real Gemma tokens.
+  async *explainTriageStream(tr: any, lang: Lang): AsyncGenerator<string> {
+    const full = await this.explainTriage(tr, lang);
+    for (const line of full.split("\n")) yield line + "\n";
+  }
+
 }
 
 // --- Gemini backend (hosted Gemma 4) with multi-key quota fallback ------------
@@ -287,6 +325,17 @@ class GeminiBackend implements Backend {
     return (resp.text ?? "").trim();
   }
 
+  private async *generateStream(system: string, user: string, temperature = 0.4): AsyncGenerator<string> {
+    const prompt = `${system}\n\n${user}`;
+    // Open the stream through the same multi-key fallback used for non-streaming calls.
+    const stream: any = await this.withFallback((c) =>
+      c.models.generateContentStream({ model: this.model, contents: prompt, config: { temperature } }));
+    for await (const chunk of stream) {
+      const t = chunk?.text ?? "";
+      if (t) yield t;
+    }
+  }
+
   async extractSymptoms(conversation: string, known: Profile): Promise<Profile> {
     const raw = await this.generate(P.EXTRACT_SYSTEM,
       P.extractUser(conversation, JSON.stringify(known)), 0.0);
@@ -308,6 +357,20 @@ class GeminiBackend implements Backend {
 
   explainTriage(tr: any, lang: Lang) {
     return this.generate(P.withLanguage(P.EXPLAIN_SYSTEM, lang), P.explainUser(JSON.stringify(tr)), 0.4);
+  }
+  explainTriageStream(tr: any, lang: Lang) {
+    return this.generateStream(P.withLanguage(P.EXPLAIN_SYSTEM, lang), P.explainUser(JSON.stringify(tr)), 0.4);
+  }
+  async safetyCheck(message: string): Promise<SafetyResult> {
+    try {
+      const raw = await this.generate(P.SAFETY_SYSTEM, P.safetyUser(message), 0.0);
+      const data: any = parseJson(raw);
+      return { emergency: data?.emergency === true, reason: typeof data?.reason === "string" ? data.reason : null };
+    } catch {
+      // Fail SAFE for the deterministic engine: if the classifier errors, don't manufacture
+      // an emergency AND don't suppress one — the rules engine remains the source of truth.
+      return { emergency: false, reason: null };
+    }
   }
   bustMyth(belief: string, fact: string, lang: Lang) {
     return this.generate(P.withLanguage(P.MYTH_SYSTEM, lang), P.mythUser(belief, fact), 0.4);

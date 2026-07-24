@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { sendMessage, explainGuide } from "@/lib/api";
+import { sendMessage, sendMessageStream, explainGuide } from "@/lib/api";
 import type { ChatItem } from "@/lib/types";
 import Message from "@/components/Message";
 import Composer from "@/components/Composer";
@@ -35,13 +35,46 @@ export default function ChatPage() {
   async function handleSend(text: string) {
     setBusy(true);
     setChat((c) => [...c, { role: "user", text }]);
+    setHistory((h) => [...h, text]);
     try {
-      const res = await sendMessage(text, profile, history, lang);
-      setProfile(res.profile);
-      setHistory((h) => [...h, text]);
-      setChat((c) => [...c, { role: "assistant", text: res.guidance, data: res }]);
+      // Stream the reply so it appears live. Append a placeholder assistant bubble, then
+      // grow its text as tokens arrive and attach the triage payload from the meta event.
+      setChat((c) => [...c, { role: "assistant", text: "" }]);
+      await sendMessageStream(text, profile, history, lang, {
+        onMeta: (m) => {
+          setProfile(m.profile);
+          setChat((c) => {
+            const next = [...c];
+            next[next.length - 1] = { ...next[next.length - 1], data: { ...m } as any };
+            return next;
+          });
+        },
+        onDelta: (chunk) => {
+          setChat((c) => {
+            const next = [...c];
+            const last = next[next.length - 1];
+            next[next.length - 1] = { ...last, text: last.text + chunk };
+            return next;
+          });
+        },
+      });
     } catch {
-      setChat((c) => [...c, { role: "assistant", text: t("chat.errorConnect") }]);
+      // Streaming unavailable (proxy buffering, older client) — fall back to one-shot call.
+      try {
+        const res = await sendMessage(text, profile, history, lang);
+        setProfile(res.profile);
+        setChat((c) => {
+          const next = [...c];
+          next[next.length - 1] = { role: "assistant", text: res.guidance, data: res };
+          return next;
+        });
+      } catch {
+        setChat((c) => {
+          const next = [...c];
+          next[next.length - 1] = { role: "assistant", text: t("chat.errorConnect") };
+          return next;
+        });
+      }
     } finally {
       setBusy(false);
     }

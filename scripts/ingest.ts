@@ -11,7 +11,14 @@ import { readFileSync, writeFileSync, readdirSync, mkdirSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { loadEnvConfig } from "@next/env";
-import { embed, chunkText, activeEmbedder, EMBED_MODEL } from "../lib/server/rag-embed";
+import {
+  embed,
+  chunkWithHeadings,
+  activeEmbedder,
+  EMBED_MODEL,
+  BGE_MODEL,
+  type Embedder,
+} from "../lib/server/rag-embed";
 
 // Load .env.local (the same file the app uses) so GOOGLE_API_KEY is picked up
 // automatically — no need to pass it inline on the command.
@@ -21,12 +28,22 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SOURCES_DIR = join(__dirname, "../lib/server/rag/sources");
 const OUT = join(__dirname, "../lib/server/rag/corpus.json");
 
-type Meta = { title: string; source: string; url: string; lang: string };
+// Extended frontmatter: `topic`, `pub_year` and `page` join the citation metadata so
+// every retrieved chunk can be traced (like Maya's source_org / page / section_title).
+type Meta = {
+  title: string;
+  source: string;
+  url: string;
+  lang: string;
+  topic: string;
+  pub_year: string;
+  page: string;
+};
 
 /** Parse a very small `--- key: value ---` frontmatter header. */
 function parseDoc(raw: string): { meta: Meta; body: string } {
   const m = raw.match(/^---\s*([\s\S]*?)\n---\s*\n([\s\S]*)$/);
-  const meta: Meta = { title: "", source: "", url: "", lang: "en" };
+  const meta: Meta = { title: "", source: "", url: "", lang: "en", topic: "", pub_year: "", page: "" };
   if (!m) return { meta, body: raw };
   for (const line of m[1].split("\n")) {
     const kv = line.match(/^(\w+):\s*(.*)$/);
@@ -35,9 +52,28 @@ function parseDoc(raw: string): { meta: Meta; body: string } {
   return { meta, body: m[2] };
 }
 
+// Fallback topic inferred from the filename prefix, so existing sources get a sensible
+// topic even before a `topic:` line is added to their frontmatter.
+function inferTopic(file: string, meta: Meta): string {
+  if (meta.topic) return meta.topic;
+  const f = file.toLowerCase();
+  if (f.includes("pcos")) return "pcos";
+  if (f.includes("endometrio")) return "endometriosis";
+  if (f.includes("menstrual")) return "menstruation";
+  if (f.includes("menopause")) return "menopause";
+  if (f.includes("contracept") || f.includes("family_planning") || f.includes("menstrual_regulation")) return "contraception";
+  if (f.includes("antenatal") || f.includes("pregnan") || f.includes("maternal") || f.includes("newborn")) return "pregnancy";
+  if (f.includes("hiv")) return "infection";
+  return "general";
+}
+
 async function main() {
-  const embedder = activeEmbedder();
-  console.log(`[ingest] embedder = ${embedder}${embedder === "google" ? ` (${EMBED_MODEL})` : " (offline)"}`);
+  // EMBEDDER=google|bge-m3|mock overrides auto-detection (used by the embedder benchmark).
+  const override = process.env.EMBEDDER as Embedder | undefined;
+  const embedder: Embedder = override ?? activeEmbedder();
+  const modelLabel =
+    embedder === "google" ? EMBED_MODEL : embedder === "bge-m3" ? BGE_MODEL : "mock-lexical-256";
+  console.log(`[ingest] embedder = ${embedder} (${modelLabel})`);
 
   const files = readdirSync(SOURCES_DIR).filter((f) => f.endsWith(".md"));
   const chunks: any[] = [];
@@ -45,10 +81,11 @@ async function main() {
 
   for (const file of files) {
     const { meta, body } = parseDoc(readFileSync(join(SOURCES_DIR, file), "utf-8"));
-    const pieces = chunkText(body);
-    console.log(`[ingest] ${file}: ${pieces.length} chunks`);
+    const topic = inferTopic(file, meta);
+    const pieces = chunkWithHeadings(body);
+    console.log(`[ingest] ${file}: ${pieces.length} chunks (topic=${topic})`);
     for (let i = 0; i < pieces.length; i++) {
-      const text = pieces[i];
+      const { text, section } = pieces[i];
       const embedding = await embed(`${meta.title}\n${text}`, embedder);
       dim = embedding.length;
       chunks.push({
@@ -57,13 +94,17 @@ async function main() {
         title: meta.title,
         source: meta.source,
         url: meta.url,
+        section,
+        topic,
+        pub_year: meta.pub_year || "",
+        page: meta.page || "",
         embedding,
       });
     }
   }
 
   mkdirSync(dirname(OUT), { recursive: true });
-  writeFileSync(OUT, JSON.stringify({ embedder, model: embedder === "google" ? EMBED_MODEL : "mock-lexical-256", dim, chunks }, null, 0));
+  writeFileSync(OUT, JSON.stringify({ embedder, model: modelLabel, dim, chunks }, null, 0));
   console.log(`[ingest] wrote ${chunks.length} chunks (dim ${dim}) -> ${OUT}`);
 }
 

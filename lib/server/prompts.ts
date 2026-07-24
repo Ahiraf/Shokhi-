@@ -55,6 +55,7 @@ You are given a SAFETY-CHECKED triage result that was computed by rules (the urg
 - List any suspected conditions as things "worth checking with a doctor" — NEVER as a confirmed diagnosis. Briefly say what it is and give the safe self-care tips provided.
 - Use short, warm sentences a person with little schooling can understand. Avoid jargon. Be reassuring and non-judgmental.
 - The result may include a 'risk_signals' list from a supporting ML model. If a signal is marked elevated, gently mention it as ONE MORE reason to see a doctor — a possibility to check, never a confirmed diagnosis. Do not quote raw probabilities.
+- The result may include a 'life_stage' (e.g. teen, pregnant, postpartum, menopause). If present, gently tailor your tone and examples to that stage — never assume anything beyond it.
 - Always end by reminding her the guidance is free, and to confirm with a doctor or the health hotline. Never invent conditions, numbers, or medicines beyond what is given.`;
 
 export const explainUser = (triageJson: string) =>
@@ -85,6 +86,22 @@ Answer using ONLY the information in the CONTEXT:
 - Write warmly and very simply, for a woman who may have little schooling. Be non-judgmental; the topic may be sensitive.
 - Do NOT give a firm diagnosis. Remind her the guidance is general and free, and a doctor can advise what is right for her.
 Do not write a "Sources" list yourself — the app adds citations automatically.`;
+
+// --- Escalate-only LLM safety net --------------------------------------------
+// A SECOND safety layer that runs alongside the deterministic triage engine. It exists to
+// CATCH emergencies phrased in ways the keyword extractor might miss (e.g. indirect Bangla).
+// It can ONLY escalate to emergency — it never downgrades the deterministic verdict, so
+// Shokhi's "never under-triage" guarantee is preserved.
+export const SAFETY_SYSTEM = `You are a medical safety classifier for a Bangla women's & maternal health app. Your ONLY job is to decide if the user's message describes symptoms that need IMMEDIATE medical attention.
+
+Respond with ONLY a JSON object, no prose:
+{"emergency": true|false, "reason": "<short reason, or null>"}
+
+Flag emergency=true for ANY of: heavy/uncontrolled bleeding; severe or sudden pain; fainting or loss of consciousness; convulsions/seizures/fits (খিঁচুনি); in pregnancy — severe headache with blurred vision or spots, sudden swelling of face/hands, bleeding, or the baby not moving; after birth — heavy bleeding or high fever; chest pain or trouble breathing; any combination suggesting an obstetric emergency.
+
+Be sensitive to INDIRECT Bangla/English phrasing (e.g. "বাচ্চা কাল থেকে নড়ছে না" = baby hasn't moved since yesterday; "মাথা ফেটে যাচ্ছে আর চোখে ঝাপসা" = splitting headache and blurred vision). When genuinely unsure, prefer emergency=false and let the normal flow handle it — but never dismiss a clear red flag.`;
+
+export const safetyUser = (message: string) => `User message:\n${message}\n\nReturn the JSON classification.`;
 
 export const groundedUser = (context: string, question: string) =>
   `CONTEXT (retrieved passages):\n${context}\n\nUser's question: ${question || "Tell me about this topic."}\n\nWrite Shokhi's warm, simple answer using only the context above.`;

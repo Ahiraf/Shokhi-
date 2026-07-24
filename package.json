@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "ingest": "npx tsx scripts/ingest.ts",
+    "eval:embedders": "npx tsx scripts/eval-embedders.ts",
     "test": "vitest run"
   },
   "dependencies": {
