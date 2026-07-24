@@ -26,10 +26,11 @@ export default function Composer({
   const { t, lang } = useLang();
   const [text, setText] = useState("");
   const [recording, setRecording] = useState(false);
-  const [startingVoice, setStartingVoice] = useState(false);
-  const [voiceError, setVoiceError] = useState("");
 
-  // Web Speech API (primary — runs in the browser, no backend/key needed)
+  // Web Speech API (primary — runs in the browser, no backend/key needed). We let the
+  // browser's own SpeechRecognition prompt handle the mic permission natively: a separate
+  // getUserMedia pre-check falsely reports "blocked" in Brave (Shields) and Safari (which
+  // doesn't route Web Speech through getUserMedia at all), so we deliberately don't add one.
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const baseTextRef = useRef("");
 
@@ -47,29 +48,9 @@ export default function Composer({
     return Ctor ? (new Ctor() as SpeechRecognitionLike) : null;
   }
 
-  async function requestMicrophone(): Promise<boolean> {
-    if (!navigator.mediaDevices?.getUserMedia) return true;
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach((track) => track.stop());
-      return true;
-    } catch (error: any) {
-      const name = error?.name as string | undefined;
-      setVoiceError(name === "NotAllowedError" || name === "SecurityError"
-        ? t("composer.micDenied")
-        : name === "NotFoundError" ? t("composer.micNotFound") : t("composer.micFailed"));
-      return false;
-    }
-  }
-
-  async function startSpeech(): Promise<boolean> {
+  function startSpeech(): boolean {
     const rec = getSpeechRecognition();
-    if (!rec) {
-      setVoiceError(t("composer.voiceNoSupport"));
-      return false;
-    }
-    setVoiceError("");
-    setStartingVoice(true);
+    if (!rec) return false;
     rec.lang = lang === "bn" ? "bn-BD" : "en-US";
     rec.interimResults = true;
     rec.continuous = false;
@@ -81,31 +62,17 @@ export default function Composer({
       const base = baseTextRef.current;
       setText((base ? base + " " : "") + out);
     };
-    rec.onerror = (e: any) => {
+    rec.onerror = () => {
       setRecording(false);
-      const err = e?.error as string | undefined;
-      if (err === "not-allowed" || err === "service-not-allowed") {
-        setVoiceError(t("composer.micDenied"));
-      } else if (err === "audio-capture") {
-        setVoiceError(t("composer.micNotFound"));
-      } else if (err === "no-speech") {
-        setVoiceError(t("composer.voiceNoSpeech"));
-      } else if (err && err !== "aborted") {
-        setVoiceError(t("composer.micFailed"));
-      }
     };
     rec.onend = () => {
       setRecording(false);
       recognitionRef.current = null;
     };
     try {
-      if (!(await requestMicrophone())) return false;
       rec.start();
     } catch {
-      setVoiceError(t("composer.micFailed"));
       return false;
-    } finally {
-      setStartingVoice(false);
     }
     recognitionRef.current = rec;
     setRecording(true);
@@ -118,22 +85,19 @@ export default function Composer({
       setRecording(false);
       return;
     }
-    if (!startingVoice && !busy) void startSpeech();
+    if (!startSpeech()) alert(t("composer.voiceNoSupport"));
   }
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <div className="flex items-end gap-2">
+    <div className="flex items-end gap-2">
       <button
         onClick={toggleVoice}
-        disabled={busy || startingVoice}
         title={recording ? t("composer.listening") : t("composer.voiceTitle")}
         aria-label={recording ? t("composer.listening") : t("composer.voiceTitle")}
-        aria-pressed={recording}
         className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl shadow-soft transition
-          ${recording ? "animate-pulse bg-red-500 text-white" : "bg-surface text-rose ring-1 ring-rose-soft hover:bg-rose-mist"} disabled:cursor-not-allowed disabled:opacity-50`}
+          ${recording ? "animate-pulse bg-red-500 text-white" : "bg-surface text-rose ring-1 ring-rose-soft hover:bg-rose-mist"}`}
       >
-        {startingVoice ? "…" : recording ? "⏹" : "🎙"}
+        {recording ? "⏹" : "🎙"}
       </button>
 
       <div className="flex flex-1 items-end gap-2 rounded-3xl bg-surface p-1.5 shadow-soft ring-1 ring-rose-soft focus-within:ring-2 focus-within:ring-rose/40">
@@ -158,13 +122,6 @@ export default function Composer({
           {busy ? "…" : t("composer.send")}
         </button>
       </div>
-      </div>
-
-      {(recording || startingVoice || voiceError) && (
-        <p className="px-1 text-xs leading-snug text-plum/50">
-          {voiceError || t("composer.voicePrivacyNote")}
-        </p>
-      )}
     </div>
   );
 }
