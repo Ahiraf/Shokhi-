@@ -160,11 +160,12 @@ export default function ChatPage() {
       {started && (
         // Fixed-height chat panel: header + scrollable messages + composer. Nothing here
         // scrolls the window, so the view stays put on the conversation.
-        <div className="flex h-[calc(100vh-8rem)] flex-col">
+        <div className="flex h-[calc(100vh-6rem)] flex-col">
           {/* header — the Shokhi mascot stays visible the whole conversation */}
           <header className="flex items-center gap-3 border-b border-rose-soft/60 py-3">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-rose-mist ring-1 ring-rose-soft">
-              <Mascot3D variant="chat" size={44} />
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-rose-mist ring-1 ring-rose-soft">
+              {/* dedicated square face crop (mascot-3d-avatar.png) so the circle frames her face */}
+              <Mascot3D variant="avatar" size={48} fit="cover" />
             </span>
             <div className="min-w-0">
               <p className="font-display text-[15px] font-bold leading-tight text-plum">

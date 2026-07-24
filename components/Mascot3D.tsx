@@ -20,11 +20,17 @@ export default function Mascot3D({
   variant,
   className = "",
   priority = false,
+  fit = "contain",
+  position = "center",
 }: {
   size?: number;
   variant?: string;
   className?: string;
   priority?: boolean;
+  /** "cover" fills a square (e.g. a round avatar); "contain" keeps the full figure. */
+  fit?: "contain" | "cover";
+  /** object-position when fit="cover" — e.g. "top" to frame her face. */
+  position?: string;
 }) {
   // page-specific pose first, then the shared default
   const sources = Array.from(
@@ -35,6 +41,9 @@ export default function Mascot3D({
 
   if (failed) return <Mascot size={size} />;
 
+  const coverStyle = { width: size, height: size, objectFit: "cover" as const, objectPosition: position };
+  const containStyle = { width: size, height: "auto" };
+
   return (
     <Image
       src={sources[idx]}
@@ -44,7 +53,7 @@ export default function Mascot3D({
       priority={priority}
       onError={() => (idx < sources.length - 1 ? setIdx(idx + 1) : setFailed(true))}
       className={className}
-      style={{ width: size, height: "auto" }}
+      style={fit === "cover" ? coverStyle : containStyle}
     />
   );
 }
