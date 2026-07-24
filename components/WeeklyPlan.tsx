@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getWellness } from "@/lib/api";
 import type { Wellness, WellnessMove } from "@/lib/types";
 import { useLang } from "./LanguageProvider";
+import { EmojiIcon } from "./Icon";
 import { weeklyPhases } from "@/lib/wellness";
 
 // during menstrual/luteal phases, keep the suggested move gentle
@@ -74,11 +75,11 @@ export default function WeeklyPlan() {
             >
               <span className="w-11 shrink-0 font-semibold text-plum/70">{dayLabel(offset)}</span>
               {p && (
-                <span className="rounded-full bg-surface px-2 py-0.5 text-xs font-medium text-rose-deep ring-1 ring-rose-soft">
+                <span className="rounded-full bg-sage-soft px-2 py-0.5 text-xs font-medium text-sage-deep ring-1 ring-sage-deep/25">
                   {pick(p, "label")}
                 </span>
               )}
-              <span className="text-plum/80">{m.icon} {pick(m, "name")}</span>
+              <span className="flex items-center gap-1.5 text-plum/80"><EmojiIcon glyph={m.icon} size={15} /> {pick(m, "name")}</span>
               {p && <span className="text-plum/45">· {pick(p, "focus")}</span>}
             </div>
           );

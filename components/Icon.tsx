@@ -65,6 +65,9 @@ const EMOJI_ICON: Record<string, IconName> = {
   "🆘": "alert", "⚠️": "alert", "👂": "ear", "🛠️": "tool", "🔒": "lock",
   "🩺": "health", "🥗": "apple", "🍎": "apple", "🧼": "sparkle", "🧺": "basket",
   "🩹": "health", "🔄": "refresh", "✅": "check", "🔍": "search",
+  // wellness movements
+  "🚶‍♀️": "activity", "🚶": "activity", "🤸‍♀️": "activity", "🤸": "activity",
+  "🦵": "activity", "🧘‍♀️": "heart", "🧘": "heart", "🌬️": "leaf", "🌬": "leaf",
 };
 
 /** Look up a line icon for an emoji glyph, or undefined if we don't have one. */
