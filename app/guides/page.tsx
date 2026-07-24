@@ -45,6 +45,16 @@ export default function GuidesPage() {
           </Link>
         ))}
       </div>
+
+      {/* the curated guides cover the common topics; anything else → ask Shokhi (RAG + chat) */}
+      <div className="mt-8 rounded-2xl bg-blush/70 px-5 py-5 text-center">
+        <p className="text-sm text-plum/75">
+          {lang === "en" ? "Can't find your topic here? Ask Shokhi anything in Bangla." : "আপনার বিষয় এখানে নেই? সখীকে বাংলায় যেকোনো প্রশ্ন করুন।"}
+        </p>
+        <Link href="/chat" className="mt-2 inline-block rounded-full bg-rose px-5 py-2 text-sm font-semibold text-accentink">
+          {t("common.askShokhi")}
+        </Link>
+      </div>
     </main>
   );
 }

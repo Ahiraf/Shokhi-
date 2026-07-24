@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { getKnowledge } from "@/lib/api";
 import type { Condition } from "@/lib/types";
 import { useLang } from "@/components/LanguageProvider";
+import ConditionSelfCheck from "@/components/ConditionSelfCheck";
 import { pickField, type StringKey } from "@/lib/i18n";
 
 const URGENCY_TAG: Record<string, { key: StringKey; cls: string }> = {
@@ -19,6 +20,7 @@ export default function ConditionDetailPage() {
   const { t, lang } = useLang();
   const { id } = useParams<{ id: string }>();
   const [cond, setCond] = useState<Condition | null>(null);
+  const [schema, setSchema] = useState<Record<string, any>>({});
   const [status, setStatus] = useState<"loading" | "ok" | "error">("loading");
 
   useEffect(() => {
@@ -26,6 +28,7 @@ export default function ConditionDetailPage() {
       .then((k) => {
         const c = k.conditions.find((x) => x.id === id) || null;
         setCond(c);
+        setSchema((k.symptom_schema as Record<string, any>) ?? {});
         setStatus(c ? "ok" : "error");
       })
       .catch(() => setStatus("error"));
@@ -85,6 +88,9 @@ export default function ConditionDetailPage() {
               </p>
             </div>
           )}
+
+          {/* interactive "Am I at risk?" self-check — makes Learn an assessment tool */}
+          <ConditionSelfCheck condition={cond as unknown as Record<string, unknown>} schema={schema} />
 
           <div className="mt-8 rounded-2xl bg-blush/70 px-4 py-4 text-center">
             <p className="text-sm text-plum/70">{t("learn.haveThis")}</p>

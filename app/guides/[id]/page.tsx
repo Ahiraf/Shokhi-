@@ -6,6 +6,8 @@ import { useParams } from "next/navigation";
 import { getGuide } from "@/lib/api";
 import type { GuideFull } from "@/lib/types";
 import { useLang } from "@/components/LanguageProvider";
+import { EmojiIcon } from "@/components/Icon";
+import MethodFinder from "@/components/MethodFinder";
 import { pickField } from "@/lib/i18n";
 
 export default function GuideDetailPage() {
@@ -35,8 +37,8 @@ export default function GuideDetailPage() {
       {guide && (
         <article className="mt-4">
           <div className="flex items-center gap-3">
-            <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blush text-3xl">
-              {guide.icon}
+            <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blush text-rose-deep">
+              <EmojiIcon glyph={guide.icon} size={28} />
             </span>
             <h1 className="font-display text-2xl font-bold leading-tight text-plum">
               {pickField<string>(lang, guide as unknown as Record<string, unknown>, "title")}
@@ -79,6 +81,9 @@ export default function GuideDetailPage() {
               {t("common.askShokhi")}
             </Link>
           </div>
+
+          {/* interactive tool on the contraception guide: a method finder */}
+          {id === "contraception" && <MethodFinder />}
 
           <p className="mt-6 text-xs leading-relaxed text-plum/45">{t("common.generalInfoNote")}</p>
         </article>

@@ -55,6 +55,16 @@ export default function LearnPage() {
           );
         })}
       </div>
+
+      {/* curated conditions cover the common ones; the chat handles anything else */}
+      <div className="mt-8 rounded-2xl bg-blush/70 px-5 py-5 text-center">
+        <p className="text-sm text-plum/75">
+          {lang === "en" ? "Worried about something not listed here? Describe it to Shokhi in Bangla." : "এখানে নেই এমন কিছু নিয়ে চিন্তিত? সখীকে বাংলায় বলুন।"}
+        </p>
+        <Link href="/chat" className="mt-2 inline-block rounded-full bg-rose px-5 py-2 text-sm font-semibold text-accentink">
+          {t("common.askShokhi")}
+        </Link>
+      </div>
     </main>
   );
 }
