@@ -26,6 +26,10 @@ export const STRINGS = {
   "nav.about": { bn: "সম্পর্কে", en: "About" },
   "nav.profile": { bn: "আমার প্রোফাইল", en: "My Profile" },
   "nav.menu": { bn: "মেনু", en: "Menu" },
+  "notif.title": { bn: "রিমাইন্ডার", en: "Reminders" },
+  "notif.empty": { bn: "সব ঠিক আছে — নতুন কিছু নেই।", en: "You're all caught up." },
+  "notif.close": { bn: "বন্ধ করুন", en: "Close" },
+  "notif.privacy": { bn: "সব রিমাইন্ডার শুধু এই ফোনেই তৈরি হয়।", en: "All reminders are built on this phone only." },
   "nav.langLabel": { bn: "English", en: "বাংলা" }, // shows the language you can switch TO
   "nav.darkMode": { bn: "ডার্ক মোড", en: "Dark mode" },
   "nav.lightMode": { bn: "লাইট মোড", en: "Light mode" },

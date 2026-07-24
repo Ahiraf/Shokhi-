@@ -161,8 +161,8 @@ body {
   opacity: 0.08;
 }
 
-/* Concentric soft rings used as a backdrop behind the hero mascot so the wide
-   hero row reads as intentional rather than empty. */
+/* Soft glow halo behind the hero mascot — a blurred rose radial gradient that fades to
+   nothing, so there's no hard edge and it scales fluidly on laptop and mobile. */
 .hero-rings::before,
 .hero-rings::after {
   content: "";
@@ -171,23 +171,36 @@ body {
   top: 50%;
   translate: -50% -50%;
   border-radius: 9999px;
-  border: 1px solid rgb(var(--c-rose) / 0.18);
   pointer-events: none;
 }
 .hero-rings::before {
-  width: 340px;
-  height: 340px;
+  width: min(115%, 30rem);
+  height: min(115%, 30rem);
+  background: radial-gradient(
+    circle,
+    rgb(var(--c-rose) / 0.3) 0%,
+    rgb(var(--c-rose) / 0.12) 42%,
+    transparent 70%
+  );
+  filter: blur(20px);
 }
+/* a smaller, warmer core glow for a little depth */
 .hero-rings::after {
-  width: 480px;
-  height: 480px;
-  border-color: rgb(var(--c-rose) / 0.10);
+  width: min(70%, 17rem);
+  height: min(70%, 17rem);
+  background: radial-gradient(circle, rgb(var(--c-apricot) / 0.22) 0%, transparent 68%);
+  filter: blur(16px);
 }
 .dark .hero-rings::before {
-  border-color: rgb(var(--c-rose-deep) / 0.28);
+  background: radial-gradient(
+    circle,
+    rgb(var(--c-rose-deep) / 0.42) 0%,
+    rgb(var(--c-rose-deep) / 0.16) 42%,
+    transparent 70%
+  );
 }
 .dark .hero-rings::after {
-  border-color: rgb(var(--c-rose-deep) / 0.16);
+  background: radial-gradient(circle, rgb(var(--c-rose) / 0.14) 0%, transparent 68%);
 }
 
 /* gentle fade-in for new messages */

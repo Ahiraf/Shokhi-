@@ -7,6 +7,7 @@ import { useState } from "react";
 import { NAV } from "@/lib/nav";
 import { useLang } from "./LanguageProvider";
 import { useTheme } from "./ThemeProvider";
+import NotificationBell from "./NotificationBell";
 
 /** Sticky top navigation shared across every page, with a mobile menu. */
 export default function Nav() {
@@ -102,13 +103,15 @@ export default function Nav() {
               </Link>
             </li>
           ))}
-          <li className="ml-1">{profileButton}</li>
+          <li className="ml-1"><NotificationBell /></li>
+          <li>{profileButton}</li>
           <li>{themeButton}</li>
           <li>{langButton("")}</li>
         </ul>
 
-        {/* mobile: profile + theme + language toggle + menu button */}
+        {/* mobile: notifications + profile + theme + language toggle + menu button */}
         <div className="flex items-center gap-2 md:hidden">
+          <NotificationBell />
           {profileButton}
           {themeButton}
           {langButton("")}
