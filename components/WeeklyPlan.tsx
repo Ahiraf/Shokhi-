@@ -5,10 +5,11 @@ import Link from "next/link";
 import { getWellness } from "@/lib/api";
 import type { Wellness, WellnessMove } from "@/lib/types";
 import { useLang } from "./LanguageProvider";
+import MoveVisual from "./MoveVisual";
 import { weeklyPhases } from "@/lib/wellness";
 
 // during menstrual/luteal phases, keep the suggested move gentle
-const GENTLE = ["walk", "stretch", "yoga", "breathing"];
+const GENTLE = ["walk", "stretch", "yoga", "breathing", "cat_cow", "pelvic_tilt", "neck_shoulder", "marching"];
 
 /**
  * "This week for you" — maps each of the next 7 days to its estimated cycle phase (from
@@ -78,9 +79,10 @@ export default function WeeklyPlan() {
                   {pick(p, "label")}
                 </span>
               )}
-              {/* workout moves keep their emoji here — clearer than a line icon for showing an
-                  exercise to low-literacy users (per Ahiraf's request, this page only) */}
-              <span className="text-plum/80">{m.icon} {pick(m, "name")}</span>
+              {/* workout POSE visual (falls back to the emoji until a pose image is added) */}
+              <span className="flex items-center gap-1.5 text-plum/80">
+                <MoveVisual id={m.id} icon={m.icon} size={18} /> {pick(m, "name")}
+              </span>
               {p && <span className="text-plum/45">· {pick(p, "focus")}</span>}
             </div>
           );

@@ -737,6 +737,42 @@
         "name_bn": "গভীর শ্বাস", "name_en": "Deep breathing",
         "how_bn": "ধীরে গভীর করে পেট ভরে ৫ মিনিট শ্বাস নিন — মানসিক চাপ কমে, যা হরমোনে প্রভাব ফেলে।",
         "how_en": "Slow, deep belly breathing for 5 minutes — lowers stress, which affects hormones."
+      },
+      {
+        "id": "marching", "icon": "🏃‍♀️",
+        "name_bn": "এক জায়গায় হাঁটা", "name_en": "Marching in place",
+        "how_bn": "ঘরেই এক জায়গায় দাঁড়িয়ে হাঁটু তুলে ৫–১০ মিনিট হাঁটুন। বাইরে যেতে না পারলেও দারুণ ব্যায়াম।",
+        "how_en": "March on the spot at home, lifting your knees, for 5–10 minutes. A great option when you can't go outside."
+      },
+      {
+        "id": "cat_cow", "icon": "🐈",
+        "name_bn": "বিড়াল-গরু স্ট্রেচ", "name_en": "Cat–cow stretch",
+        "how_bn": "হাত ও হাঁটুর ওপর ভর দিয়ে ধীরে ধীরে পিঠ উঁচু-নিচু করুন — কোমর ও মাসিকের ব্যথায় আরাম দেয়।",
+        "how_en": "On your hands and knees, slowly arch and round your back. Eases lower-back and period pain."
+      },
+      {
+        "id": "pelvic_tilt", "icon": "🧎‍♀️",
+        "name_bn": "পেলভিক টিল্ট", "name_en": "Pelvic tilts",
+        "how_bn": "চিত হয়ে শুয়ে ধীরে ধীরে কোমর সামান্য তুলে পিঠ মেঝেতে চাপুন, তারপর ছাড়ুন — তলপেটের ব্যথা কমায়।",
+        "how_en": "Lie on your back and gently tilt your pelvis, pressing your lower back to the floor, then release. Soothes cramps."
+      },
+      {
+        "id": "neck_shoulder", "icon": "🙆‍♀️",
+        "name_bn": "ঘাড় ও কাঁধ ঘোরানো", "name_en": "Neck & shoulder rolls",
+        "how_bn": "ধীরে ধীরে ঘাড় ও কাঁধ গোল করে ঘোরান — বসে থাকা বা কাজের টান কমে, শরীর হালকা লাগে।",
+        "how_en": "Slowly roll your neck and shoulders in circles. Releases tension from sitting or work."
+      },
+      {
+        "id": "dancing", "icon": "💃",
+        "name_bn": "নাচ", "name_en": "Dancing",
+        "how_bn": "পছন্দের গান চালিয়ে ১০–১৫ মিনিট মন খুলে নাচুন — মন ভালো করে ও হালকা কার্ডিও হয়।",
+        "how_en": "Put on music you like and move freely for 10–15 minutes — joyful cardio that lifts your mood."
+      },
+      {
+        "id": "stairs", "icon": "🧗‍♀️",
+        "name_bn": "সিঁড়ি ওঠা-নামা", "name_en": "Stair climbing",
+        "how_bn": "কয়েকবার সিঁড়ি ধীরে ধীরে ওঠা-নামা করুন — হৃৎস্পন্দন বাড়ানোর সহজ ও ঘরোয়া উপায়।",
+        "how_en": "Walk up and down the stairs a few times — a simple way at home to raise your heart rate."
       }
     ],
     "disclaimer_bn": "এটি শক্তিশালী ও ভারসাম্যপূর্ণ থাকার সাধারণ পরামর্শ — কোনো ডায়েট বা ওজন কমানোর পরিকল্পনা নয়, চিকিৎসাও নয়। আপনি গর্ভবতী, খুব দুর্বল/রক্তস্বল্পতাগ্রস্ত হলে বা কোনো রোগ থাকলে চলাফেরা মৃদু রাখুন এবং ডাক্তারের পরামর্শ নিন।",

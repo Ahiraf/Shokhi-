@@ -7,6 +7,7 @@ import { getKnowledge } from "@/lib/api";
 import type { Condition } from "@/lib/types";
 import { useLang } from "@/components/LanguageProvider";
 import ConditionSelfCheck from "@/components/ConditionSelfCheck";
+import SpeakButton from "@/components/SpeakButton";
 import { pickField, type StringKey } from "@/lib/i18n";
 
 const URGENCY_TAG: Record<string, { key: StringKey; cls: string }> = {
@@ -47,9 +48,20 @@ export default function ConditionDetailPage() {
 
       {cond && (
         <article className="mt-4">
-          <h1 className="font-display text-2xl font-bold leading-tight text-plum">
-            {lang === "en" ? cond.name_en || cond.name_bn : cond.name_bn}
-          </h1>
+          <div className="flex items-start gap-3">
+            <h1 className="flex-1 font-display text-2xl font-bold leading-tight text-plum">
+              {lang === "en" ? cond.name_en || cond.name_bn : cond.name_bn}
+            </h1>
+            <SpeakButton
+              className="mt-1"
+              text={[
+                lang === "en" ? cond.name_en || cond.name_bn : cond.name_bn,
+                lang === "en" ? cond.about_en || cond.about_bn : cond.about_bn,
+                ...(pickField<string[]>(lang, cond as unknown as Record<string, unknown>, "self_care") ?? []),
+                pickField<string>(lang, cond as unknown as Record<string, unknown>, "see_doctor") ?? "",
+              ].filter(Boolean).join(". ")}
+            />
+          </div>
           {lang !== "en" && cond.name_en && (
             <p className="mt-1 text-sm text-plum/45">{cond.name_en}</p>
           )}

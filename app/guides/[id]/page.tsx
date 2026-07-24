@@ -8,6 +8,7 @@ import type { GuideFull } from "@/lib/types";
 import { useLang } from "@/components/LanguageProvider";
 import { EmojiIcon } from "@/components/Icon";
 import MethodFinder from "@/components/MethodFinder";
+import SpeakButton from "@/components/SpeakButton";
 import { pickField } from "@/lib/i18n";
 
 export default function GuideDetailPage() {
@@ -43,6 +44,15 @@ export default function GuideDetailPage() {
             <h1 className="font-display text-2xl font-bold leading-tight text-plum">
               {pickField<string>(lang, guide as unknown as Record<string, unknown>, "title")}
             </h1>
+            <SpeakButton
+              className="ml-auto self-start"
+              text={[
+                pickField<string>(lang, guide as unknown as Record<string, unknown>, "title"),
+                pickField<string>(lang, guide as unknown as Record<string, unknown>, "summary"),
+                ...(pickField<string[]>(lang, guide as unknown as Record<string, unknown>, "points") ?? []),
+                pickField<string>(lang, guide as unknown as Record<string, unknown>, "when_see_doctor"),
+              ].filter(Boolean).join(". ")}
+            />
           </div>
 
           <p className="mt-4 text-[15px] leading-relaxed text-plum/75">

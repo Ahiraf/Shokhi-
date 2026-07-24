@@ -4,6 +4,7 @@ import type { ChatItem } from "@/lib/types";
 import UrgencyPill from "./UrgencyPill";
 import RiskBar from "./RiskBar";
 import LogoMark from "./LogoMark";
+import SpeakButton from "./SpeakButton";
 import { useLang } from "./LanguageProvider";
 import { pickField } from "@/lib/i18n";
 
@@ -61,6 +62,13 @@ export default function Message({ item }: { item: ChatItem }) {
         {item.data?.next_question && !item.data.is_emergency && (
           <div className="mt-3 rounded-xl bg-rose-mist px-3 py-2 text-sm text-rose-deep">
             ❓ {item.data.next_question}
+          </div>
+        )}
+
+        {/* voice output — read the reply aloud (for users who prefer listening) */}
+        {item.text.trim() && (
+          <div className="mt-2 flex justify-end">
+            <SpeakButton text={item.text} size="sm" />
           </div>
         )}
       </div>

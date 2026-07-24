@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import PageIntro from "@/components/PageIntro";
 import WeeklyPlan from "@/components/WeeklyPlan";
+import MoveVisual from "@/components/MoveVisual";
+import SpeakButton from "@/components/SpeakButton";
 import { useLang } from "@/components/LanguageProvider";
 import { getWellness } from "@/lib/api";
 import type { Wellness } from "@/lib/types";
@@ -80,11 +82,14 @@ export default function WellnessPage() {
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {w.moves.map((m) => (
                 <div key={m.id} className="flex gap-3 rounded-2xl bg-surface/80 p-4 ring-1 ring-rose-soft">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sage-soft text-2xl">
-                    {m.icon}
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-sage-soft text-2xl">
+                    <MoveVisual id={m.id} icon={m.icon} size={40} />
                   </span>
-                  <div>
-                    <p className="font-display text-sm font-bold text-plum">{pick(m, "name")}</p>
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="font-display text-sm font-bold text-plum">{pick(m, "name")}</p>
+                      <SpeakButton size="sm" text={`${pick(m, "name")}. ${pick(m, "how")}`} />
+                    </div>
                     <p className="mt-0.5 text-sm leading-relaxed text-plum/65">{pick(m, "how")}</p>
                   </div>
                 </div>
