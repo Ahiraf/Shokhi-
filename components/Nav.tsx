@@ -49,7 +49,7 @@ export default function Nav() {
       aria-label={lang === "bn" ? "Switch to English" : "বাংলায় দেখুন"}
       title={lang === "bn" ? "Switch to English" : "বাংলায় দেখুন"}
     >
-      🌐 {t("nav.langLabel")}
+      {t("nav.langLabel")}
     </button>
   );
 
