@@ -1,4 +1,4 @@
-import { Assistant, applySafetyNet } from "@/lib/server/assistant";
+import { Assistant, applySafetyNet, safetyNetEnabled } from "@/lib/server/assistant";
 import { enforceRateLimit } from "@/lib/server/rate-limit";
 import {
   errorJson,
@@ -35,15 +35,19 @@ export async function POST(req: Request) {
     async start(controller) {
       const send = (event: string, data: unknown) =>
         controller.enqueue(encoder.encode(sse(event, data)));
+      // Open the stream immediately so the client shows a live reply and proxies don't buffer.
+      controller.enqueue(encoder.encode(": open\n\n"));
       try {
         const a = new Assistant(readProfile(body.profile), readHistory(body.history));
-        await a.addUserMessage(message);
 
+        // Safety net runs CONCURRENTLY with extraction (both only need the raw message), so it
+        // adds no latency before the first token. Deterministic triage still owns urgency.
+        const safetyP = safetyNetEnabled()
+          ? a.backend.safetyCheck(message).catch(() => ({ emergency: false, reason: null }))
+          : Promise.resolve({ emergency: false, reason: null });
+        await a.addUserMessage(message);
         const base = a.triage();
-        const safety = await a.backend
-          .safetyCheck(message)
-          .catch(() => ({ emergency: false, reason: null }));
-        const { result } = applySafetyNet(base, safety);
+        const { result } = applySafetyNet(base, await safetyP);
 
         send("meta", {
           profile: a.profile,

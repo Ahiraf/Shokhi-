@@ -75,8 +75,16 @@ export default function Composer({
       const base = baseTextRef.current;
       setText((base ? base + " " : "") + out);
     };
-    rec.onerror = () => {
+    rec.onerror = (e: any) => {
       setRecording(false);
+      // Surface WHY the mic failed instead of silently doing nothing. "no-speech" and
+      // "aborted" are normal (user paused / stopped) — don't nag for those.
+      const err = e?.error as string | undefined;
+      if (err === "not-allowed" || err === "service-not-allowed") {
+        alert(t("composer.micDenied"));
+      } else if (err && err !== "no-speech" && err !== "aborted") {
+        alert(t("composer.micFailed"));
+      }
     };
     rec.onend = () => {
       setRecording(false);

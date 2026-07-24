@@ -127,38 +127,51 @@ const T = {
   },
 } as const;
 
+// Deterministic, offline symptom extraction (negation-aware). Exported so the orchestrator
+// can use it as the DEFAULT extractor even on the Gemini backend — that keeps the hot path to
+// a single (slow) Gemma call for the warm reply, instead of two sequential calls that blow past
+// the serverless time budget. Set SHOKHI_LLM_EXTRACT=1 to use Gemma for extraction instead.
+export function deterministicExtract(conversation: string, known: Profile): Profile {
+  const text = conversation;
+  const low = text.toLowerCase();
+  const out: Profile = {};
+  let m = text.match(/(?:বয়স|age)\D{0,4}([০-৯0-9]{1,3})/);
+  if (!m) m = text.match(/([০-৯0-9]{1,3})\s*(?:বছর|years?)/);
+  if (m) out.age = toInt(m[1]);
+  if (text.includes("গর্ভবতী") && !["গর্ভবতী নই", "গর্ভবতী না"].some((n) => text.includes(n)))
+    out.is_pregnant_possible = true;
+  for (const [field, kws] of TRIGGERS) {
+    for (const kw of kws) {
+      const idx = low.indexOf(kw.toLowerCase());
+      if (idx === -1) continue;
+      let before = low.slice(Math.max(0, idx - 24), idx);
+      // keep only the current clause: drop anything up to the last clause separator
+      for (const sep of CLAUSE_SEP) {
+        const s = before.lastIndexOf(sep);
+        if (s !== -1) before = before.slice(s + sep.length);
+      }
+      const tail = low.slice(idx + kw.length, idx + kw.length + 14);
+      const negated =
+        NEG_BEFORE.some((n) => before.includes(n)) || NEG_AFTER.some((n) => tail.includes(n));
+      out[field] = !negated;
+      break;
+    }
+  }
+  if (["মাসিক হচ্ছে", "পিরিয়ড চলছে", "রক্ত যাচ্ছে"].some((w) => text.includes(w)) || low.includes("on my period"))
+    out.bleeding_now ??= true;
+  return Object.fromEntries(Object.entries(out).filter(([k, v]) => known[k] !== v));
+}
+
+/** Whether to use Gemma (slow, more robust) for extraction. Off by default for latency. */
+export function llmExtractEnabled(): boolean {
+  return process.env.SHOKHI_LLM_EXTRACT === "1";
+}
+
 class MockBackend implements Backend {
   name = "mock";
 
   async extractSymptoms(conversation: string, known: Profile): Promise<Profile> {
-    const text = conversation;
-    const low = text.toLowerCase();
-    const out: Profile = {};
-    let m = text.match(/(?:বয়স|age)\D{0,4}([০-৯0-9]{1,3})/);
-    if (!m) m = text.match(/([০-৯0-9]{1,3})\s*(?:বছর|years?)/);
-    if (m) out.age = toInt(m[1]);
-    if (text.includes("গর্ভবতী") && !["গর্ভবতী নই", "গর্ভবতী না"].some((n) => text.includes(n)))
-      out.is_pregnant_possible = true;
-    for (const [field, kws] of TRIGGERS) {
-      for (const kw of kws) {
-        const idx = low.indexOf(kw.toLowerCase());
-        if (idx === -1) continue;
-        let before = low.slice(Math.max(0, idx - 24), idx);
-        // keep only the current clause: drop anything up to the last clause separator
-        for (const sep of CLAUSE_SEP) {
-          const s = before.lastIndexOf(sep);
-          if (s !== -1) before = before.slice(s + sep.length);
-        }
-        const tail = low.slice(idx + kw.length, idx + kw.length + 14);
-        const negated =
-          NEG_BEFORE.some((n) => before.includes(n)) || NEG_AFTER.some((n) => tail.includes(n));
-        out[field] = !negated;
-        break;
-      }
-    }
-    if (["মাসিক হচ্ছে", "পিরিয়ড চলছে", "রক্ত যাচ্ছে"].some((w) => text.includes(w)) || low.includes("on my period"))
-      out.bleeding_now ??= true;
-    return Object.fromEntries(Object.entries(out).filter(([k, v]) => known[k] !== v));
+    return deterministicExtract(conversation, known);
   }
 
   async explainTriage(tr: any, lang: Lang): Promise<string> {

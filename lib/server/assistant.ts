@@ -3,7 +3,7 @@
 
 import { triage as runTriage, knowledge, type Profile } from "./triage";
 import { riskSignals } from "./risk";
-import { getBackend, type Backend } from "./gemma";
+import { getBackend, deterministicExtract, llmExtractEnabled, type Backend } from "./gemma";
 import { retrieve, type Retrieved } from "./rag";
 import type { Lang } from "./prompts";
 
@@ -37,6 +37,13 @@ function sourcesFooter(hits: Retrieved[], lang: Lang): string {
   return `\n\n**${label}:** ${links}`;
 }
 
+// The LLM safety net is an EXTRA Gemma call (quota + a concurrent request). Deterministic
+// triage already guards every emergency, so the net is OPT-IN: set SHOKHI_SAFETY_NET=1 to
+// enable it. When on, it runs concurrently with extraction so it adds no wall-clock latency.
+export function safetyNetEnabled(): boolean {
+  return process.env.SHOKHI_SAFETY_NET === "1";
+}
+
 /**
  * Apply the escalate-only LLM safety net to a deterministic triage result.
  *
@@ -55,6 +62,10 @@ export function applySafetyNet(
   }
   const reason = safety.reason || "possible emergency symptoms";
   result.urgency = "emergency";
+  // keep the human-readable label in sync with the escalated urgency
+  const emLevel = (knowledge as any)?.meta?.urgency_levels?.emergency ?? {};
+  result.urgency_label_bn = emLevel.label_bn ?? result.urgency_label_bn;
+  result.urgency_label_en = emLevel.label_en ?? result.urgency_label_en;
   result.red_flags = [
     ...(result.red_flags ?? []),
     {
@@ -109,7 +120,12 @@ export class Assistant {
 
   async addUserMessage(message: string): Promise<void> {
     this.history.push(message);
-    const updates = await this.backend.extractSymptoms(this.history.join("\n"), this.profile);
+    // Default: fast, offline deterministic extraction (one fewer Gemma round-trip, so the
+    // hot path fits the serverless time budget). SHOKHI_LLM_EXTRACT=1 opts into Gemma extraction.
+    const convo = this.history.join("\n");
+    const updates = llmExtractEnabled()
+      ? await this.backend.extractSymptoms(convo, this.profile)
+      : deterministicExtract(convo, this.profile);
     this.profile = { ...this.profile, ...updates };
   }
 

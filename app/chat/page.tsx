@@ -145,10 +145,14 @@ export default function ChatPage() {
 
       {started && (
         <>
-          <section className="flex-1 space-y-4 py-6">
-            {chat.map((item, i) => (
-              <Message key={i} item={item} />
-            ))}
+          {/* bottom-aligned so a short exchange sits just above the composer (visible),
+              instead of pinning to the top and leaving a big empty gap below */}
+          <section className="flex flex-1 flex-col justify-end space-y-4 py-6">
+            {chat.map((item, i) =>
+              // don't render the empty assistant placeholder while streaming — the "thinking"
+              // indicator below covers that wait; the bubble appears once the first token lands
+              item.role === "assistant" && item.text === "" ? null : <Message key={i} item={item} />
+            )}
             {busy && (
               <div className="flex items-center gap-2.5 pl-1 text-plum/50">
                 <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full ring-1 ring-rose-soft">

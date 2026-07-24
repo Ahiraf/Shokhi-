@@ -126,6 +126,10 @@ export const STRINGS = {
     en: "Voice input isn't supported in this browser — please use Chrome, or type your message.",
   },
   "composer.micFailed": { bn: "মাইক্রোফোন চালু করা গেল না।", en: "Couldn't start the microphone." },
+  "composer.micDenied": {
+    bn: "মাইক্রোফোনের অনুমতি বন্ধ আছে। ব্রাউজারের ঠিকানার পাশে 🔒/🎙 আইকনে গিয়ে মাইক্রোফোন 'Allow' করুন, নইলে লিখে জানান।",
+    en: "Microphone permission is blocked. Click the 🔒/🎙 icon by the address bar and Allow the microphone — or just type your message.",
+  },
   "composer.voicePrivacyNote": {
     bn: "🔒 কণ্ঠ শনাক্ত করতে আপনার ব্রাউজার অডিও একটি বাইরের সেবায় (যেমন Chrome-এ Google) পাঠাতে পারে। স্বাস্থ্য-সংক্রান্ত কথা বলার আগে খেয়াল রাখুন। চাইলে টাইপ করেও জানাতে পারেন।",
     en: "🔒 Voice input may send your audio to a third-party service (e.g. Google in Chrome) to transcribe it. Keep this in mind before speaking about health. You can always type instead.",

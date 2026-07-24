@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Assistant, applySafetyNet } from "@/lib/server/assistant";
+import { Assistant, applySafetyNet, safetyNetEnabled } from "@/lib/server/assistant";
 import { enforceRateLimit } from "@/lib/server/rate-limit";
 import {
   errorJson,
@@ -24,12 +24,16 @@ export async function POST(req: Request) {
   try {
     const lang = readLanguage(body.lang);
     const a = new Assistant(readProfile(body.profile), readHistory(body.history));
-    await a.addUserMessage(message);
 
-    // Deterministic triage decides urgency; the LLM safety net can only ESCALATE it.
+    // Run the (independent) LLM safety net CONCURRENTLY with symptom extraction so it adds
+    // no extra latency — both only need the raw message. Deterministic triage still decides
+    // urgency; the safety net can only ESCALATE it.
+    const safetyP = safetyNetEnabled()
+      ? a.backend.safetyCheck(message).catch(() => ({ emergency: false, reason: null }))
+      : Promise.resolve({ emergency: false, reason: null });
+    await a.addUserMessage(message);
     const base = a.triage();
-    const safety = await a.backend.safetyCheck(message).catch(() => ({ emergency: false, reason: null }));
-    const { result } = applySafetyNet(base, safety);
+    const { result } = applySafetyNet(base, await safetyP);
 
     return NextResponse.json({
       profile: a.profile,
