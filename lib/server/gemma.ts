@@ -82,7 +82,14 @@ const TRIGGERS: [string, string[]][] = [
   ["vaginal_dryness", ["যোনিপথে শুষ্ক", "যোনি শুষ্ক", "vaginal dryness", "dryness down there"]],
   ["menopause_mood_changes", ["মাঝবয়সে মেজাজ", "ঘুমের সমস্যা", "mid-life mood", "menopause mood"]],
 ];
-const NEG = ["না", "নেই", "নয়", "not ", "no ", "without", "don't", "doesn't"];
+// Bangla negation almost always FOLLOWS the symptom word ("জ্বর নেই" = "fever none"),
+// while English negation PRECEDES it ("no fever", "don't have fever"). Splitting the two
+// keeps a Bangla "নেই" in a different clause from wrongly suppressing a later symptom.
+const NEG_AFTER = ["না", "নেই", "নয়"]; // Bangla negation after the word
+const NEG_BEFORE = ["not ", "no ", "without", "don't", "doesn't", "never"]; // English before
+// Clause boundaries — a negation before one of these belongs to a different clause and
+// must not carry over (e.g. "জ্বর নেই, কিন্তু প্রচুর রক্ত" — the bleeding is NOT negated).
+const CLAUSE_SEP = [",", "।", ";", "\n", "কিন্তু", "তবে", " but "];
 
 const T = {
   bn: {
@@ -127,9 +134,16 @@ class MockBackend implements Backend {
       for (const kw of kws) {
         const idx = low.indexOf(kw.toLowerCase());
         if (idx === -1) continue;
-        const before = low.slice(Math.max(0, idx - 24), idx);
+        let before = low.slice(Math.max(0, idx - 24), idx);
+        // keep only the current clause: drop anything up to the last clause separator
+        for (const sep of CLAUSE_SEP) {
+          const s = before.lastIndexOf(sep);
+          if (s !== -1) before = before.slice(s + sep.length);
+        }
         const tail = low.slice(idx + kw.length, idx + kw.length + 14);
-        out[field] = !NEG.some((n) => before.includes(n) || tail.includes(n));
+        const negated =
+          NEG_BEFORE.some((n) => before.includes(n)) || NEG_AFTER.some((n) => tail.includes(n));
+        out[field] = !negated;
         break;
       }
     }

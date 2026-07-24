@@ -1,0 +1,43 @@
+MIT License
+
+Copyright (c) 2026 Ahiraf (Shokhi / সখী)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-------------------------------------------------------------------------------
+SCOPE — code vs. health content
+-------------------------------------------------------------------------------
+The MIT licence above covers the SOURCE CODE of this project only.
+
+It does NOT relicense the third-party health information bundled with the app
+(the Retrieval-Augmented Generation corpus under `lib/server/rag/sources/` and
+the curated knowledge base). That material remains under the licences of its
+original publishers, several of which are NON-COMMERCIAL and SHARE-ALIKE:
+
+  - World Health Organization (WHO)  — CC BY-NC-SA 3.0 IGO
+  - NHS England                      — Open Government Licence v3.0
+  - Govt. of Bangladesh (DGHS/DGFP)  — public information, used with attribution
+  - icddr,b                          — © icddr,b, cite the source
+
+Each source document records its own licence in its `.md` frontmatter, and full
+attribution and required disclaimers are in ATTRIBUTION.md. If you reuse this
+project, you must keep that attribution and honour those content licences —
+notably, the WHO-derived material may not be used commercially.
+
+Shokhi provides general health information, not a diagnosis.

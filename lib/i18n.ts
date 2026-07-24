@@ -126,6 +126,14 @@ export const STRINGS = {
     en: "Voice input isn't supported in this browser — please use Chrome, or type your message.",
   },
   "composer.micFailed": { bn: "মাইক্রোফোন চালু করা গেল না।", en: "Couldn't start the microphone." },
+  "composer.voicePrivacyNote": {
+    bn: "🔒 কণ্ঠ শনাক্ত করতে আপনার ব্রাউজার অডিও একটি বাইরের সেবায় (যেমন Chrome-এ Google) পাঠাতে পারে। স্বাস্থ্য-সংক্রান্ত কথা বলার আগে খেয়াল রাখুন। চাইলে টাইপ করেও জানাতে পারেন।",
+    en: "🔒 Voice input may send your audio to a third-party service (e.g. Google in Chrome) to transcribe it. Keep this in mind before speaking about health. You can always type instead.",
+  },
+  "composer.voicePrivacyConsent": {
+    bn: "কণ্ঠে বলতে চাইলে আপনার ব্রাউজার অডিও একটি বাইরের সেবায় (যেমন Chrome-এ Google) পাঠিয়ে লেখায় রূপান্তর করে — এই অডিও Shokhi সংরক্ষণ করে না। রাজি থাকলে ‘OK’ চাপুন।",
+    en: "To use voice, your browser sends the audio to a third-party service (e.g. Google in Chrome) to convert it to text — Shokhi does not store this audio. Press ‘OK’ to allow.",
+  },
 
   // --- message / triage ----------------------------------------------------
   "message.riskHint": { bn: "📊 সহায়ক ইঙ্গিত", en: "📊 Supporting signal" },

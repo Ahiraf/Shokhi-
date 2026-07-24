@@ -264,6 +264,10 @@ in the file's frontmatter. Current documents:
 
 #### Attribution & licences (courtesy)
 
+**Code licence:** the source code is released under the **[MIT License](LICENSE)** ©
+2026 Ahiraf. The MIT licence covers the *code only* — the bundled health content keeps
+its publishers' licences (see below and `LICENSE` for the code-vs-content scope).
+
 Full source credits and licence details are in **[ATTRIBUTION.md](ATTRIBUTION.md)**. In short:
 
 - **WHO** content is reused under **CC BY-NC-SA 3.0 IGO** (attribution, non-commercial,

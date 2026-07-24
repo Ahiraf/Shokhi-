@@ -45,9 +45,25 @@ export default function Composer({
     return Ctor ? (new Ctor() as SpeechRecognitionLike) : null;
   }
 
+  // One-time privacy consent: browser speech recognition can send audio to a third
+  // party (e.g. Google in Chrome). We disclose this and remember the choice locally.
+  const CONSENT_KEY = "shokhi.voiceConsent";
+  function hasVoiceConsent(): boolean {
+    try {
+      if (localStorage.getItem(CONSENT_KEY) === "yes") return true;
+      const ok = window.confirm(t("composer.voicePrivacyConsent"));
+      if (ok) localStorage.setItem(CONSENT_KEY, "yes");
+      return ok;
+    } catch {
+      // no localStorage (private mode) — still ask each time via confirm
+      return window.confirm(t("composer.voicePrivacyConsent"));
+    }
+  }
+
   function startSpeech(): boolean {
     const rec = getSpeechRecognition();
     if (!rec) return false;
+    if (!hasVoiceConsent()) return true; // user declined; treat as handled, don't record
     rec.lang = lang === "bn" ? "bn-BD" : "en-US";
     rec.interimResults = true;
     rec.continuous = false;
@@ -86,7 +102,8 @@ export default function Composer({
   }
 
   return (
-    <div className="flex items-end gap-2">
+    <div className="flex flex-col gap-1.5">
+      <div className="flex items-end gap-2">
       <button
         onClick={toggleVoice}
         title={recording ? t("composer.listening") : t("composer.voiceTitle")}
@@ -119,6 +136,13 @@ export default function Composer({
           {busy ? "…" : t("composer.send")}
         </button>
       </div>
+      </div>
+
+      {recording && (
+        <p className="px-1 text-xs leading-snug text-plum/50">
+          {t("composer.voicePrivacyNote")}
+        </p>
+      )}
     </div>
   );
 }

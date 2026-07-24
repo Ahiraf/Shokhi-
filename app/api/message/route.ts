@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Assistant } from "@/lib/server/assistant";
+import { enforceRateLimit } from "@/lib/server/rate-limit";
 import {
   errorJson,
   MAX_MESSAGE_LENGTH,
@@ -14,6 +15,8 @@ export const runtime = "nodejs";
 export const maxDuration = 60; // Gemma replies can take a few seconds
 
 export async function POST(req: Request) {
+  const limited = enforceRateLimit(req);
+  if (limited) return limited;
   const body = await readJson(req);
   if (!body) return errorJson("Request body must be a JSON object.", 400);
   const message = readText(body, "message", MAX_MESSAGE_LENGTH, true);
